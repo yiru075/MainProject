@@ -17,10 +17,16 @@ import Topic2_1 from './pages/Levels/Level2/Topic2_1.jsx'
 import Topic2_2 from './pages/Levels/Level2/Topic2_2.jsx'
 import Topic2_3 from './pages/Levels/Level2/Topic2_3.jsx'
 import Topic2_4 from './pages/Levels/Level2/Topic2_4.jsx'
+import Topic2_5 from './pages/Levels/Level2/Topic2_5.jsx'
+import Topic2_6 from './pages/Levels/Level2/Topic2_6.jsx'
+import Topic2_7 from './pages/Levels/Level2/Topic2_7.jsx'
+import Topic2_8 from './pages/Levels/Level2/Topic2_8.jsx'
 // Level 3 Topics
 import Topic3_1 from './pages/Levels/Level3/Topic3_1.jsx'
 import Topic3_2 from './pages/Levels/Level3/Topic3_2.jsx'
 import Topic3_3 from './pages/Levels/Level3/Topic3_3.jsx'
+import Topic3_4 from './pages/Levels/Level3/Topic3_4.jsx'
+import Topic3_5 from './pages/Levels/Level3/Topic3_5.jsx'
 import './App.css'
 
 function App() {
@@ -48,11 +54,17 @@ function App() {
         <Route path="/level2/Topic2_2" element={<Topic2_2 />} />
         <Route path="/level2/Topic2_3" element={<Topic2_3 />} />
         <Route path="/level2/Topic2_4" element={<Topic2_4 />} />
+        <Route path="/level2/Topic2_5" element={<Topic2_5 />} />
+        <Route path="/level2/Topic2_6" element={<Topic2_6 />} />
+        <Route path="/level2/Topic2_7" element={<Topic2_7 />} />
+        <Route path="/level2/Topic2_8" element={<Topic2_8 />} />
 
         {/* Level 3 Topic Routes */}
         <Route path="/level3/Topic3_1" element={<Topic3_1 />} />
         <Route path="/level3/Topic3_2" element={<Topic3_2 />} />
         <Route path="/level3/Topic3_3" element={<Topic3_3 />} />
+        <Route path="/level3/Topic3_4" element={<Topic3_4 />} />
+        <Route path="/level3/Topic3_5" element={<Topic3_5 />} />
       </Routes>
     </Router>
   )
