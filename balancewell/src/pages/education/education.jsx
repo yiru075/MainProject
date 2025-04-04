@@ -39,7 +39,7 @@ const levelTopics = {
   ]
 };
 
-// 修正重复的主题数据
+// Fix duplicate topic data
 const fixedLevelTopics = {
   1: levelTopics[1],
   2: levelTopics[2].filter((topic, index, self) => 
@@ -57,7 +57,7 @@ const Education = () => {
   const [progressPercent, setProgressPercent] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   
-  // 加载已完成的主题
+  // Load completed topics from local storage
   useEffect(() => {
     const storedCompletedTopics = localStorage.getItem('completedTopics');
     if (storedCompletedTopics) {
@@ -65,7 +65,7 @@ const Education = () => {
     }
   }, []);
   
-  // 计算完成进度
+  // Calculate completion progress
   useEffect(() => {
     const totalTopics = fixedLevelTopics[userLevel].length;
     const completedCount = completedTopics.filter(topic => topic.startsWith(`Topic${userLevel}_`)).length;
@@ -74,16 +74,16 @@ const Education = () => {
   }, [completedTopics, userLevel]);
 
   const handleTopicClick = (level, topicId) => {
-    // 如果主题未完成，则标记为已完成
+    // Mark topic as completed if not already completed
     if (!completedTopics.includes(topicId)) {
       const updatedCompletedTopics = [...completedTopics, topicId];
       setCompletedTopics(updatedCompletedTopics);
       
-      // 保存到localStorage
+      // Save to localStorage
       localStorage.setItem('completedTopics', JSON.stringify(updatedCompletedTopics));
     }
     
-    // 导航到相应的主题页面
+    // Navigate to the corresponding topic page
     navigate(`/level${level}/${topicId}`);
   };
 
@@ -91,14 +91,14 @@ const Education = () => {
     return completedTopics.includes(topicId);
   };
 
-  // 清空当前等级的进度
+  // Reset progress for current level
   const handleResetProgress = () => {
     setIsModalVisible(true);
   };
 
-  // 确认清空进度
+  // Confirm progress reset
   const confirmReset = () => {
-    // 过滤掉当前等级的主题，只保留其他等级的主题
+    // Filter out topics from current level, keep topics from other levels
     const filteredTopics = completedTopics.filter(
       topic => !topic.startsWith(`Topic${userLevel}_`)
     );
