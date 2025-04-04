@@ -33,7 +33,7 @@ const levelTopics = {
     { id: 'Topic3_2', title: 'Self-Managed Super Funds (SMSFs)', description: 'Understanding the responsibilities and benefits of running your own super fund.' },
     { id: 'Topic3_3', title: 'Superannuation and Tax Planning', description: 'Tax-effective strategies related to superannuation contributions and withdrawals.' },
     { id: 'Topic3_4', title: 'Estate Planning and Super', description: 'How superannuation interacts with your estate planning strategies.' },
-    { id: 'Topic3_5', title: 'International Aspects of Super', description: 'Managing superannuation when moving overseas or returning to Australia.' }
+    { id: 'Topic3_5', title: 'International Aspects of Super', description: 'Managing superannuation when moving overseas or returning to Australia.' },
     { id: 'Topic3_3', title: 'Superannuation and Tax Planning', description: 'Tax-effective strategies related to superannuation contributions and withdrawals.' }
   ]
 };
