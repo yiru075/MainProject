@@ -101,12 +101,12 @@
   align-items: center;
 }
 
-/* 修改进度条颜色 */
+/* Change progress bar color */
 .progress-container .ant-progress-bg {
   background-color: #FFC107 !important;
 }
 
-/* Modal 样式 */
+/* Modal styles */
 .ant-modal-footer .ant-btn-primary {
   background-color: #FFC107 !important;
   border-color: #FFC107 !important;
