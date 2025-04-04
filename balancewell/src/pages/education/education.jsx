@@ -5,7 +5,7 @@ import './education.css';
 
 const { Title, Text } = Typography;
 
-// Topic data for each level
+// Topic data for each level...
 const levelTopics = {
   1: [
     { id: 'Topic1_1', title: 'What is Superannuation and Why It Matters', description: 'Understanding the basics of superannuation and its importance for your future.' },
