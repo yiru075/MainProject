@@ -26,28 +26,15 @@ const levelTopics = {
     { id: 'Topic2_5', title: 'Employer vs Personal Contributions', description: 'Understanding the difference between employer and voluntary contributions.' },
     { id: 'Topic2_6', title: 'Superannuation and Life Events', description: 'How life events can impact your superannuation strategy.' },
     { id: 'Topic2_7', title: 'Retirement Planning Basics', description: 'Introduction to retirement planning and how super fits in.' },
-    { id: 'Topic2_8', title: 'Super Fund Performance Metrics', description: 'How to evaluate and compare super fund performance.' },
-    { id: 'Topic2_4', title: 'Investment Options Within Super', description: 'Exploring the various investment choices available in your super fund.' }
+    { id: 'Topic2_8', title: 'Super Fund Performance Metrics', description: 'How to evaluate and compare super fund performance.' }
   ],
   3: [
     { id: 'Topic3_1', title: 'Advanced Super Strategies', description: 'Strategic approaches to optimize your superannuation.' },
     { id: 'Topic3_2', title: 'Self-Managed Super Funds (SMSFs)', description: 'Understanding the responsibilities and benefits of running your own super fund.' },
     { id: 'Topic3_3', title: 'Superannuation and Tax Planning', description: 'Tax-effective strategies related to superannuation contributions and withdrawals.' },
     { id: 'Topic3_4', title: 'Estate Planning and Super', description: 'How superannuation interacts with your estate planning strategies.' },
-    { id: 'Topic3_5', title: 'International Aspects of Super', description: 'Managing superannuation when moving overseas or returning to Australia.' },
-    { id: 'Topic3_3', title: 'Superannuation and Tax Planning', description: 'Tax-effective strategies related to superannuation contributions and withdrawals.' }
+    { id: 'Topic3_5', title: 'International Aspects of Super', description: 'Managing superannuation when moving overseas or returning to Australia.' }
   ]
-};
-
-// Fix duplicate topic data
-const fixedLevelTopics = {
-  1: levelTopics[1],
-  2: levelTopics[2].filter((topic, index, self) => 
-    index === self.findIndex(t => t.id === topic.id)
-  ),
-  3: levelTopics[3].filter((topic, index, self) => 
-    index === self.findIndex(t => t.id === topic.id)
-  )
 };
 
 const Education = () => {
@@ -67,7 +54,7 @@ const Education = () => {
   
   // Calculate completion progress
   useEffect(() => {
-    const totalTopics = fixedLevelTopics[userLevel].length;
+    const totalTopics = levelTopics[userLevel].length;
     const completedCount = completedTopics.filter(topic => topic.startsWith(`Topic${userLevel}_`)).length;
     const percent = totalTopics > 0 ? Math.round((completedCount / totalTopics) * 100) : 0;
     setProgressPercent(percent);
@@ -141,7 +128,7 @@ const Education = () => {
       <div className="topics-container">
         <Title level={3}>Topics For Your Level</Title>
         <Row gutter={[16, 16]}>
-          {fixedLevelTopics[userLevel]?.map((topic) => (
+          {levelTopics[userLevel]?.map((topic) => (
             <Col xs={24} sm={12} md={8} key={topic.id}>
               <Card 
                 hoverable
