@@ -3,10 +3,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.3rem 2rem;
+    padding: 0rem 2rem;
     box-sizing: border-box;
     margin: 0;
-    height: 90px;
   }
 
   .bw-header .logo .logo-highlight {
@@ -15,10 +14,9 @@
     color: #FFC107;
     line-height: 1;
     margin: 0;
-    padding: 0;
+    padding: 0; 
     display: inline-block;
-    padding-top: 25px;
-    margin-left: 4rem;
+    margin-left: 1rem; 
   }
   
   .bw-header .nav-menu ul {
@@ -64,4 +62,3 @@
       display: block;
     }
   }
-  

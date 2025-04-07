@@ -1,0 +1,128 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .form-content {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .form-section {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-label {
+    font-weight: bold;
+    color: #f5a300;
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  
+  .form-input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .geocoder-box .mapboxgl-ctrl-geocoder {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 0px;
+  }
+  
+  .form-error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  
+  .form-success {
+    color: green;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  
+  .form-button-wrapper {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  
+  .form-submit-btn,
+  .form-reset-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #f5a300;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-submit-btn:hover,
+  .form-reset-btn:hover {
+    background-color: #e69500;
+  }
+  
+  .form-ratio-info {
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff8e1;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .form-ratio-info table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  
+  .form-ratio-info th,
+  .form-ratio-info td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .form-ratio-info th {
+    font-weight: bold;
+    color: #444;
+  }
+  
+  .continue-btn {
+    background-color: #f5a300;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .continue-btn:hover {
+    background-color: #e69500;
+    transform: translateY(-2px);
+  }
+  
+  .discover-button-wrapper {
+    margin-top: 16px;
+  }
+  

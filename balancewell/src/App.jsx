@@ -4,6 +4,7 @@ import Header from './components/header/header.jsx'
 import Home from './pages/home/home.jsx'
 import Housing from './pages/housing/housing.jsx'
 import Education from './pages/education/education.jsx'
+import Sustainability from './pages/sustainability/sustainability.jsx'
 // Level 1 Topics
 import Topic1_1 from './pages/Levels/Level1/Topic1_1.jsx'
 import Topic1_2 from './pages/Levels/Level1/Topic1_2.jsx'
@@ -38,7 +39,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/sustainability" element={<MapView />} /> */}
+        <Route path="/sustainability" element={<Sustainability />} />
         <Route path="/housing" element={<Housing />} />
         <Route path="/education" element={<Education />} />
 
