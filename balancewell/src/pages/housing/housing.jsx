@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './Housing.css';
+import './housing.css';
 import * as turf from '@turf/turf';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
