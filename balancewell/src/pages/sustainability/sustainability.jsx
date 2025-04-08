@@ -146,7 +146,7 @@ const Sustainability = () => {
       <form onSubmit={handleSubmit} className="form-content">
         <div className="form-section">
           <label className="form-label">
-            1. Which suburb do you currently live in?
+            1. Which suburb do you currently live in Victoria, Australia?
           </label>
           <div ref={geocoderContainer} className="geocoder-box" />
           {errors.suburb && <p className="form-error">{errors.suburb}</p>}
@@ -156,7 +156,7 @@ const Sustainability = () => {
         </div>
 
         <div className="form-section">
-          <label className="form-label">2. What is your weekly income?</label>
+          <label className="form-label">2. What is your weekly income(AUD)?</label>
           <input
             type="number"
             step="0.01"
@@ -171,7 +171,7 @@ const Sustainability = () => {
         </div>
 
         <div className="form-section">
-          <label className="form-label">3. What is your weekly rent expense?</label>
+          <label className="form-label">3. What is your weekly rent(AUD)?</label>
           <input
             type="number"
             step="0.01"

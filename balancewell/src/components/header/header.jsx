@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <header className="bw-header">
       <div className="logo">
-        <span className="logo-highlight">BalanceWell</span>
+        <span className="logo-highlight">WellbeingHub</span>
       </div>
       <nav className="nav-menu">
         <ul>
