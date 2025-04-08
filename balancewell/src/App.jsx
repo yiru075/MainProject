@@ -4,7 +4,10 @@ import Header from './components/header/header.jsx'
 import Home from './pages/home/home.jsx'
 import Housing from './pages/housing/housing.jsx'
 import Education from './pages/education/education.jsx'
+import EduMenu from './pages/eduMenu/eduMenu.jsx'
 import Sustainability from './pages/sustainability/sustainability.jsx'
+import News from './pages/news/news.jsx'
+import Quiz from './pages/quiz/quiz.jsx'
 // Level 1 Topics
 import Topic1_1 from './pages/Levels/Level1/Topic1_1.jsx'
 import Topic1_2 from './pages/Levels/Level1/Topic1_2.jsx'
@@ -42,6 +45,9 @@ function App() {
         <Route path="/sustainability" element={<Sustainability />} />
         <Route path="/housing" element={<Housing />} />
         <Route path="/education" element={<Education />} />
+        <Route path="/eduMenu" element={<EduMenu />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/quiz" element={<Quiz />} />
 
         {/* Level 1 Topic Routes */}
         <Route path="/level1/Topic1_1" element={<Topic1_1 />} />
