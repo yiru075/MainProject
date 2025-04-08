@@ -13,7 +13,7 @@ function Information() {
           Aging Well Isn’t A <br /> <span className="orange-text">Luxury– It’s A Right!</span>
         </h2>
         <h4>
-          Meet the Heart and Soul of <span className="brand-name">BalanceWell</span>
+          Meet the Heart and Soul of <span className="brand-name">WellbeingHub</span>
         </h4>
         <p>
           With <span className="highlight">"Balance Well"</span>, we approach with a deeply
