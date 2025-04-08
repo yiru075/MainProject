@@ -1,9 +1,38 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { DownOutlined } from "@ant-design/icons";
 import "./header.css";
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const isAwarenessActive = 
+    location.pathname === "/education" || 
+    location.pathname === "/news" ||
+    location.pathname === "/eduMenu" ||
+    location.pathname.startsWith("/level");
+
+  // Function to check level in localStorage and navigate accordingly
+  const handleModulesClick = (e) => {
+    e.preventDefault();
+    const savedLevel = localStorage.getItem('userLevel');
+    
+    if (savedLevel) {
+      // Navigate to education page if level is saved
+      navigate('/education');
+    } else {
+      // Navigate to eduMenu if no level is saved
+      navigate('/eduMenu');
+    }
+    
+    setDropdownVisible(false);
+  };
 
   return (
     <header className="bw-header">
@@ -33,13 +62,31 @@ const Header = () => {
               Housing
             </Link>
           </li>
-          <li>
-            <Link
-              to="/education"
-              className={location.pathname === "/education" ? "active" : ""}
+          <li className="dropdown-container">
+            <div 
+              className={`dropdown-trigger ${isAwarenessActive ? "active" : ""}`}
+              onClick={toggleDropdown}
             >
-              Education
-            </Link>
+              Awareness <DownOutlined className="dropdown-icon" />
+            </div>
+            {dropdownVisible && (
+              <div className="dropdown-menu">
+                <a 
+                  href="#"
+                  className={location.pathname === "/education" || location.pathname === "/eduMenu" || location.pathname.startsWith("/level") ? "active" : ""}
+                  onClick={handleModulesClick}
+                >
+                  Modules
+                </a>
+                <Link 
+                  to="/news" 
+                  className={location.pathname === "/news" ? "active" : ""}
+                  onClick={() => setDropdownVisible(false)}
+                >
+                  News
+                </Link>
+              </div>
+            )}
           </li>
         </ul>
       </nav>

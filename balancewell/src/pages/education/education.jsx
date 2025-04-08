@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography, Badge, Progress, Tag, Button, Modal } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { CheckCircleFilled, TrophyOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Typography, Badge, Progress, Tag, Button, Modal, Space } from 'antd';
+import { useNavigate, Link } from 'react-router-dom';
+import { CheckCircleFilled, TrophyOutlined, ReloadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import './education.css';
 
 const { Title, Text } = Typography;
@@ -43,6 +43,7 @@ const Education = () => {
   const [completedTopics, setCompletedTopics] = useState([]);
   const [progressPercent, setProgressPercent] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAssessedLevel, setIsAssessedLevel] = useState(false);
   
   // Load completed topics from local storage
   useEffect(() => {
@@ -59,6 +60,24 @@ const Education = () => {
     const percent = totalTopics > 0 ? Math.round((completedCount / totalTopics) * 100) : 0;
     setProgressPercent(percent);
   }, [completedTopics, userLevel]);
+
+  // Load user level from localStorage on component mount
+  useEffect(() => {
+    const savedLevel = localStorage.getItem('userLevel');
+    const tryLevel = localStorage.getItem('trylevel');
+    
+    if (savedLevel) {
+      setUserLevel(parseInt(savedLevel));
+      setIsAssessedLevel(true);
+    } else if (tryLevel) {
+      // If user has selected a level to try but hasn't completed assessment
+      setUserLevel(parseInt(tryLevel));
+      setIsAssessedLevel(false);
+    } else {
+      // If no level data is available, redirect to eduMenu
+      navigate('/eduMenu');
+    }
+  }, [navigate]);
 
   const handleTopicClick = (level, topicId) => {
     // Mark topic as completed if not already completed
@@ -102,9 +121,23 @@ const Education = () => {
         <Text>Your current level: <Badge count={userLevel} style={{ backgroundColor: '#FFC107', color: '#000' }} /></Text>
       </div>
       
+      {!isAssessedLevel && (
+        <div className="quiz-reminder">
+          <Space align="center">
+            <QuestionCircleOutlined />
+            <Text>
+              You're currently exploring Level {userLevel}. For a personalized recommendation based on your knowledge, 
+              take our quick assessment quiz.
+            </Text>
+            <Link to="/quiz">
+              <Button type="primary" size="small">Take Quiz</Button>
+            </Link>
+          </Space>
+        </div>
+      )}
+      
       <div className="progress-container">
         <div className="progress-header">
-          <Text>Your progress: {progressPercent}% completed</Text>
           {progressPercent === 100 && (
             <Button 
               type="primary" 
@@ -115,6 +148,7 @@ const Education = () => {
               Reset Progress
             </Button>
           )}
+          <Text>Your progress: {progressPercent}% completed</Text>
         </div>
         <Progress percent={progressPercent} strokeColor="#FFC107" />
         {progressPercent === 100 && (
