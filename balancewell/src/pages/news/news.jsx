@@ -11,6 +11,13 @@ const News = () => {
   const [search, setSearch] = useState('');
   const [error, setError] = useState(null);
 
+  // RSS feed URLs
+  const feedUrls = {
+    diet: 'https://rss.app/feeds/YzBOIqqBNLHyw3yb.xml',
+    exercise: 'https://rss.app/feeds/u313nh5diwfVRYeB.xml',
+    mental: 'https://rss.app/feeds/TlBKbedwF2EhYf4d.xml'
+  };
+
   // Sample articles for each category when no results found
   const sampleArticles = {
     diet: [
@@ -70,67 +77,54 @@ const News = () => {
     }
     
     // Then try to extract from content
-    const match = item?.content?.match(/<img.*?src=["'](.*?)["']/);
+    const match = item?.content?.match(/<img.*?src=["'](https?:\/\/.*?)["']/);
     return match ? match[1] : null;
   };
 
   useEffect(() => {
-    const fetchNews = () => {
-      fetch('https://cftszlhuhkvepemocmgh.supabase.co/functions/v1/rss-reader', {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdHN6bGh1aGt2ZXBlbW9jbWdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwOTAwODUsImV4cCI6MjA1OTY2NjA4NX0.uTI2trAx3IfqdBw7YRYYyk00CbICNfQaf4Lqiug5Ed0'
-        }
-      })
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Response status: ' + res.status);
-          }
-          return res.json();
-        })
-        .then(data => {
-          if (!Array.isArray(data)) {
-            throw new Error('Response is not an array');
-          }
-          
-          // Categorize articles into three categories
-          const categorizedFeeds = {
-            diet: [],
-            exercise: [],
-            mental: []
-          };
-          
-          data.forEach(item => {
-            const title = item.title?.toLowerCase() || '';
-            const content = item.content?.toLowerCase() || '';
+    const fetchNews = async () => {
+      setLoading(true);
+      const categorizedFeeds = {
+        diet: [],
+        exercise: [],
+        mental: []
+      };
+      
+      try {
+        // Fetch all RSS feeds in parallel
+        const categoryPromises = Object.entries(feedUrls).map(async ([category, url]) => {
+          try {
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
             
-            if (title.includes('nutrition') || title.includes('diet') || 
-                content.includes('nutrition') || content.includes('diet') || 
-                content.includes('food') || content.includes('eating')) {
-              categorizedFeeds.diet.push(item);
-            } else if (title.includes('exercise') || title.includes('fitness') || 
-                       content.includes('exercise') || content.includes('fitness') || 
-                       content.includes('workout') || content.includes('physical activity')) {
-              categorizedFeeds.exercise.push(item);
-            } else {
-              categorizedFeeds.mental.push(item);
+            if (!response.ok) {
+              throw new Error(`Error fetching ${category} feed: ${response.status}`);
             }
-          });
-          
-          setFeeds(categorizedFeeds);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error('Error fetching data:', err);
-          setFeeds({ diet: [], exercise: [], mental: [] });
-          setError('Unable to load news data');
-          setLoading(false);
+            
+            const data = await response.json();
+            
+            if (data.status === 'ok' && Array.isArray(data.items)) {
+              categorizedFeeds[category] = data.items;
+            }
+          } catch (categoryError) {
+            console.error(`Error fetching ${category} feed:`, categoryError);
+          }
         });
+        
+        // Wait for all requests to complete
+        await Promise.all(categoryPromises);
+        
+        setFeeds(categorizedFeeds);
+      } catch (error) {
+        console.error('Error fetching feeds:', error);
+        setError('Unable to load news data. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchNews(); // Initial load
     
-    const interval = setInterval(fetchNews, 60000); // Refresh every 60 sec
+    const interval = setInterval(fetchNews, 300000); // Refresh every 5 minutes
     return () => clearInterval(interval);
   }, []);
 

@@ -16,7 +16,7 @@ function Information() {
           Meet the Heart and Soul of <span className="brand-name">WellbeingHub</span>
         </h4>
         <p>
-          With <span className="highlight">"Balance Well"</span>, we approach with a deeply
+          With <span className="highlight">"WellbeingHub"</span>, we approach with a deeply
           personalized touch, striving to understand each individual's unique needs,
           preferences, and life story, because we believe that the most meaningful care is
           one that honors the individuality and dignity of every senior we serve.

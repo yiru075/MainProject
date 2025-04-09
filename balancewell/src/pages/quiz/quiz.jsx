@@ -164,7 +164,7 @@ const Quiz = () => {
               )}
             </Paragraph>
             <Paragraph>
-              <Link to={`/level${recommendedLevel}/topic1_1`}>
+              <Link to="/education">
                 <Button type="link">
                   Begin My Learning Journey
                 </Button>

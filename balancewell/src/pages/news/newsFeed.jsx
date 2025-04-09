@@ -1,34 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Input, Typography, Spin, Row, Col } from 'antd';
+import { Card, Input, Typography, Spin, Row, Col, Tabs } from 'antd';
 import axios from 'axios';
 
 const { Title, Paragraph } = Typography;
 const { Search } = Input;
+const { TabPane } = Tabs;
 
 const NewsFeed = () => {
-  const [articles, setArticles] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [articles, setArticles] = useState({
+    diet: [],
+    exercise: [],
+    mental: []
+  });
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('all');
+
+  // RSS feed URLs
+  const feedUrls = {
+    diet: 'https://rss.app/feeds/YzBOIqqBNLHyw3yb.xml',
+    exercise: 'https://rss.app/feeds/u313nh5diwfVRYeB.xml',
+    mental: 'https://rss.app/feeds/TlBKbedwF2EhYf4d.xml'
+  };
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get(
-          'https://cftszlhuhkvepemocmgh.supabase.co/functions/v1/rss-reader',
-          {
-            headers: {
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdHN6bGh1aGt2ZXBlbW9jbWdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwOTAwODUsImV4cCI6MjA1OTY2NjA4NX0.uTI2trAx3IfqdBw7YRYYyk00CbICNfQaf4Lqiug5Ed0',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
+        setLoading(true);
+        const results = {};
+        
+        // Fetch all RSS feeds in parallel
+        const requests = Object.entries(feedUrls).map(async ([category, url]) => {
+          try {
+            const response = await axios.get(
+              `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`
+            );
+            
+            if (response.data.status === 'ok' && Array.isArray(response.data.items)) {
+              results[category] = response.data.items;
+            } else {
+              results[category] = [];
             }
+          } catch (error) {
+            console.error(`Error fetching ${category} feed:`, error);
+            results[category] = [];
           }
-        );
-        setArticles(response.data);
-        setFiltered(response.data);
-        setLoading(false);
+        });
+        
+        await Promise.all(requests);
+        setArticles(results);
       } catch (error) {
         console.error('Failed to fetch RSS:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -38,18 +61,45 @@ const NewsFeed = () => {
 
   const handleSearch = (value) => {
     setSearchTerm(value);
-    const lower = value.toLowerCase();
-    const results = articles.filter(article =>
-      article.title.toLowerCase().includes(lower) ||
-      article.content?.toLowerCase().includes(lower)
-    );
-    setFiltered(results);
   };
 
   const extractImage = (html) => {
-    const match = html?.match(/<img.*?src=\"(.*?)\"/);
+    const match = html?.match(/<img.*?src=\"(https?:\/\/.*?)\"/);
     return match ? match[1] : null;
   };
+
+  // Filter articles based on search term and active tab
+  const getFilteredArticles = () => {
+    const lower = searchTerm.toLowerCase();
+    
+    let filtered = [];
+    
+    if (activeTab === 'all') {
+      // Combine all categories
+      Object.values(articles).forEach(categoryArticles => {
+        filtered = [...filtered, ...categoryArticles];
+      });
+    } else {
+      // Show only the active tab category
+      filtered = articles[activeTab] || [];
+    }
+    
+    // Apply search filter if there's a search term
+    if (lower) {
+      filtered = filtered.filter(article => 
+        article.title.toLowerCase().includes(lower) ||
+        article.content?.toLowerCase().includes(lower)
+      );
+    }
+    
+    return filtered;
+  };
+
+  const onTabChange = (key) => {
+    setActiveTab(key);
+  };
+
+  const filteredArticles = getFilteredArticles();
 
   return (
     <div style={{ padding: '30px' }}>
@@ -65,11 +115,18 @@ const NewsFeed = () => {
         onChange={(e) => handleSearch(e.target.value)}
       />
 
+      <Tabs defaultActiveKey="all" onChange={onTabChange} style={{ marginBottom: 20 }}>
+        <TabPane tab="All News" key="all" />
+        <TabPane tab="Diet & Nutrition" key="diet" />
+        <TabPane tab="Exercise & Fitness" key="exercise" />
+        <TabPane tab="Mental Health" key="mental" />
+      </Tabs>
+
       {loading ? (
         <Spin tip="Loading..." size="large" />
       ) : (
         <Row gutter={[24, 24]}>
-          {filtered.map((item, index) => {
+          {filteredArticles.map((item, index) => {
             const image = extractImage(item.content);
             return (
               <Col xs={24} sm={12} md={8} key={index}>
@@ -90,6 +147,14 @@ const NewsFeed = () => {
               </Col>
             );
           })}
+          
+          {filteredArticles.length === 0 && (
+            <Col span={24}>
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <p>No articles found matching your search criteria.</p>
+              </div>
+            </Col>
+          )}
         </Row>
       )}
     </div>
