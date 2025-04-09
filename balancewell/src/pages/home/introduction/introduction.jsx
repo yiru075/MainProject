@@ -9,7 +9,7 @@ function Introduction() {
       <div className="introduction-content">
         <h1>
           Your aging journey starts with{" "}
-          <span className="highlight">BalanceWell</span>
+          <span className="highlight">WellbeingHub</span>
         </h1>
         <p>
           Everyone deserves growing older with confidence, care and connection.

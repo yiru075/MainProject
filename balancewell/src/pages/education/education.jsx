@@ -9,31 +9,34 @@ const { Title, Text } = Typography;
 // Topic data for each level
 const levelTopics = {
   1: [
-    { id: 'Topic1_1', title: 'What is Superannuation and Why It Matters', description: 'Understanding the basics of superannuation and its importance for your future.' },
-    { id: 'Topic1_2', title: 'Superannuation - The Basics', description: 'Learn about how superannuation works and the key terminology.' },
-    { id: 'Topic1_3', title: 'Types of Superannuation Funds', description: 'Explore different types of super funds and their features.' },
-    { id: 'Topic1_4', title: 'Your Super Statement Explained', description: 'How to read and understand your superannuation statement.' },
-    { id: 'Topic1_5', title: 'Finding Lost Super', description: 'Steps to locate and consolidate your lost superannuation accounts.' },
-    { id: 'Topic1_6', title: 'Super Guarantee - What Employers Must Pay', description: 'Understanding your entitlements under the Superannuation Guarantee.' },
-    { id: 'Topic1_7', title: 'Super and Changing Jobs', description: 'What happens to your super when you change employers.' },
-    { id: 'Topic1_8', title: 'Getting Help with Super', description: 'Resources and support services for superannuation assistance.' }
+    { id: 'Topic1_1', title: 'What is Superannuation and Why Does It Matter?', description: 'Understanding the basics of superannuation and its importance for your future.' },
+    { id: 'Topic1_2', title: 'What is Financial Literacy?', description: 'Learn about financial literacy and why it matters for everyday life, especially as you age.' },
+    { id: 'Topic1_3', title: 'What is a Budget and Why Is It Helpful?', description: 'Understand what a budget is in simple terms and how it helps with planning your money.' },
+    { id: 'Topic1_4', title: 'What is Rent Stress?', description: 'Learn what rent stress means and how to know if you\'re spending too much on rent.' },
+    { id: 'Topic1_5', title: 'What is Healthy Food After 40?', description: 'Learn about key nutrients, energy, health, and simple food choices that support your budget and wellbeing.' },
+    { id: 'Topic1_6', title: 'What Does Aging Well Look Like?', description: 'Learn what healthy aging means in everyday terms and small things you can do to age with strength.' },
+    { id: 'Topic1_7', title: 'What is "Safe to Spend" and How Do I Know Mine?', description: 'Learn what "Safe to Spend" means and how to estimate your safe spending amount.' },
+    { id: 'Topic1_8', title: 'Who Can Help Me with Money or Support?', description: 'Where to go for trusted, free financial and wellbeing help in Australia.' }
   ],
   2: [
     { id: 'Topic2_1', title: 'How to Check Your Super Balance via MyGov', description: 'Step-by-step guide to checking your super through the government portal.' },
-    { id: 'Topic2_2', title: 'Consolidating Multiple Super Accounts', description: 'Benefits and process of combining your superannuation accounts.' },
-    { id: 'Topic2_3', title: 'Understanding Super Fees', description: 'The different types of fees that can impact your super balance.' },
-    { id: 'Topic2_4', title: 'Investment Options Within Super', description: 'Exploring the various investment choices available in your super fund.' },
-    { id: 'Topic2_5', title: 'Employer vs Personal Contributions', description: 'Understanding the difference between employer and voluntary contributions.' },
-    { id: 'Topic2_6', title: 'Superannuation and Life Events', description: 'How life events can impact your superannuation strategy.' },
-    { id: 'Topic2_7', title: 'Retirement Planning Basics', description: 'Introduction to retirement planning and how super fits in.' },
-    { id: 'Topic2_8', title: 'Super Fund Performance Metrics', description: 'How to evaluate and compare super fund performance.' }
+    { id: 'Topic2_2', title: 'How Compound Interest Grows Your Super', description: 'Learn how small amounts in super can grow over time through compound interest.' },
+    { id: 'Topic2_3', title: 'Difference Between Needs and Wants', description: 'Understanding what needs and wants mean in personal budgeting and why it matters.' },
+    { id: 'Topic2_4', title: 'How Much Rent Is Too Much?', description: 'Understanding rent-to-income ratio and the threshold for rent stress in Australia.' },
+    { id: 'Topic2_5', title: 'Affordable Staples That Support Energy and Health', description: 'Learn about low-cost nutritious foods that support your health as you age.' },
+    { id: 'Topic2_6', title: 'Free or Low-Cost Health Check-ups & Screenings in Victoria', description: 'Discover health check-ups and screenings available at little or no cost in Victoria.' },
+    { id: 'Topic2_7', title: 'How to Read a Food Label (Salt, Sugar, Fats)', description: 'Learn what nutrition labels mean and where to find key health information on packaged foods.' },
+    { id: 'Topic2_8', title: 'Understanding Centrelink Rent Assistance', description: 'Learn what Rent Assistance is, who may be eligible, and where to check eligibility.' }
   ],
   3: [
-    { id: 'Topic3_1', title: 'Advanced Super Strategies', description: 'Strategic approaches to optimize your superannuation.' },
-    { id: 'Topic3_2', title: 'Self-Managed Super Funds (SMSFs)', description: 'Understanding the responsibilities and benefits of running your own super fund.' },
-    { id: 'Topic3_3', title: 'Superannuation and Tax Planning', description: 'Tax-effective strategies related to superannuation contributions and withdrawals.' },
-    { id: 'Topic3_4', title: 'Estate Planning and Super', description: 'How superannuation interacts with your estate planning strategies.' },
-    { id: 'Topic3_5', title: 'International Aspects of Super', description: 'Managing superannuation when moving overseas or returning to Australia.' }
+    { id: 'Topic3_1', title: 'Creating a Simple Weekly Budget', description: 'Learn how to create a simple weekly budget to manage your everyday spending effectively.' },
+    { id: 'Topic3_2', title: 'Tracking Your Spending with a Template', description: 'Tools and methods to track where your money goes each week or day.' },
+    { id: 'Topic3_3', title: 'What to Do If You Didn\'t Work in a Formal Job (Super Gaps)', description: 'Understanding superannuation gaps and options if you have little or no super.' },
+    { id: 'Topic3_4', title: 'Sample Weekly Meal Plan Under $50', description: 'Practical examples of how to eat healthy on a budget with a sample meal plan.' },
+    { id: 'Topic3_5', title: 'Understanding Safe and Affordable Suburbs', description: 'What to consider when choosing where to live for affordability and support.' },
+    { id: 'Topic3_6', title: 'Budgeting Around Remittances and Family Support', description: 'How to budget when sending money to family overseas while maintaining your own financial health.' },
+    { id: 'Topic3_7', title: 'Staying Physically Active Without a Gym', description: 'Simple, low-cost ways to stay active at home or in your neighbourhood.' },
+    { id: 'Topic3_8', title: 'Staying Socially Connected in Later Life', description: 'Why social connection is important and how to feel less isolated without spending money.' }
   ]
 };
 
