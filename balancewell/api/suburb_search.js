@@ -10,7 +10,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing query parameter "q"' });
   }
 
-  const victoriaBbox = '140.9617,-39.1592,150.0274,-33.9806';
+  const victoriaBbox = '140.9617,-39.1592,149.9760,-33.9806';
+
+
 
   const accessToken = process.env.VITE_MAPBOX_TOKEN;
   if (!accessToken) {

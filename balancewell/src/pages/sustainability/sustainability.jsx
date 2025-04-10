@@ -379,6 +379,7 @@ const Sustainability = () => {
     setRent('');
     setRentRatio(null);
     setErrors({ suburb: '', income: '', rent: '' });
+    setSearchResults([]); 
     localStorage.removeItem('sustainabilityData');
   };
 
@@ -402,23 +403,27 @@ const Sustainability = () => {
           {errors.suburb && <p className="form-error">{errors.suburb}</p>}
           {isLoading && <p className="form-info">Loading...</p>}
           {searchResults.length > 0 && (
-            <ul className="search-results">
-              {searchResults.map((result, index) => (
-                <li
-                  key={index}
-                  onClick={() => {
-                    setSuburb(result.name);
-                    setSearchResults([]);
-                  }}
-                  className="search-result-item"
-                >
-                  {result.name}
-                </li>
-              ))}
-            </ul>
-          )}
+            <div className="geocoder-box search-dropdown">
+              <ul className="search-results">
+                {searchResults.map((result, index) => (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setSuburb(result.name);
+                      setSearchResults([]);
+                    }}
+                    className="search-result-item"
+                  >
+                    <span className="result-name">{result.name}</span>
+                    {result.state && (
+                      <span className="result-state">, {result.state}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}      
         </div>
-
         <div className="form-section">
           <label className="form-label">2. What is your weekly income(AUD)?</label>
           <input
