@@ -10,7 +10,7 @@ function Information() {
       </div>
       <div className="about-content">
         <h2>
-          Aging Well Isn’t A <br /> <span className="orange-text">Luxury– It’s A Right!</span>
+          Aging Well Isn’t a <br /> <span className="orange-text">Luxury– It’s a Right!</span>
         </h2>
         <h4>
           Meet the Heart and Soul of <span className="brand-name">WellbeingHub</span>

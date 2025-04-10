@@ -41,11 +41,19 @@ const Header = () => {
       </div>
       <nav className="nav-menu">
         <ul>
-          <li>
+          {/* <li>
             <Link to="/" className={location.pathname === "/" ? "active" : ""}>
               Home
             </Link>
+          </li> */}
+          
+          {/*For Login Page  */}
+          <li>
+            <Link to="/home" className={location.pathname === "/home" ? "active" : ""}>
+              Home
+            </Link>
           </li>
+
           <li>
             <Link
               to="/sustainability"
