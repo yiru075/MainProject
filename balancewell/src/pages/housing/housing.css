@@ -5,17 +5,24 @@
   padding: 40px;
   background-color: #f7f7f7;
   min-height: 100vh;
-  gap: 20px; 
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .map-card {
   position: relative;
-  flex: 1; 
+  flex: 1;
   height: 75vh;
   border-radius: 12px;
   overflow: hidden;
   background-color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: width 0.3s ease;
+}
+
+.map-card-narrow {
+  width: 80vw;
+  max-width: 80%;
 }
 
 .map-container {
@@ -23,107 +30,28 @@
   height: 100%;
 }
 
-.control-panel {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.dropdown-box,
-.input-box {
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  font-size: 14px;
-  width: 100%;
-}
-
-.dropdown-box label,
-.input-box label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-.dropdown-box select,
-.input-box input {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.recommendation-box {
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  font-size: 14px;
-  width: 100%;
-}
-
-.legend-box {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  width: 200px;
-}
-
-.legend-title {
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 5px;
-}
-
-.legend-bar {
-  width: 160px;
-  height: 10px;
-  background: linear-gradient(to right, #ffffb2, #fecc5c, #fd8d3c, #f03b20, #bd0026);
-  border-radius: 5px;
-  margin: 0 auto 5px;
-}
-
-.legend-scale {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: #555;
-}
-
-.legend-note {
-  font-size: 10px;
-  text-align: center;
-  color: #333;
-  margin-top: 5px;
-}
-
 .control-card {
-  flex: 0.3; 
+  flex: 0.3;
   background: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 20px; 
+  gap: 20px;
+  min-width: 250px;
+  max-width: 350px;
+}
+
+.recommendation-box {
+  background: white;
+  border-radius: 8px;
+  width: 100%;
 }
 
 .recommendation-box h4 {
   margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .recommendation-table {
@@ -174,88 +102,112 @@
   box-sizing: border-box;
 }
 
-.no-background {
-  background: none;
-  box-shadow: none;
-  padding: 0;
+.legend-box {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  width: 200px;
 }
 
-.housing-container {
+.legend-title {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.legend-bar {
+  width: 160px;
+  height: 10px;
+  background: linear-gradient(to right, #ffffb2, #fecc5c, #fd8d3c, #f03b20, #bd0026);
+  border-radius: 5px;
+  margin: 0 auto 5px;
+}
+
+.legend-scale {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 40px;
-  background-color: #f7f7f7;
-  min-height: 100vh;
-  gap: 20px;
+  font-size: 10px;
+  color: #555;
 }
 
-.map-card {
-  position: relative;
-  flex: 1;
-  height: 75vh;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.control-card {
-  flex: 0.3;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-label {
+  font-size: 16px;
+  color: #555;
 }
 
 @media (max-width: 768px) {
   .housing-container {
     flex-direction: column;
     padding: 20px;
-    gap: 10px;
+    gap: 15px;
   }
 
   .map-card {
-    height: 50vh; 
+    height: 50vh;
+    width: 100% !important;
   }
 
-  .control-card {
-    flex: 1;
-    padding: 15px;
-    box-shadow: none; 
-    background: none; 
+  
+  
+
+  .recommendation-table th,
+  .recommendation-table td {
+    font-size: 12px;
   }
 }
 
-
 @media (max-width: 480px) {
-  .housing-container {
-    padding: 10px;
-  }
-
   .map-card {
-    height: 40vh; 
-  }
-
-  .control-card {
-    padding: 10px;
-    gap: 10px;
-  }
-
-  .dropdown-box,
-  .input-box {
-    font-size: 12px; 
-  }
-
-  .recommendation-box h4 {
-    font-size: 14px;
+    height: 40vh;
   }
 
   .recommendation-table th,
   .recommendation-table td {
-    font-size: 10px; 
+    font-size: 10px;
+  }
+
+  .floating-dropdown label,
+  .floating-dropdown select {
+    font-size: 12px;
   }
 }

@@ -1,0 +1,145 @@
+.edumenu-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.edumenu-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.edumenu-header h2 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.edumenu-intro {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  max-width: 800px;
+  line-height: 1.6;
+  color: #555;
+  margin: 0 auto;
+}
+
+/* Level cards styling */
+.level-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.level-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+}
+
+.level-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.level-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 5px 0;
+}
+
+.level-card-header h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.level-description {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.level-topics {
+  background-color: #f8f8f8;
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  border-left: 3px solid #FFC107;
+}
+
+.level-topics h4 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.level-topics ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.level-topics li {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.start-level-btn {
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background-color: #FFC107 !important;
+  border-color: #FFC107 !important;
+  color: #000 !important;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.start-level-btn:hover {
+  background-color: #e0aa05 !important;
+  border-color: #e0aa05 !important;
+  color: #000 !important;
+  transform: translateY(-2px);
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .edumenu-container {
+    padding: 30px 15px;
+    margin: 20px auto;
+  }
+  
+  .edumenu-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .edumenu-intro {
+    font-size: 1rem;
+  }
+  
+  .level-card {
+    margin-bottom: 20px;
+  }
+  
+  .level-topics {
+    padding: 20px;
+  }
+
+  .level-card-header h3 {
+    font-size: 1.4rem;
+  }
+}

@@ -1,15 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import './sustainability.css';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-
 const Sustainability = () => {
-  const geocoderContainer = useRef(null);
-  const geocoderRef = useRef(null);
   const navigate = useNavigate();
 
   const [suburb, setSuburb] = useState('');
@@ -21,51 +14,8 @@ const Sustainability = () => {
     income: '',
     rent: '',
   });
-
-  useEffect(() => {
-    const saved = localStorage.getItem('sustainabilityData');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setSuburb(parsed.suburb || '');
-      setIncome(parsed.income?.toString() || '');
-      setRent(parsed.rent?.toString() || '');
-      setRentRatio(parsed.rentRatio || null);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (geocoderContainer.current) {
-      geocoderContainer.current.innerHTML = '';
-    }
-
-    const geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      types: 'place,locality,neighborhood',
-      placeholder: 'Search your suburb',
-      countries: 'au',
-      filter: (item) =>
-        item.context.some((c) => c.id.includes('region') && c.text === 'Victoria'),
-      mapboxgl: mapboxgl,
-    });
-
-    geocoderRef.current = geocoder;
-    geocoder.addTo(geocoderContainer.current);
-
-    const handleResult = (e) => {
-      const selected = e.result.text;
-      setSuburb(selected);
-      setErrors((prev) => ({ ...prev, suburb: '' }));
-    };
-
-    geocoder.on('result', handleResult);
-
-    return () => {
-      geocoder.off('result', handleResult);
-      if (geocoderContainer.current) {
-        geocoderContainer.current.innerHTML = '';
-      }
-    };
-  }, []);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateIncome = () => {
     if (!(parseFloat(income) > 0)) {
@@ -90,6 +40,28 @@ const Sustainability = () => {
     } else {
       setErrors((prev) => ({ ...prev, rent: '' }));
       return true;
+    }
+  };
+
+  const handleSearch = async (query) => {
+    if (!query) {
+      setSearchResults([]);
+      return;
+    }
+  
+    setIsLoading(true);
+    try {
+      const baseUrl = import.meta.env.VITE_WEBSITE_URL; 
+      const response = await fetch(`${baseUrl}/api/suburb_search?q=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch search results');
+      }
+      const data = await response.json();
+      setSearchResults(data.results || []);
+    } catch (error) {
+      console.error('Error fetching suburb search results:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -128,7 +100,6 @@ const Sustainability = () => {
     setSuburb('');
     setIncome('');
     setRent('');
-    geocoderRef.current?.clear();
   };
 
   const handleReset = () => {
@@ -137,8 +108,8 @@ const Sustainability = () => {
     setRent('');
     setRentRatio(null);
     setErrors({ suburb: '', income: '', rent: '' });
+    setSearchResults([]); 
     localStorage.removeItem('sustainabilityData');
-    geocoderRef.current?.clear();
   };
 
   return (
@@ -148,13 +119,40 @@ const Sustainability = () => {
           <label className="form-label">
             1. Which suburb do you currently live in Victoria, Australia?
           </label>
-          <div ref={geocoderContainer} className="geocoder-box" />
+          <input
+            type="text"
+            value={suburb}
+            onChange={(e) => {
+              setSuburb(e.target.value);
+              handleSearch(e.target.value);
+            }}
+            className="form-input"
+            placeholder="Search for your suburb"
+          />
           {errors.suburb && <p className="form-error">{errors.suburb}</p>}
-          {suburb && !errors.suburb && (
-            <p className="form-success">Selected suburb: {suburb}</p>
-          )}
+          {isLoading && <p className="form-info">Loading...</p>}
+          {searchResults.length > 0 && (
+            <div className="geocoder-box search-dropdown">
+              <ul className="search-results">
+                {searchResults.map((result, index) => (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setSuburb(result.name);
+                      setSearchResults([]);
+                    }}
+                    className="search-result-item"
+                  >
+                    <span className="result-name">{result.name}</span>
+                    {result.state && (
+                      <span className="result-state">, {result.state}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}      
         </div>
-
         <div className="form-section">
           <label className="form-label">2. What is your weekly income(AUD)?</label>
           <input
@@ -221,7 +219,8 @@ const Sustainability = () => {
                   return (
                     <p style={{ color: 'red' }}>
                       ❗️ <strong>Affordability Level: Level 3 (UNAFFORDABLE)</strong><br />
-                      This is above the recommended 35% threshold.
+                      This is above the recommended 35% threshold.<br />
+                      WellbeingHub will help you discover nearby suburbs with better rent-to-income ratios.
                     </p>
                   );
                 }

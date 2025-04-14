@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './housing.css';
 import * as turf from '@turf/turf';
+import './housing.css';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -15,22 +15,37 @@ const houseTypes = [
   '4 Bed House',
 ];
 
+const getCoordsFromSuburb = async (suburb) => {
+  const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(suburb)}.json?access_token=${mapboxgl.accessToken}`);
+  const data = await response.json();
+  if (data.features && data.features.length > 0) {
+    return data.features[0].center;
+  }
+  return null;
+};
+
 const Housing = () => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
   const popupRef = useRef(new mapboxgl.Popup({ closeButton: false, closeOnClick: false }));
+
   const [selectedType, setSelectedType] = useState('1 Bed Flat');
-  const [geojsonData, setGeojsonData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [hasSuburbData, setHasSuburbData] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
-  const [radius, setRadius] = useState(10);
-  const [hasValidUserData, setHasValidUserData] = useState(false);
+  const [maxDistance, setMaxDistance] = useState(10);
+  const [showControlPanel, setShowControlPanel] = useState(false);
+
+  const geojsonRef = useRef(null);
+  const userCoordsRef = useRef(null);
+  const sustainabilityDataRef = useRef(null);
 
   const updateInteraction = (map, type) => {
     if (!map || !map.getLayer('rent-heatmap')) return;
 
     map.setPaintProperty('rent-heatmap', 'fill-color', [
       'case',
-      ['has', type],
+      ['boolean', ['!=', ['get', type], null], false],
       [
         'interpolate',
         ['linear'],
@@ -44,20 +59,21 @@ const Housing = () => {
       '#eeeeee'
     ]);
 
-    map.off('mousemove', 'rent-heatmap', map._handleMouseMove);
-    map.off('mouseleave', 'rent-heatmap', map._handleMouseLeave);
+    map.off('mousemove', 'rent-heatmap', map._hoverMove);
+    map.off('mouseleave', 'rent-heatmap', map._hoverLeave);
 
     const handleMouseMove = (e) => {
       const feature = e.features?.[0];
       if (feature) {
         const suburb = feature.properties.vic_loca_2 || 'Unknown';
-        const rent = feature.properties[selectedType];
+        const rent = feature.properties[type];
         const rentDisplay = rent ? `$${rent}` : 'No Data';
 
         popupRef.current
           .setLngLat(e.lngLat)
-          .setHTML(`<strong>${suburb}</strong><br/>${selectedType}: ${rentDisplay}`)
+          .setHTML(`<strong>${suburb}</strong><br/>${type}: ${rentDisplay}`)
           .addTo(map);
+
         map.getCanvas().style.cursor = 'pointer';
       }
     };
@@ -69,180 +85,277 @@ const Housing = () => {
 
     map.on('mousemove', 'rent-heatmap', handleMouseMove);
     map.on('mouseleave', 'rent-heatmap', handleMouseLeave);
-    map._handleMouseMove = handleMouseMove;
-    map._handleMouseLeave = handleMouseLeave;
+
+    map._hoverMove = handleMouseMove;
+    map._hoverLeave = handleMouseLeave;
   };
 
-  const getRecommendations = (geojson, type, userSuburb, userIncome, currentRent) => {
-    if (!geojson || !type || !userSuburb || !userIncome || !currentRent) return [];
+  const generateRecommendations = (geojson, coords, income, suburbName, currentRent) => {
+    const userPoint = turf.point(coords);
+    const recommendationsRaw = [];
 
-    const userFeature = geojson.features.find(f =>
-      f.properties.vic_loca_2?.toLowerCase() === userSuburb.toLowerCase()
-    );
-    if (!userFeature) return [];
+    for (const feature of geojson.features) {
+      const rent = feature.properties[selectedType];
+      const suburb = feature.properties.vic_loca_2;
 
-    const userCenter = turf.center(userFeature).geometry.coordinates;
+      if (!rent || rent >= income * 0.3 || suburb === suburbName) continue;
 
-    const affordable = geojson.features
-      .map(f => {
-        const rent = f.properties[type];
-        if (!rent || rent >= 0.3 * userIncome) return null;
-        const center = turf.center(f).geometry.coordinates;
-        const distance = turf.distance(turf.point(userCenter), turf.point(center), { units: 'kilometers' });
-        if (distance > radius) return null;
+      const centroid = turf.centroid(feature);
+      const distance = turf.distance(userPoint, centroid, { units: 'kilometers' });
 
+      if (distance <= maxDistance) {
         const saved = currentRent - rent;
+        recommendationsRaw.push({ suburb, rent, distance, saved });
+      }
+    }
 
-        return {
-          suburb: f.properties.vic_loca_2,
-          rent,
-          center,
-          distance,
-          saved: saved > 0 ? saved : 0,
-          feature: f
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.distance - b.distance);
+    recommendationsRaw.sort((a, b) => a.distance - b.distance);
+    const topRecommendations = recommendationsRaw.slice(0, 5);
+    setRecommendations(topRecommendations);
 
-    return affordable.slice(0, 5);
-  };
+    const highlightedFeatures = geojson.features.filter((feature) =>
+      topRecommendations.some(r => r.suburb === feature.properties.vic_loca_2)
+    );
 
-  const highlightRecommendations = (map, features) => {
-    const geo = {
-      type: 'FeatureCollection',
-      features: features.map(r => r.feature)
-    };
-
-    if (!map.getSource('recommendation-highlight')) {
-      map.addSource('recommendation-highlight', {
-        type: 'geojson',
-        data: geo,
+    const map = mapRef.current;
+    if (map.getSource('recommended-outline-source')) {
+      map.getSource('recommended-outline-source').setData({
+        type: 'FeatureCollection',
+        features: highlightedFeatures
       });
+    } else {
+      map.addSource('recommended-outline-source', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: highlightedFeatures
+        }
+      });
+
       map.addLayer({
-        id: 'recommendation-outline',
+        id: 'recommended-outline',
         type: 'line',
-        source: 'recommendation-highlight',
+        source: 'recommended-outline-source',
         paint: {
           'line-color': '#0066ff',
-          'line-width': 2
+          'line-width': 2,
+          'line-opacity': 0.8,
         }
       });
-    } else {
-      map.getSource('recommendation-highlight').setData(geo);
-    }
-  };
 
-  const addUserLocationMarker = (map, center) => {
-    const geo = {
-      type: 'FeatureCollection',
-      features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: center } }]
-    };
-
-    if (!map.getSource('user-location')) {
-      map.addSource('user-location', {
-        type: 'geojson',
-        data: geo
-      });
       map.addLayer({
-        id: 'user-location-circle',
-        type: 'circle',
-        source: 'user-location',
+        id: 'recommended-fill',
+        type: 'fill',
+        source: 'recommended-outline-source',
         paint: {
-          'circle-radius': 6,
-          'circle-color': '#0066ff',
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff'
+          'fill-color': '#66ccff',
+          'fill-opacity': 0.2,
         }
-      }, 'rent-heatmap');
-    } else {
-      map.getSource('user-location').setData(geo);
+      });
     }
   };
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v10',
-      center: [144.9631, -37.8136],
-      zoom: 9,
-    });
+    const init = async () => {
+      let userCoords = [144.9631, -37.8136];
 
-    mapRef.current = map;
-
-    map.on('load', async () => {
-      const response = await fetch('/enhanced_rental_by_sa2.geojson');
-      const geojson = await response.json();
-      setGeojsonData(geojson);
-
-      map.addSource('sa2-rent', {
-        type: 'geojson',
-        data: geojson,
-      });
-      map.addLayer({
-        id: 'rent-heatmap',
-        type: 'fill',
-        source: 'sa2-rent',
-        paint: {
-          'fill-color': '#eeeeee',
-          'fill-opacity': 0.8,
-          'fill-outline-color': '#cccccc'
-        }
-      });
-
-      updateInteraction(map, selectedType);
-
-      const stored = JSON.parse(localStorage.getItem('sustainabilityData'));
-      const valid = stored?.suburb && stored?.income && stored?.rentRatio && stored?.rent;
-      setHasValidUserData(!!valid);
-
-      if (valid) {
-        const matched = geojson.features.find(f =>
-          f.properties.vic_loca_2?.toLowerCase() === stored.suburb.toLowerCase()
-        );
-        if (matched) {
-          const center = turf.center(matched).geometry.coordinates;
-          map.flyTo({ center, zoom: 11, speed: 1.2, curve: 1.5 });
-          addUserLocationMarker(map, center);
-        }
+      const sustainabilityRaw = localStorage.getItem('sustainabilityData');
+      if (sustainabilityRaw) {
+        const parsed = JSON.parse(sustainabilityRaw);
+        sustainabilityDataRef.current = parsed;
+        const coords = await getCoordsFromSuburb(parsed.suburb);
+        if (coords) userCoords = coords;
+        userCoordsRef.current = coords;
       }
-    });
 
-    return () => map.remove();
+      const map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: userCoords,
+        zoom: 9,
+      });
+
+      mapRef.current = map;
+
+      map.on('load', async () => {
+        const allFeatures = [];
+        const pageSize = 1000;
+        let page = 1;
+        let hasMore = true;
+
+        try {
+          while (hasMore) {
+            const response = await fetch(`https://cftszlhuhkvepemocmgh.supabase.co/functions/v1/get_rent_by_sa2?page=${page}&pageSize=${pageSize}`, {
+              headers: {
+                Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+              }
+            });
+
+            const geojsonPage = await response.json();
+
+            if (!geojsonPage.features || geojsonPage.features.length === 0) {
+              hasMore = false;
+              break;
+            }
+
+            allFeatures.push(...geojsonPage.features);
+            page++;
+          }
+
+          const geojson = {
+            type: 'FeatureCollection',
+            features: allFeatures,
+          };
+
+          geojsonRef.current = geojson;
+
+          map.addSource('sa2-rent', {
+            type: 'geojson',
+            data: geojson,
+          });
+
+          map.addLayer({
+            id: 'rent-heatmap',
+            type: 'fill',
+            source: 'sa2-rent',
+            paint: {
+              'fill-color': '#eeeeee',
+              'fill-opacity': 0.8,
+              'fill-outline-color': '#cccccc'
+            }
+          });
+
+          updateInteraction(map, selectedType);
+
+          if (sustainabilityRaw && sustainabilityDataRef.current && userCoordsRef.current) {
+            setHasSuburbData(true);
+            const { suburb, income, rentRatio, rent } = sustainabilityDataRef.current;
+
+            const markerElement = document.createElement('div');
+            markerElement.innerText = '🔵';
+            markerElement.style.fontSize = '15px';
+            markerElement.style.lineHeight = '1';
+
+            new mapboxgl.Marker({ element: markerElement })
+              .setLngLat(userCoordsRef.current)
+              .setPopup(new mapboxgl.Popup().setText(`Your suburb: ${suburb}`))
+              .addTo(map);
+
+            if (rentRatio > 35) {
+              setShowControlPanel(true);
+              generateRecommendations(geojson, userCoordsRef.current, income, suburb, rent);
+            }
+          }
+
+        } catch (err) {
+          console.error('Failed to load map data:', err);
+        } finally {
+          setLoading(false);
+        }
+      });
+    };
+
+    init();
+
+    return () => mapRef.current && mapRef.current.remove();
   }, []);
 
   useEffect(() => {
     const map = mapRef.current;
     updateInteraction(map, selectedType);
 
-    if (!geojsonData || !hasValidUserData) return;
-
-    const stored = JSON.parse(localStorage.getItem('sustainabilityData'));
-    if (!stored?.suburb || !stored?.income || !stored?.rentRatio || !stored?.rent) return;
-
-    const rentRatio = parseFloat(stored.rentRatio);
-    if (rentRatio > 35) {
-      const recs = getRecommendations(
-        geojsonData,
-        selectedType,
-        stored.suburb,
-        stored.income,
-        stored.rent
+    if (
+      hasSuburbData &&
+      geojsonRef.current &&
+      userCoordsRef.current &&
+      sustainabilityDataRef.current?.income &&
+      sustainabilityDataRef.current?.suburb &&
+      showControlPanel
+    ) {
+      generateRecommendations(
+        geojsonRef.current,
+        userCoordsRef.current,
+        sustainabilityDataRef.current.income,
+        sustainabilityDataRef.current.suburb,
+        sustainabilityDataRef.current.rent
       );
-      setRecommendations(recs);
-      highlightRecommendations(map, recs);
-    } else {
-      setRecommendations([]);
-      if (map.getSource('recommendation-highlight')) {
-        map.removeLayer('recommendation-outline');
-        map.removeSource('recommendation-highlight');
-      }
     }
-  }, [selectedType, geojsonData, radius, hasValidUserData]);
+  }, [selectedType, maxDistance]);
+
+  const controlPanel = (
+    <div className="control-card">
+      <div className="recommendation-box">
+        <h4>Recommended Suburbs (within {maxDistance}km)</h4>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label htmlFor="type">Choose House Type:</label>
+          <select
+            id="type"
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+          >
+            {houseTypes.map((type) => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+        </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <label htmlFor="range">Recommendation Radius: {maxDistance} km</label>
+          <input
+            type="range"
+            id="range"
+            min="0"
+            max="20"
+            step="1"
+            value={maxDistance}
+            onChange={(e) => setMaxDistance(Number(e.target.value))}
+            style={{ width: '100%' }}
+          />
+        </div>
+
+        {recommendations.length === 0 ? (
+          <div>No suitable suburbs within selected range.</div>
+        ) : (
+          <table className="recommendation-table">
+            <thead>
+              <tr>
+                <th>Suburb</th>
+                <th>Rent ($/week)</th>
+                <th>Distance (km)</th>
+                <th>Save ($/week)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recommendations.map((r, idx) => (
+                <tr key={idx}>
+                  <td>{r.suburb}</td>
+                  <td>${r.rent}</td>
+                  <td>{r.distance.toFixed(1)}</td>
+                  <td style={{ color: r.saved > 0 ? 'green' : 'inherit' }}>
+                    {r.saved > 0 ? `$${r.saved.toFixed(0)}` : '-'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="housing-container">
-      <div className="map-card">
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="spinner" />
+            <div className="loading-label">Loading Map Data</div>
+          </div>
+        </div>
+      )}
+
+      <div className={`map-card ${hasSuburbData ? 'map-card-narrow' : ''}`}>
         <div className="legend-box">
           <div className="legend-title">Median House Rent</div>
           <div className="legend-bar" />
@@ -250,65 +363,28 @@ const Housing = () => {
             <span>$300</span>
             <span>$1300+</span>
           </div>
-          {hasValidUserData && (
-            <div className="legend-note">🔵 Your current living suburb</div>
-          )}
+          {hasSuburbData && <div className="legend-current-suburb">🔵 Current Living Suburb</div>}
         </div>
+
         <div ref={mapContainer} className="map-container" />
-        {!hasValidUserData && (
+
+        {!showControlPanel && (
           <div className="floating-dropdown">
             <label htmlFor="type">Choose House Type:</label>
-            <select id="type" value={selectedType} onChange={e => setSelectedType(e.target.value)}>
-              {houseTypes.map(type => <option key={type} value={type}>{type}</option>)}
+            <select
+              id="type"
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+            >
+              {houseTypes.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
             </select>
           </div>
         )}
       </div>
 
-
-      {hasValidUserData && (
-        <div className={`control-card ${hasValidUserData ? 'no-background' : ''}`}>
-          <div className="dropdown-box">
-            <label htmlFor="type">Choose House Type:</label>
-            <select id="type" value={selectedType} onChange={e => setSelectedType(e.target.value)}>
-              {houseTypes.map(type => <option key={type} value={type}>{type}</option>)}
-            </select>
-          </div>
-
-          <div className="input-box">
-            <label htmlFor="radius">Recommendation Radius (1–20 km):</label>
-            <input type="number" id="radius" min={1} max={20} value={radius} onChange={e => setRadius(Number(e.target.value))} />
-          </div>
-
-          {recommendations.length > 0 && (
-            <div className="recommendation-box">
-              <h4>Recommended Suburbs (within {radius}km)</h4>
-              <table className="recommendation-table">
-                <thead>
-                  <tr>
-                    <th>Suburb</th>
-                    <th>Rent ($/week)</th>
-                    <th>Distance (km)</th>
-                    <th>Save ($/week)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recommendations.map((r, idx) => (
-                    <tr key={idx}>
-                      <td>{r.suburb}</td>
-                      <td>${r.rent}</td>
-                      <td>{r.distance.toFixed(1)}</td>
-                      <td style={{ color: r.saved > 0 ? 'green' : 'inherit' }}>
-                        {r.saved > 0 ? `$${r.saved.toFixed(0)}` : '-'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      )}
+      {showControlPanel && controlPanel}
     </div>
   );
 };
