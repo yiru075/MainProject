@@ -70,6 +70,14 @@ const Header = () => {
               Housing
             </Link>
           </li>
+          <li>
+            <Link
+              to="/events"
+              className={location.pathname === "/events" ? "active" : ""}
+            >
+              Events
+            </Link>
+          </li>
           <li className="dropdown-container">
             <div 
               className={`dropdown-trigger ${isAwarenessActive ? "active" : ""}`}

@@ -120,6 +120,7 @@ import Quiz from './pages/quiz/quiz.jsx';
 import TopicPageWrapper from './components/TopicNavigation/TopicPageWrapper.jsx';
 import Password from './pages/password/password.jsx';
 import ProtectedRoute from './components/projectedRoute.jsx';
+import Events from './pages/events/events.jsx';
 
 // Level 1 Topics
 import Topic1_1 from './pages/Levels/Level1/Topic1_1.jsx';
@@ -181,6 +182,7 @@ function AppContent() {
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/sustainability" element={<ProtectedRoute><Sustainability /></ProtectedRoute>} />
         <Route path="/housing" element={<ProtectedRoute><Housing /></ProtectedRoute>} />
+        <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
         <Route path="/education" element={<ProtectedRoute><Education /></ProtectedRoute>} />
         <Route path="/eduMenu" element={<ProtectedRoute><EduMenu /></ProtectedRoute>} />
         <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
