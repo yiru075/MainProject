@@ -134,68 +134,54 @@
 
 // export default Events;
 
-
 import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import './events.css';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN_ONE;
-
 const Events = () => {
-    const geocoderRef = useRef(null);
     const selectedRef = useRef(null);
     const [suburb, setSuburb] = useState('');
+    const [inputValue, setInputValue] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() => {
-        if (geocoderRef.current) {
-            geocoderRef.current.innerHTML = '';
+        if (inputValue.trim().length < 2) {
+            setSuggestions([]);
+            return;
         }
 
-        const geocoder = new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            mapboxgl,
-            placeholder: 'Enter suburb name',
-            marker: false,
-            countries: 'AU',
-            types: 'place,locality',
-            bbox: [140.9617, -39.1592, 150.0331, -33.9806],
-            proximity: {
-                longitude: 144.9631,
-                latitude: -37.8136,
-            },
-            forwardGeocoder: async (query) => {
-                const res = await fetch(`/api/geocode-by-query?query=${encodeURIComponent(query)}`);
+        const fetchSuggestions = async () => {
+            try {
+                const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+                const res = await fetch(`${baseUrl}/api/geocode-by-query?query=${encodeURIComponent(inputValue)}`);
                 const data = await res.json();
-                return data.features || [];
+                setSuggestions(data.features || []);
+            } catch (err) {
+                console.error('Geocode error:', err);
             }
-        });
+        };
 
-        geocoder.addTo(geocoderRef.current);
+        const debounce = setTimeout(fetchSuggestions, 300);
+        return () => clearTimeout(debounce);
+    }, [inputValue]);
 
-        geocoder.on('result', (e) => {
-            const name = e.result.place_name;
-            const coords = e.result.center;
-            const context = e.result.context || [];
+    const handleSelect = (feature) => {
+        const name = feature.place_name;
+        const coords = feature.center;
+        const context = feature.context || [];
 
-            const isVictoria = context.some(
-                (c) =>
-                    c.id.startsWith('region') &&
-                    (c.text === 'Victoria' || c.short_code === 'AU-VIC')
-            );
+        const isVictoria = context.some(
+            (c) => c.id.startsWith('region') && (c.text === 'Victoria' || c.short_code === 'AU-VIC')
+        );
 
-            if (isVictoria) {
-                selectedRef.current = { suburb: name, coords };
-                setSuburb(name);
-            } else {
-                selectedRef.current = null;
-                alert('Please select a suburb in Victoria.');
-            }
-        });
-
-        return () => geocoder.clear();
-    }, []);
+        if (isVictoria) {
+            selectedRef.current = { suburb: name, coords };
+            setSuburb(name);
+            setInputValue(name);
+            setSuggestions([]);
+        } else {
+            alert('Please select a suburb in Victoria.');
+        }
+    };
 
     const handleUseLocation = () => {
         if (navigator.geolocation) {
@@ -203,8 +189,8 @@ const Events = () => {
                 async (position) => {
                     const { latitude, longitude } = position.coords;
                     const coords = [longitude, latitude];
-
-                    const response = await fetch(`/api/geocode?coords=${longitude},${latitude}`);
+                    const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+                    const response = await fetch(`${baseUrl}/api/geocode?coords=${longitude},${latitude}`);
                     const data = await response.json();
 
                     if (data.features && data.features.length > 0) {
@@ -212,14 +198,13 @@ const Events = () => {
                         const context = data.features[0].context || [];
 
                         const isVictoria = context.some(
-                            (c) =>
-                                c.id.startsWith('region') &&
-                                (c.text === 'Victoria' || c.short_code === 'AU-VIC')
+                            (c) => c.id.startsWith('region') && (c.text === 'Victoria' || c.short_code === 'AU-VIC')
                         );
 
                         if (isVictoria) {
                             selectedRef.current = { suburb: name, coords };
                             setSuburb(name);
+                            setInputValue(name);
                         } else {
                             alert('Your location is outside Victoria.');
                         }
@@ -256,12 +241,24 @@ const Events = () => {
             </div>
             <div className="event-search-box">
                 <div className="geocoder-container">
-                    <div ref={geocoderRef} />
+                    <input
+                        className="event-input"
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Enter suburb name"
+                    />
+                    <ul className="event-suggestions">
+                        {suggestions.map((feature) => (
+                            <li key={feature.id} onClick={() => handleSelect(feature)}>
+                                {feature.place_name}
+                            </li>
+                        ))}
+                    </ul>
                     <button className="event-location-btn" onClick={handleUseLocation}>
                         Use my location
                     </button>
                 </div>
-
                 <button className="event-search-btn" onClick={handleSearchClick}>
                     Find events near me
                 </button>
@@ -271,4 +268,3 @@ const Events = () => {
 };
 
 export default Events;
-
