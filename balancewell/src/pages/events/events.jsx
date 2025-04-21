@@ -141,6 +141,8 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import './events.css';
 
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN_ONE;
+
 const Events = () => {
     const geocoderRef = useRef(null);
     const selectedRef = useRef(null);
@@ -152,7 +154,7 @@ const Events = () => {
         }
 
         const geocoder = new MapboxGeocoder({
-            accessToken: 'no-token-needed',
+            accessToken: mapboxgl.accessToken,
             mapboxgl,
             placeholder: 'Enter suburb name',
             marker: false,
