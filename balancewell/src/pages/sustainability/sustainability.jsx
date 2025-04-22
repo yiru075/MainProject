@@ -16,6 +16,8 @@ const Sustainability = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [noVicMatch, setNoVicMatch] = useState(false);
+
 
   const validateIncome = () => {
     if (!(parseFloat(income) > 0)) {
@@ -44,22 +46,27 @@ const Sustainability = () => {
   };
 
   const handleSearch = async (query) => {
-    if (!query) {
+    if (!query || query.trim() === '') {
       setSearchResults([]);
+      setNoVicMatch(false);
       return;
     }
-  
+
     setIsLoading(true);
     try {
-      const baseUrl = import.meta.env.VITE_WEBSITE_URL; 
+      const baseUrl = import.meta.env.VITE_WEBSITE_URL;
       const response = await fetch(`${baseUrl}/api/suburb_search?q=${encodeURIComponent(query)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch search results');
       }
       const data = await response.json();
-      setSearchResults(data.results || []);
+      const results = data.results || [];
+
+      setSearchResults(results);
+      setNoVicMatch(results.length === 0);
     } catch (error) {
       console.error('Error fetching suburb search results:', error);
+      setNoVicMatch(true);
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +115,7 @@ const Sustainability = () => {
     setRent('');
     setRentRatio(null);
     setErrors({ suburb: '', income: '', rent: '' });
-    setSearchResults([]); 
+    setSearchResults([]);
     localStorage.removeItem('sustainabilityData');
   };
 
@@ -123,15 +130,24 @@ const Sustainability = () => {
             type="text"
             value={suburb}
             onChange={(e) => {
-              setSuburb(e.target.value);
-              handleSearch(e.target.value);
+              const input = e.target.value;
+              setSuburb(input);
+
+              if (input.trim() === '') {
+                setSearchResults([]);
+                setNoVicMatch(false);
+                return;
+              }
+
+              handleSearch(input);
             }}
             className="form-input"
             placeholder="Search for your suburb"
           />
+
           {errors.suburb && <p className="form-error">{errors.suburb}</p>}
           {isLoading && <p className="form-info">Loading...</p>}
-          {searchResults.length > 0 && (
+          {searchResults.length > 0 && suburb.trim() !== '' &&(
             <div className="geocoder-box search-dropdown">
               <ul className="search-results">
                 {searchResults.map((result, index) => (
@@ -140,18 +156,20 @@ const Sustainability = () => {
                     onClick={() => {
                       setSuburb(result.name);
                       setSearchResults([]);
+                      setNoVicMatch(false);
                     }}
                     className="search-result-item"
                   >
                     <span className="result-name">{result.name}</span>
-                    {result.state && (
-                      <span className="result-state">, {result.state}</span>
-                    )}
                   </li>
                 ))}
               </ul>
             </div>
-          )}      
+          )}
+          {noVicMatch && suburb.trim() !== '' && !isLoading && (
+            <p className="form-error">No suburbs found in Victoria. Please check your input or try another name.</p>
+          )}
+
         </div>
         <div className="form-section">
           <label className="form-label">2. What is your weekly income(AUD)?</label>
