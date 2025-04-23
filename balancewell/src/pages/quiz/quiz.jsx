@@ -226,11 +226,13 @@ const Quiz = () => {
         <Title level={2} className="quiz-title">
           WellbeingHub Module Assessment Quiz
         </Title>
-        <Paragraph className="quiz-description">
-          Let's find the best place for you to begin your journey.
-          <br />
-          Answer the following {quizQuestions.length} questions. Your responses will help us match you with the right level.
-        </Paragraph>
+        {!quizCompleted && (
+          <Paragraph className="quiz-description">
+            Let's find the best place for you to begin your journey.
+            <br />
+            Answer the following {quizQuestions.length} questions. Your responses will help us match you with the right level.
+          </Paragraph>
+        )}
         
         {renderQuizContent()}
       </Card>

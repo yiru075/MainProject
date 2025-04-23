@@ -78,6 +78,14 @@ const Header = () => {
               Events
             </Link>
           </li>
+          <li>
+            <Link
+              to="/calculation"
+              className={location.pathname === "/calculation" ? "active" : ""}
+            >
+              Calculator
+            </Link>
+          </li>
           <li className="dropdown-container">
             <div 
               className={`dropdown-trigger ${isAwarenessActive ? "active" : ""}`}
