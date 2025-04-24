@@ -115,7 +115,7 @@ const Events = () => {
               value={suburb}
               onChange={(e) => setSuburb(e.target.value)}
               className="form-input"
-              placeholder="Enter suburb"
+              placeholder="Enter suburb name"
             />
             <button className="event-location-btn" onClick={handleUseLocation}>
               <span role="img" aria-label="location"></span> Use my location
