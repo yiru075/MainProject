@@ -11,6 +11,7 @@ const Events = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [noMatch, setNoMatch] = useState(false);
+  const [isAutoLocated, setIsAutoLocated] = useState(false); 
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -23,7 +24,7 @@ const Events = () => {
       }
 
       handleSearch(trimmed);
-    }, 300); 
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [suburb]);
@@ -56,7 +57,6 @@ const Events = () => {
           const coords = [longitude, latitude];
 
           const response = await fetch(`/api/geocode?coords=${longitude},${latitude}`);
-
           const data = await response.json();
           if (data.features && data.features.length > 0) {
             const name = data.features[0].place_name;
@@ -70,7 +70,8 @@ const Events = () => {
 
             if (isVictoria) {
               selectedRef.current = { suburb: name, coords };
-              setSuburb(name);
+              setSuburb(name); 
+              setIsAutoLocated(true); 
               console.log('Located suburb:', name);
             } else {
               alert('Your location is outside Victoria.');
@@ -90,9 +91,10 @@ const Events = () => {
   };
 
   const handleSearchClick = () => {
-    const selected = selectedRef.current;
-    if (selected) {
-      console.log('Selected suburb:', selected.suburb);
+    if (isAutoLocated && selectedRef.current) {
+      console.log('Selected suburb:', selectedRef.current.suburb);
+    } else if (suburb.trim() !== '') {
+      console.log('Selected suburb:', suburb);
     } else {
       alert('Please enter or select a suburb.');
     }
@@ -106,24 +108,27 @@ const Events = () => {
           Find free or low-cost health checkups, workshops, and wellness activities near you.
         </p>
       </div>
-  
+
       <div className="event-search-box">
         <div className="geocoder-container">
           <div className="suburb-input-row">
             <input
               type="text"
               value={suburb}
-              onChange={(e) => setSuburb(e.target.value)}
+              onChange={(e) => {
+                setSuburb(e.target.value);
+                setIsAutoLocated(false); 
+              }}
               className="form-input"
               placeholder="Enter suburb name"
             />
             <button className="event-location-btn" onClick={handleUseLocation}>
-              <span role="img" aria-label="location"></span> Use my location
+              Use my location
             </button>
           </div>
-  
+
           {isLoading && <p className="form-info">Loading...</p>}
-  
+
           {searchResults.length > 0 && suburb.trim() !== '' && (
             <ul className="search-results" role="listbox">
               {searchResults.map((result, index) => (
@@ -134,6 +139,7 @@ const Events = () => {
                     setSuburb(result.name);
                     setSearchResults([]);
                     setNoMatch(false);
+                    setIsAutoLocated(false); 
                   }}
                   role="option"
                 >
@@ -142,19 +148,18 @@ const Events = () => {
               ))}
             </ul>
           )}
-  
+
           {noMatch && !isLoading && suburb.trim() !== '' && (
             <p className="form-error">No matching suburbs found in Victoria.</p>
           )}
         </div>
-  
+
         <button className="event-search-btn" onClick={handleSearchClick}>
           Find events near me
         </button>
       </div>
     </div>
   );
-  
 };
 
 export default Events;
