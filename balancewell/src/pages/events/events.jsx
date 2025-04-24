@@ -236,6 +236,7 @@ const Events = () => {
               selectedRef.current = { suburb: name, coords };
               setSuburb(name);
               setIsAutoLocated(true);
+              handleSearchClick();
             } else {
               alert('Your location is outside Victoria.');
             }
@@ -250,6 +251,13 @@ const Events = () => {
       );
     } else {
       alert('Geolocation is not supported by your browser.');
+    }
+  };
+
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    if (selectedRef.current?.coords) {
+      handleSearchClick();
     }
   };
 
@@ -295,6 +303,7 @@ const Events = () => {
 
         if (isVictoria) {
           selectedRef.current = { suburb: resultName, coords };
+          handleSearchClick();
         } else {
           alert('This suburb is not in Victoria.');
         }
@@ -364,13 +373,13 @@ const Events = () => {
       <div className="event-tabs">
         <button
           className={category === 'health' ? 'tab active' : 'tab'}
-          onClick={() => setCategory('health')}
+          onClick={() => handleCategoryChange('health')}
         >
           Health Events
         </button>
         <button
           className={category === 'social' ? 'tab active' : 'tab'}
-          onClick={() => setCategory('social')}
+          onClick={() => handleCategoryChange('social')}
         >
           Social / Wellbeing Events
         </button>
