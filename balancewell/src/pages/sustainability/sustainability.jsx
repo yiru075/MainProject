@@ -20,10 +20,18 @@ const Sustainability = () => {
 
 
   const validateIncome = () => {
-    if (!(parseFloat(income) > 0)) {
+    const value = parseFloat(income);
+  
+    if (isNaN(value) || value < 0) {
       setErrors((prev) => ({
         ...prev,
-        income: 'Income must be a number greater than 0.',
+        income: 'Income must be 0 or a positive number.',
+      }));
+      return false;
+    } else if (value > 250000) {
+      setErrors((prev) => ({
+        ...prev,
+        income: 'Income must not exceed 250,000 AUD.',
       }));
       return false;
     } else {
@@ -31,12 +39,21 @@ const Sustainability = () => {
       return true;
     }
   };
+  
 
   const validateRent = () => {
-    if (!(parseFloat(rent) > 0)) {
+    const value = parseFloat(rent);
+  
+    if (isNaN(value) || value < 0) {
       setErrors((prev) => ({
         ...prev,
-        rent: 'Rent must be a number greater than 0.',
+        rent: 'Rent must be 0 or a positive number.',
+      }));
+      return false;
+    } else if (value > 20000) {
+      setErrors((prev) => ({
+        ...prev,
+        rent: 'Rent must not exceed 20,000 AUD.',
       }));
       return false;
     } else {
@@ -44,6 +61,7 @@ const Sustainability = () => {
       return true;
     }
   };
+  
 
   const handleSearch = async (query) => {
     if (!query || query.trim() === '') {
@@ -176,7 +194,8 @@ const Sustainability = () => {
           <input
             type="number"
             step="0.01"
-            min="0.01"
+            min="0"
+            max="250000"
             value={income}
             onChange={(e) => setIncome(e.target.value)}
             onBlur={validateIncome}
@@ -190,8 +209,8 @@ const Sustainability = () => {
           <label className="form-label">3. What is your weekly rent(AUD)?</label>
           <input
             type="number"
-            step="0.01"
-            min="0.01"
+            step="0"
+            min="20000"
             value={rent}
             onChange={(e) => setRent(e.target.value)}
             onBlur={validateRent}
@@ -222,21 +241,21 @@ const Sustainability = () => {
                 if (ratio <= 30) {
                   return (
                     <p style={{ color: 'green' }}>
-                      ✅ <strong>Affordability Level: Level 1 (AFFORDABLE)</strong><br />
+                      <strong>Affordability Level: Level 1 (AFFORDABLE)</strong><br />
                       You are within the safe housing affordability range.
                     </p>
                   );
                 } else if (ratio <= 35) {
                   return (
                     <p style={{ color: '#e67e22' }}>
-                      ⚠️ <strong>Affordability Level: Level 2 (AT RISK)</strong><br />
+                      <strong>Affordability Level: Level 2 (AT RISK)</strong><br />
                       You are near the affordability threshold.
                     </p>
                   );
                 } else {
                   return (
                     <p style={{ color: 'red' }}>
-                      ❗️ <strong>Affordability Level: Level 3 (UNAFFORDABLE)</strong><br />
+                      <strong>Affordability Level: Level 3 (UNAFFORDABLE)</strong><br />
                       This is above the recommended 35% threshold.<br />
                       WellbeingHub will help you discover nearby suburbs with better rent-to-income ratios.
                     </p>
@@ -256,17 +275,17 @@ const Sustainability = () => {
                   <tr>
                     <td>≤ 30%</td>
                     <td>Affordable</td>
-                    <td>Level 1 ✅</td>
+                    <td>Level 1 </td>
                   </tr>
                   <tr>
                     <td>30% – 35%</td>
                     <td>At Risk</td>
-                    <td>Level 2 ⚠️</td>
+                    <td>Level 2 </td>
                   </tr>
                   <tr>
                     <td>&gt; 35%</td>
                     <td>Unaffordable</td>
-                    <td>Level 3 ❗️</td>
+                    <td>Level 3 </td>
                   </tr>
                 </tbody>
               </table>
