@@ -229,8 +229,7 @@ const Events = () => {
             const name = data.features[0].place_name;
             const context = data.features[0].context || [];
             const isVictoria = context.some(
-              (c) => c.id.startsWith('region') &&
-                     (c.text === 'Victoria' || c.short_code === 'AU-VIC')
+              (c) => c.id.startsWith('region') && (c.text === 'Victoria' || c.short_code === 'AU-VIC')
             );
             if (isVictoria) {
               selectedRef.current = { suburb: name, coords };
@@ -273,6 +272,39 @@ const Events = () => {
     }
   };
 
+  const handleSuburbSelect = async (resultName) => {
+    setSuburb(resultName);
+    setSearchResults([]);
+    setNoMatch(false);
+    setIsAutoLocated(false);
+
+    try {
+      const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+      const response = await fetch(`${baseUrl}/api/geocode?q=${encodeURIComponent(resultName)}`);
+      const data = await response.json();
+
+      if (data.features && data.features.length > 0) {
+        const feature = data.features[0];
+        const coords = feature.center;
+        const context = feature.context || [];
+        const isVictoria = context.some(
+          (c) => c.id.startsWith('region') && (c.text === 'Victoria' || c.short_code === 'AU-VIC')
+        );
+
+        if (isVictoria) {
+          selectedRef.current = { suburb: resultName, coords };
+        } else {
+          alert('This suburb is not in Victoria.');
+        }
+      } else {
+        alert('Could not find coordinates for the selected suburb.');
+      }
+    } catch (error) {
+      console.error('Failed to fetch coordinates:', error);
+      alert('Failed to retrieve location data.');
+    }
+  };
+
   return (
     <div className="event-search-wrapper">
       <div className="event-header">
@@ -308,12 +340,7 @@ const Events = () => {
                 <li
                   key={index}
                   className="search-result-item"
-                  onClick={() => {
-                    setSuburb(result.name);
-                    setSearchResults([]);
-                    setNoMatch(false);
-                    setIsAutoLocated(false);
-                  }}
+                  onClick={() => handleSuburbSelect(result.name)}
                   role="option"
                 >
                   {result.name}
