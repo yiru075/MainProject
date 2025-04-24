@@ -223,7 +223,8 @@ const Events = () => {
           const { latitude, longitude } = position.coords;
           const coords = [longitude, latitude];
           const baseUrl = import.meta.env.VITE_WEBSITE_URL;
-          const response = await fetch(`${baseUrl}/api/geocode?coords=${longitude},${latitude}`);
+          const timestamp = Date.now();
+          const response = await fetch(`${baseUrl}/api/geocode?coords=${longitude},${latitude}&t=${timestamp}`);
           const data = await response.json();
           if (data.features && data.features.length > 0) {
             const name = data.features[0].place_name;
@@ -280,7 +281,8 @@ const Events = () => {
 
     try {
       const baseUrl = import.meta.env.VITE_WEBSITE_URL;
-      const response = await fetch(`${baseUrl}/api/geocode?q=${encodeURIComponent(resultName)}`);
+      const timestamp = Date.now();
+      const response = await fetch(`${baseUrl}/api/geocode?q=${encodeURIComponent(resultName)}&t=${timestamp}`);
       const data = await response.json();
 
       if (data.features && data.features.length > 0) {
