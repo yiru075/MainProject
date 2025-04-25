@@ -80,6 +80,14 @@ const Header = () => {
           </li>
           <li>
             <Link
+              to="/retirementSupport"
+              className={location.pathname === "/retirementSupport" ? "active" : ""}
+            >
+              Retirement Support
+            </Link>
+          </li>
+          <li>
+            <Link
               to="/calculation"
               className={location.pathname === "/calculation" ? "active" : ""}
             >
