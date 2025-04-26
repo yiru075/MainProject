@@ -4,6 +4,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import * as turf from '@turf/turf';
 import './housing.css';
 
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN_ONE;
+
 
 const houseTypes = [
   '1 Bed Flat',
@@ -227,7 +229,8 @@ const Housing = () => {
         //     features: allFeatures,
         //   };
         try {
-          const response = await fetch('/api/enhanced_rental');
+          const response = await fetch('/enhanced_rental_by_sa2.geojson');
+
           if (!response.ok) {
             throw new Error('Upload failed');
           }
