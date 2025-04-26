@@ -18,6 +18,7 @@ import Password from './pages/password/password.jsx';
 import ProtectedRoute from './components/projectedRoute.jsx';
 import Events from './pages/events/events.jsx';
 import Calculation from './pages/Calculation/Calculation';
+import RetirementSupport from './pages/retirementSupport/retirementSupport.jsx';
 
 // Level 1 Topics
 import Topic1_1 from './pages/Levels/Level1/Topic1_1.jsx';
@@ -61,7 +62,7 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
-  const showHeader = location.pathname !== '/'; // 登录页不显示 Header
+  const showHeader = location.pathname !== '/'; // Hide header on the password page
 
   const wrapTopicComponent = (Component) => {
     return (
@@ -80,6 +81,7 @@ function AppContent() {
         <Route path="/sustainability" element={<ProtectedRoute><Sustainability /></ProtectedRoute>} />
         <Route path="/housing" element={<ProtectedRoute><Housing /></ProtectedRoute>} />
         <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
+        <Route path="/retirementSupport" element={<ProtectedRoute><RetirementSupport /></ProtectedRoute>} />
         <Route path="/education" element={<ProtectedRoute><Education /></ProtectedRoute>} />
         <Route path="/eduMenu" element={<ProtectedRoute><EduMenu /></ProtectedRoute>} />
         <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
