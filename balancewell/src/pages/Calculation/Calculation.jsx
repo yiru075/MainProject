@@ -296,10 +296,12 @@ function Calculation() {
               onChange={(e) => setPropertyType(e.target.value)}
               className="property-dropdown"
             >
-              <option value="1 Bed Flat">1 bed flat</option>
-              <option value="2 Bed Flat">2 bed flat</option>
-              <option value="3 Bed House">3 bed house</option>
-              <option value="4 Bed House">4 bed house</option>
+              <option value="1 Bed Flat">1 Bed Flat</option>
+              <option value="2 Bed Flat">2 Bed Flat</option>
+              <option value="2 Bed House">2 Bed House</option>
+              <option value="3 Bed Flat">3 Bed Flat</option>
+              <option value="3 Bed House">3 Bed House</option>
+              <option value="4 Bed House">4 Bed House</option>
             </select>
           </div>
         </div>
