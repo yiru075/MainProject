@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './sustainability.css';
 
 const Sustainability = () => {
   const navigate = useNavigate();
+  const selectedRef = useRef(null);
 
   const [suburb, setSuburb] = useState('');
   const [income, setIncome] = useState('');
@@ -16,57 +17,30 @@ const Sustainability = () => {
   });
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [noVicMatch, setNoVicMatch] = useState(false);
+  const [noMatch, setNoMatch] = useState(false);
+  const [skipNextSearch, setSkipNextSearch] = useState(false);
 
-
-  const validateIncome = () => {
-    const value = parseFloat(income);
-  
-    if (isNaN(value) || value < 0) {
-      setErrors((prev) => ({
-        ...prev,
-        income: 'Income must be 0 or a positive number.',
-      }));
-      return false;
-    } else if (value > 250000) {
-      setErrors((prev) => ({
-        ...prev,
-        income: 'Income must not exceed 250,000 AUD.',
-      }));
-      return false;
-    } else {
-      setErrors((prev) => ({ ...prev, income: '' }));
-      return true;
-    }
-  };
-  
-
-  const validateRent = () => {
-    const value = parseFloat(rent);
-  
-    if (isNaN(value) || value < 0) {
-      setErrors((prev) => ({
-        ...prev,
-        rent: 'Rent must be 0 or a positive number.',
-      }));
-      return false;
-    } else if (value > 20000) {
-      setErrors((prev) => ({
-        ...prev,
-        rent: 'Rent must not exceed 20,000 AUD.',
-      }));
-      return false;
-    } else {
-      setErrors((prev) => ({ ...prev, rent: '' }));
-      return true;
-    }
-  };
-  
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      const trimmed = suburb.trim();
+      if (skipNextSearch) {
+        setSkipNextSearch(false);
+        return;
+      }
+      if (trimmed === '') {
+        setSearchResults([]);
+        setNoMatch(false);
+        return;
+      }
+      handleSearch(trimmed);
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [suburb]);
 
   const handleSearch = async (query) => {
     if (!query || query.trim() === '') {
       setSearchResults([]);
-      setNoVicMatch(false);
+      setNoMatch(false);
       return;
     }
 
@@ -74,19 +48,45 @@ const Sustainability = () => {
     try {
       const baseUrl = import.meta.env.VITE_WEBSITE_URL;
       const response = await fetch(`${baseUrl}/api/suburb_search?q=${encodeURIComponent(query)}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch search results');
-      }
+      if (!response.ok) throw new Error('Failed to fetch search results');
       const data = await response.json();
       const results = data.results || [];
-
       setSearchResults(results);
-      setNoVicMatch(results.length === 0);
+      setNoMatch(results.length === 0);
     } catch (error) {
       console.error('Error fetching suburb search results:', error);
-      setNoVicMatch(true);
+      setSearchResults([]);
+      setNoMatch(true);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const validateIncome = () => {
+    const value = parseFloat(income);
+    if (isNaN(value) || value < 0) {
+      setErrors((prev) => ({ ...prev, income: 'Income must be 0 or a positive number.' }));
+      return false;
+    } else if (value > 250000) {
+      setErrors((prev) => ({ ...prev, income: 'Income must not exceed 250,000 AUD.' }));
+      return false;
+    } else {
+      setErrors((prev) => ({ ...prev, income: '' }));
+      return true;
+    }
+  };
+
+  const validateRent = () => {
+    const value = parseFloat(rent);
+    if (isNaN(value) || value < 0) {
+      setErrors((prev) => ({ ...prev, rent: 'Rent must be 0 or a positive number.' }));
+      return false;
+    } else if (value > 20000) {
+      setErrors((prev) => ({ ...prev, rent: 'Rent must not exceed 20,000 AUD.' }));
+      return false;
+    } else {
+      setErrors((prev) => ({ ...prev, rent: '' }));
+      return true;
     }
   };
 
@@ -95,7 +95,7 @@ const Sustainability = () => {
 
     const isIncomeValid = validateIncome();
     const isRentValid = validateRent();
-    const isSuburbValid = suburb !== '';
+    const isSuburbValid = suburb.trim() !== '';
 
     if (!isSuburbValid) {
       setErrors((prev) => ({ ...prev, suburb: 'Please select a suburb' }));
@@ -125,6 +125,8 @@ const Sustainability = () => {
     setSuburb('');
     setIncome('');
     setRent('');
+    setSearchResults([]);
+    setNoMatch(false);
   };
 
   const handleReset = () => {
@@ -137,6 +139,13 @@ const Sustainability = () => {
     localStorage.removeItem('sustainabilityData');
   };
 
+  const handleSuburbSelect = (name) => {
+    setSuburb(name);
+    setSearchResults([]);
+    setNoMatch(false);
+    setSkipNextSearch(true);
+  };
+
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit} className="form-content">
@@ -144,53 +153,45 @@ const Sustainability = () => {
           <label className="form-label">
             1. Which suburb do you currently live in Victoria, Australia?
           </label>
-          <input
-            type="text"
-            value={suburb}
-            onChange={(e) => {
-              const input = e.target.value;
-              setSuburb(input);
+          <div className="suburb-input-wrapper">
+            <input
+              type="text"
+              value={suburb}
+              onChange={(e) => setSuburb(e.target.value)}
+              className="form-input"
+              placeholder="Enter suburb name"
+            />
 
-              if (input.trim() === '') {
-                setSearchResults([]);
-                setNoVicMatch(false);
-                return;
-              }
+            {isLoading && <p className="form-info">Loading...</p>}
 
-              handleSearch(input);
-            }}
-            className="form-input"
-            placeholder="Search for your suburb"
-          />
-
-          {errors.suburb && <p className="form-error">{errors.suburb}</p>}
-          {isLoading && <p className="form-info">Loading...</p>}
-          {searchResults.length > 0 && suburb.trim() !== '' &&(
-            <div className="geocoder-box search-dropdown">
-              <ul className="search-results">
+            {searchResults.length > 0 && suburb.trim() !== '' && (
+              <ul className="search-results" role="listbox">
                 {searchResults.map((result, index) => (
                   <li
                     key={index}
-                    onClick={() => {
-                      setSuburb(result.name);
-                      setSearchResults([]);
-                      setNoVicMatch(false);
-                    }}
                     className="search-result-item"
+                    onClick={() => handleSuburbSelect(result.name)}
+                    role="option"
                   >
-                    <span className="result-name">{result.name}</span>
+                    {result.name}
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
-          {noVicMatch && suburb.trim() !== '' && !isLoading && (
-            <p className="form-error">No suburbs found in Victoria. Please check your input or try another name.</p>
-          )}
+            )}
 
+            {noMatch && !isLoading && suburb.trim() !== '' && (
+              <p className="form-error">No matching suburbs found in Victoria.</p>
+            )}
+          </div>
+
+
+          {noMatch && !isLoading && suburb.trim() !== '' && (
+            <p className="form-error">No matching suburbs found in Victoria.</p>
+          )}
         </div>
+
         <div className="form-section">
-          <label className="form-label">2. What is your weekly income(AUD)?</label>
+          <label className="form-label">2. What is your weekly income (AUD)?</label>
           <input
             type="number"
             step="0.01"
@@ -206,11 +207,12 @@ const Sustainability = () => {
         </div>
 
         <div className="form-section">
-          <label className="form-label">3. What is your weekly rent(AUD)?</label>
+          <label className="form-label">3. What is your weekly rent (AUD)?</label>
           <input
             type="number"
             step="0"
-            min="20000"
+            min="0"
+            max="20000"
             value={rent}
             onChange={(e) => setRent(e.target.value)}
             onBlur={validateRent}
@@ -275,25 +277,26 @@ const Sustainability = () => {
                   <tr>
                     <td>≤ 30%</td>
                     <td>Affordable</td>
-                    <td>Level 1 </td>
+                    <td>Level 1</td>
                   </tr>
                   <tr>
                     <td>30% – 35%</td>
                     <td>At Risk</td>
-                    <td>Level 2 </td>
+                    <td>Level 2</td>
                   </tr>
                   <tr>
                     <td>&gt; 35%</td>
                     <td>Unaffordable</td>
-                    <td>Level 3 </td>
+                    <td>Level 3</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <div className="discover-button-wrapper">
-              <button className="continue-btn" type="button"
-                onClick={() => navigate('/housing')}>Discover Rent</button>
+              <button className="continue-btn" type="button" onClick={() => navigate('/housing')}>
+                Discover Rent
+              </button>
             </div>
           </>
         )}

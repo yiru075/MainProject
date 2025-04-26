@@ -37,7 +37,7 @@ const Header = () => {
   return (
     <header className="bw-header">
       <div className="logo">
-        <span className="logo-highlight">WellbeingHub</span>
+        <span className="logo-highlight">Safe and Settled</span>
       </div>
       <nav className="nav-menu">
         <ul>

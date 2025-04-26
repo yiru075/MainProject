@@ -6,7 +6,6 @@ import './housing.css';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN_ONE;
 
-
 const houseTypes = [
   '1 Bed Flat',
   '2 Bed Flat',
@@ -16,25 +15,14 @@ const houseTypes = [
   '4 Bed House',
 ];
 
-// const getCoordsFromSuburb = async (suburb) => {
-//   const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(suburb)}.json?access_token=${mapboxgl.accessToken}`);
-//   const data = await response.json();
-//   if (data.features && data.features.length > 0) {
-//     return data.features[0].center;
-//   }
-//   return null;
-// };
-
 const getCoordsFromSuburb = async (suburb) => {
   try {
     const baseUrl = import.meta.env.VITE_WEBSITE_URL;
-    const response = await fetch(`${baseUrl}/api/your-geocoding-api?q=${encodeURIComponent(suburb)}`);
+    const response = await fetch(`${baseUrl}/api/geocode?q=${encodeURIComponent(suburb)}`);
     if (!response.ok) {
       throw new Error('Failed to retrieve location');
     }
     const data = await response.json();
-
-    // Extract the center point from the first feature
     if (data.features && data.features.length > 0) {
       return data.features[0].center;
     }
@@ -44,7 +32,6 @@ const getCoordsFromSuburb = async (suburb) => {
     return null;
   }
 };
-
 
 const Housing = () => {
   const mapContainer = useRef(null);
@@ -163,7 +150,7 @@ const Housing = () => {
           'line-width': 2,
           'line-opacity': 0.8,
         }
-      });
+      }), undefined;
 
       map.addLayer({
         id: 'recommended-fill',
@@ -200,80 +187,33 @@ const Housing = () => {
       mapRef.current = map;
 
       map.on('load', async () => {
-        // const allFeatures = [];
-        // const pageSize = 1000;
-        // let page = 1;
-        // let hasMore = true;
-
-        // try {
-        //   while (hasMore) {
-        //     const response = await fetch(`https://cftszlhuhkvepemocmgh.supabase.co/functions/v1/get_rent_by_sa2?page=${page}&pageSize=${pageSize}`, {
-        //       headers: {
-        //         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-        //       }
-        //     });
-
-        //     const geojsonPage = await response.json();
-
-        //     if (!geojsonPage.features || geojsonPage.features.length === 0) {
-        //       hasMore = false;
-        //       break;
-        //     }
-
-        //     allFeatures.push(...geojsonPage.features);
-        //     page++;
-        //   }
-
-        //   const geojson = {
-        //     type: 'FeatureCollection',
-        //     features: allFeatures,
-        //   };
         try {
           const response = await fetch('/enhanced_rental_by_sa2.geojson');
-
           if (!response.ok) {
-            throw new Error('Upload failed');
+            throw new Error('Failed to load geojson data');
           }
           const geojson = await response.json();
-        
-          geojsonRef.current = geojson;
-        
-          map.addSource('sa2-rent', {
-            type: 'geojson',
-            data: geojson,
-          });
-        
-          map.addLayer({
-            id: 'rent-heatmap',
-            type: 'fill',
-            source: 'sa2-rent',
-            paint: {
-              'fill-color': '#eeeeee',
-              'fill-opacity': 0.8,
-              'fill-outline-color': '#cccccc'
-            }
-          });
-        
-          updateInteraction(map, selectedType);
-        
-
           geojsonRef.current = geojson;
 
-          map.addSource('sa2-rent', {
-            type: 'geojson',
-            data: geojson,
-          });
+          if (!map.getSource('sa2-rent')) {
+            map.addSource('sa2-rent', {
+              type: 'geojson',
+              data: geojson,
+            });
+          }
 
-          map.addLayer({
-            id: 'rent-heatmap',
-            type: 'fill',
-            source: 'sa2-rent',
-            paint: {
-              'fill-color': '#eeeeee',
-              'fill-opacity': 0.8,
-              'fill-outline-color': '#cccccc'
-            }
-          });
+          if (!map.getLayer('rent-heatmap')) {
+            map.addLayer({
+              id: 'rent-heatmap',
+              type: 'fill',
+              source: 'sa2-rent',
+              paint: {
+                'fill-color': '#eeeeee',
+                'fill-opacity': 0.8,
+                'fill-outline-color': '#cccccc'
+              }
+            });
+          }
 
           updateInteraction(map, selectedType);
 
@@ -296,9 +236,9 @@ const Housing = () => {
               generateRecommendations(geojson, userCoordsRef.current, income, suburb, rent);
             }
           }
-
         } catch (err) {
           console.error('Failed to load map data:', err);
+          alert('Failed to load map data. Please try again later.');
         } finally {
           setLoading(false);
         }
