@@ -15,14 +15,35 @@ const houseTypes = [
   '4 Bed House',
 ];
 
+// const getCoordsFromSuburb = async (suburb) => {
+//   const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(suburb)}.json?access_token=${mapboxgl.accessToken}`);
+//   const data = await response.json();
+//   if (data.features && data.features.length > 0) {
+//     return data.features[0].center;
+//   }
+//   return null;
+// };
+
 const getCoordsFromSuburb = async (suburb) => {
-  const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(suburb)}.json?access_token=${mapboxgl.accessToken}`);
-  const data = await response.json();
-  if (data.features && data.features.length > 0) {
-    return data.features[0].center;
+  try {
+    const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+    const response = await fetch(`${baseUrl}/api/your-geocoding-api?q=${encodeURIComponent(suburb)}`);
+    if (!response.ok) {
+      throw new Error('Failed to retrieve location');
+    }
+    const data = await response.json();
+
+    // Extract the center point from the first feature
+    if (data.features && data.features.length > 0) {
+      return data.features[0].center;
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to fetch coordinates:', error);
+    return null;
   }
-  return null;
 };
+
 
 const Housing = () => {
   const mapContainer = useRef(null);
@@ -207,8 +228,7 @@ const Housing = () => {
         //     features: allFeatures,
         //   };
         try {
-          const baseUrl = import.meta.env.VITE_WEBSITE_URL;
-          const response = await fetch('${baseUrl}/api/enhanced_rental');
+          const response = await fetch('/api/enhanced_rental');
           if (!response.ok) {
             throw new Error('Upload failed');
           }
