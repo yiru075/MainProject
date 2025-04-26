@@ -8,13 +8,10 @@ function Introduction() {
     <section className="introduction">
       <div className="introduction-content">
         <h1>
-          Your aging journey starts with{" "}
-          <span className="highlight">WellbeingHub</span>
+          <span className="highlight">Helping you age well with clarity, care and financial confidence.</span>
         </h1>
         <p>
-          Everyone deserves growing older with confidence, care and connection.
-          <br />
-          How ready are you for aging planning?
+        Start shaping a future that supports your well-being
         </p>
         <div className="button-group">
           <Link to="/quiz" className="test-button">Test your readiness</Link>
