@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './news.css';
 
+// New Supabase endpoint and token
+const SUPABASE_URL = 'https://zikibbiiudsntbyqmxcp.supabase.co/functions/v1/rss_news';
+const SUPABASE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inppa2liYmlpdWRzbnRieXFteGNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1ODI1MTEsImV4cCI6MjA2MTE1ODUxMX0.n_XCkaptcADXHh0UOHr-RNFojIebdS9BuaC3GEGrsMs';
+
 const News = () => {
   const [feeds, setFeeds] = useState({
     diet: [],
@@ -10,13 +14,6 @@ const News = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [error, setError] = useState(null);
-
-  // RSS feed URLs
-  const feedUrls = {
-    diet: 'https://rss.app/feeds/YzBOIqqBNLHyw3yb.xml',
-    exercise: 'https://rss.app/feeds/u313nh5diwfVRYeB.xml',
-    mental: 'https://rss.app/feeds/TlBKbedwF2EhYf4d.xml'
-  };
 
   // Sample articles for each category when no results found
   const sampleArticles = {
@@ -84,36 +81,24 @@ const News = () => {
   useEffect(() => {
     const fetchNews = async () => {
       setLoading(true);
-      const categorizedFeeds = {
-        diet: [],
-        exercise: [],
-        mental: []
-      };
       
       try {
-        // Fetch all RSS feeds in parallel
-        const categoryPromises = Object.entries(feedUrls).map(async ([category, url]) => {
-          try {
-            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-            
-            if (!response.ok) {
-              throw new Error(`Error fetching ${category} feed: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.status === 'ok' && Array.isArray(data.items)) {
-              categorizedFeeds[category] = data.items;
-            }
-          } catch (categoryError) {
-            console.error(`Error fetching ${category} feed:`, categoryError);
+        const response = await fetch(SUPABASE_URL, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${SUPABASE_TOKEN}`
           }
         });
         
-        // Wait for all requests to complete
-        await Promise.all(categoryPromises);
+        if (!response.ok) {
+          throw new Error(`Error fetching news: ${response.status}`);
+        }
         
-        setFeeds(categorizedFeeds);
+        const data = await response.json();
+        
+        // Assuming the API returns data in the format { diet: [], exercise: [], mental: [] }
+        setFeeds(data);
       } catch (error) {
         console.error('Error fetching feeds:', error);
         setError('Unable to load news data. Please try again later.');
