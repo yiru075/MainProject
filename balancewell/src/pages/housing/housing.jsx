@@ -178,34 +178,62 @@ const Housing = () => {
       mapRef.current = map;
 
       map.on('load', async () => {
-        const allFeatures = [];
-        const pageSize = 1000;
-        let page = 1;
-        let hasMore = true;
+        // const allFeatures = [];
+        // const pageSize = 1000;
+        // let page = 1;
+        // let hasMore = true;
 
+        // try {
+        //   while (hasMore) {
+        //     const response = await fetch(`https://cftszlhuhkvepemocmgh.supabase.co/functions/v1/get_rent_by_sa2?page=${page}&pageSize=${pageSize}`, {
+        //       headers: {
+        //         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        //       }
+        //     });
+
+        //     const geojsonPage = await response.json();
+
+        //     if (!geojsonPage.features || geojsonPage.features.length === 0) {
+        //       hasMore = false;
+        //       break;
+        //     }
+
+        //     allFeatures.push(...geojsonPage.features);
+        //     page++;
+        //   }
+
+        //   const geojson = {
+        //     type: 'FeatureCollection',
+        //     features: allFeatures,
+        //   };
         try {
-          while (hasMore) {
-            const response = await fetch(`https://cftszlhuhkvepemocmgh.supabase.co/functions/v1/get_rent_by_sa2?page=${page}&pageSize=${pageSize}`, {
-              headers: {
-                Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-              }
-            });
-
-            const geojsonPage = await response.json();
-
-            if (!geojsonPage.features || geojsonPage.features.length === 0) {
-              hasMore = false;
-              break;
-            }
-
-            allFeatures.push(...geojsonPage.features);
-            page++;
+          const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+          const response = await fetch('${baseUrl}/api/enhanced_rental');
+          if (!response.ok) {
+            throw new Error('Upload failed');
           }
-
-          const geojson = {
-            type: 'FeatureCollection',
-            features: allFeatures,
-          };
+          const geojson = await response.json();
+        
+          geojsonRef.current = geojson;
+        
+          map.addSource('sa2-rent', {
+            type: 'geojson',
+            data: geojson,
+          });
+        
+          map.addLayer({
+            id: 'rent-heatmap',
+            type: 'fill',
+            source: 'sa2-rent',
+            paint: {
+              'fill-color': '#eeeeee',
+              'fill-opacity': 0.8,
+              'fill-outline-color': '#cccccc'
+            }
+          });
+        
+          updateInteraction(map, selectedType);
+        
 
           geojsonRef.current = geojson;
 
