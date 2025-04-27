@@ -122,11 +122,14 @@ const Sustainability = () => {
 
     localStorage.setItem('sustainabilityData', JSON.stringify(userData));
 
-    setSuburb('');
-    setIncome('');
-    setRent('');
-    setSearchResults([]);
-    setNoMatch(false);
+
+    // setSkipNextSearch(true);
+    // setSuburb('');
+    // setIncome('');
+    // setRent('');
+    // setSearchResults([]);
+    // setNoMatch(false);
+
   };
 
   const handleReset = () => {
