@@ -16,7 +16,7 @@ function Calculation() {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [savings, setSavings] = useState('');
-  const [propertyType, setPropertyType] = useState('2 bed flat');
+  const [propertyType, setPropertyType] = useState('1 Bed Flat');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
