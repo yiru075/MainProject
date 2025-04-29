@@ -12,8 +12,8 @@ const Header = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
-  const isAwarenessActive = 
-    location.pathname === "/education" || 
+  const isAwarenessActive =
+    location.pathname === "/education" ||
     location.pathname === "/news" ||
     location.pathname === "/eduMenu" ||
     location.pathname.startsWith("/level");
@@ -22,7 +22,7 @@ const Header = () => {
   const handleModulesClick = (e) => {
     e.preventDefault();
     const savedLevel = localStorage.getItem('userLevel');
-    
+
     if (savedLevel) {
       // Navigate to education page if level is saved
       navigate('/education');
@@ -30,14 +30,20 @@ const Header = () => {
       // Navigate to eduMenu if no level is saved
       navigate('/eduMenu');
     }
-    
+
     setDropdownVisible(false);
   };
 
   return (
     <header className="bw-header">
       <div className="logo">
-        <span className="logo-highlight">Safe and Settled</span>
+        <Link to="/home">
+          <img
+            src="/logo.png"
+            alt="Safe and Settled Logo"
+            className="logo-image"
+          />
+        </Link>
       </div>
       <nav className="nav-menu">
         <ul>
@@ -46,7 +52,7 @@ const Header = () => {
               Home
             </Link>
           </li> */}
-          
+
           {/*For Login Page  */}
           <li>
             <Link to="/home" className={location.pathname === "/home" ? "active" : ""}>
@@ -95,7 +101,7 @@ const Header = () => {
             </Link>
           </li>
           <li className="dropdown-container">
-            <div 
+            <div
               className={`dropdown-trigger ${isAwarenessActive ? "active" : ""}`}
               onClick={toggleDropdown}
             >
@@ -103,15 +109,15 @@ const Header = () => {
             </div>
             {dropdownVisible && (
               <div className="dropdown-menu">
-                <a 
+                <a
                   href="#"
                   className={location.pathname === "/education" || location.pathname === "/eduMenu" || location.pathname.startsWith("/level") ? "active" : ""}
                   onClick={handleModulesClick}
                 >
                   Modules
                 </a>
-                <Link 
-                  to="/news" 
+                <Link
+                  to="/news"
                   className={location.pathname === "/news" ? "active" : ""}
                   onClick={() => setDropdownVisible(false)}
                 >

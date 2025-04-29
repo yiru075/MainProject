@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.8rem 2rem;
+    padding: 0.4rem 2rem;
     box-sizing: border-box;
     margin: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -12,7 +12,7 @@
     z-index: 1000;
   }
 
-  .bw-header .logo .logo-highlight {
+  .bw-header .logo-highlight {
     font-size: 1.8rem;
     font-weight: bold;
     color: #FFC107;
@@ -158,6 +158,11 @@
     animation: dropdownFadeIn 0.2s ease forwards;
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
+  .logo-image {
+    height: 50px; 
+  }
+  
   
   @keyframes dropdownFadeIn {
     to {
