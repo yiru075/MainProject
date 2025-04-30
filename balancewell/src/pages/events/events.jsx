@@ -93,6 +93,7 @@ const Events = () => {
     setCategory(newCategory);
     setIsFallback(false);
     setEvents([]);
+    setSelectedEvent(null);
     setIsLoading(true);
     if (selectedRef.current?.coords) {
       await handleSearchClick(newCategory);

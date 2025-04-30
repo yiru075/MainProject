@@ -261,7 +261,7 @@ function Calculation() {
           <div className="suburb-input-container" ref={dropdownRef}>
             <input
               type="text"
-              placeholder="Search your suburb or postcode within Victoria only"
+              placeholder="Search your suburb name within Victoria only"
               value={suburb}
               onChange={(e) => setSuburb(e.target.value)}
               className="suburb-input"
