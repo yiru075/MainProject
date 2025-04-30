@@ -88,6 +88,12 @@ function Calculation() {
       return;
     }
 
+    const savingsValue = parseInt(savings);
+    if (savingsValue < 10000 || savingsValue > 310000) {
+      alert('Please enter a budget between $10,000 and $310,000');
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -103,7 +109,7 @@ function Calculation() {
           body: JSON.stringify({
             suburb: suburb.toLowerCase(),
             property_type: propertyType,
-            budget: parseInt(savings)
+            budget: savingsValue
           })
         }
       );
@@ -280,10 +286,12 @@ function Calculation() {
           <div className="suburb-input-container">
             <input
               type="number"
-              placeholder="Eg: Enter value greater than $5000 and lesser than $2,000,000"
+              placeholder="Enter value between $10,000 and $310,000"
               value={savings}
               onChange={(e) => setSavings(e.target.value)}
               className="savings-input"
+              min="10000"
+              max="310000"
             />
           </div>
         </div>
