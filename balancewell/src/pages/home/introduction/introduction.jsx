@@ -14,7 +14,7 @@ function Introduction() {
         Start shaping a future that supports your well-being
         </p>
         <div className="button-group">
-          <Link to="/quiz" className="test-button">Test your readiness</Link>
+          <Link to="/quiz" className="test-button">Start Your Guided Path</Link>
           {/* <Link to="/quiz" className="quiz-button">Quiz</Link> */}
         </div>
       </div>
