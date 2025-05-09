@@ -88,6 +88,12 @@ function Calculation() {
       return;
     }
 
+    const savingsValue = parseInt(savings);
+    if (savingsValue < 20000 || savingsValue > 310000) {
+      alert('Please enter a budget between $20,000 and $310,000');
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -103,7 +109,7 @@ function Calculation() {
           body: JSON.stringify({
             suburb: suburb.toLowerCase(),
             property_type: propertyType,
-            budget: parseInt(savings)
+            budget: savingsValue
           })
         }
       );
@@ -242,10 +248,17 @@ function Calculation() {
       <div className="hero-section">
         <h1>Project Your Rent Sustainability Over Time</h1>
         <p>
-          Use this tool to estimate how long your current rental budget can sustain
-          you in a selected suburb. We calculate this based on median weekly rent
-          and historical rent inflation, helping you plan ahead with greater financial
-          clarity.
+          This calculator is designed to help you understand how long your savings might cover rental expenses in a specific suburb.
+        </p>
+        <p>
+          By entering your available budget, you'll receive an estimate of how many months or years you could afford to rent in that area based on:
+        </p>
+        <ul>
+          <li>Current median weekly rent, and</li>
+          <li>5-year average rental inflation for that suburb.</li>
+        </ul>
+        <p>
+          You'll also receive alternative suburb suggestions where your savings may stretch further, giving you more options to consider.
         </p>
       </div>
 
@@ -280,10 +293,12 @@ function Calculation() {
           <div className="suburb-input-container">
             <input
               type="number"
-              placeholder="Eg: Enter value greater than $5000 and lesser than $2,000,000"
+              placeholder="Enter value between $20,000 and $310,000"
               value={savings}
               onChange={(e) => setSavings(e.target.value)}
               className="savings-input"
+              min="20000"
+              max="310000"
             />
           </div>
         </div>
@@ -333,9 +348,7 @@ function Calculation() {
           </div>
 
           <p className="results-explanation">
-            Based on current rent and {(results.rental_inflation * 100).toFixed(1)}% average rental inflation
-            rate, you can afford to live in <strong>{results.target_suburb}</strong>, in a <strong>{propertyType}</strong> for
-            approximately <strong>{results.can_live_years} years</strong>.
+            Based on median weekly rent and 5 year average rental inflation rate of {(results.rental_inflation * 100).toFixed(1)}%, you can afford to live in <strong>{results.target_suburb}</strong>, in a <strong>{propertyType}</strong> for approximately <strong>{results.can_live_years} years</strong>.
           </p>
 
           <div className="recommendations">
