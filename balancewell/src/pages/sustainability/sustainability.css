@@ -1,205 +1,3 @@
-/* .form-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0px 20px;
-  background-color: var(--bg-color);
-}
-
-.form-content {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin: 0 auto;
-}
-
-.form-section {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.form-label {
-  font-weight: bold;
-  color: var(--primary-color);
-  font-size: 20px;
-  margin-bottom: 8px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  margin-top: 8px;
-  box-sizing: border-box;
-  background-color: var(--card-bg);
-  color: var(--text-color);
-}
-
-.form-error {
-  color: #e63946;
-  font-size: 0.875rem;
-  margin-top: 4px;
-}
-
-.form-info {
-  font-size: 0.875rem;
-  color: var(--text-color-secondary);
-  margin-top: 4px;
-}
-
-.geocoder-box.search-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: var(--dropdown-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  z-index: 999;
-  margin-top: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.search-results {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.search-result-item {
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  font-size: 0.95rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--dropdown-bg);
-  color: var(--text-color);
-}
-
-.search-result-item:hover {
-  background-color: var(--dropdown-hover-bg);
-}
-
-.result-name {
-  font-weight: 500;
-}
-
-.result-state {
-  font-size: 0.875rem;
-  color: var(--text-color-secondary);
-}
-
-.form-button-wrapper {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.form-submit-btn,
-.form-reset-btn {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 14px;
-  background-color: var(--primary-color);
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.form-submit-btn:hover,
-.form-reset-btn:hover {
-  background-color: #e0a800;
-}
-
-.form-ratio-info {
-  padding: 16px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--card-bg);
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-color);
-}
-
-.form-ratio-info table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
-  font-size: 13px;
-}
-
-.form-ratio-info th,
-.form-ratio-info td {
-  padding: 8px 6px;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-color);
-}
-
-.form-ratio-info th {
-  font-weight: bold;
-}
-
-.continue-btn {
-  background-color: var(--primary-color);
-  border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 14px 28px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.continue-btn:hover {
-  background-color: #e0a800;
-  transform: translateY(-2px);
-}
-
-.discover-button-wrapper {
-  margin-top: 16px;
-}
-
-.form-intro {
-  text-align: center;
-  padding: 32px 20px 24px 20px;
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.form-intro h2 {
-  font-size: 26px;
-  color: var(--form-title-color, #f1c40f); 
-  margin-bottom: 12px;
-}
-
-.form-intro p {
-  font-size: 16px;
-  color: #ccc;
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.intro-image {
-  width: 120px;
-  margin-bottom: 20px;
-} */
-
-
 .form-container {
   display: flex;
   flex-direction: column;
@@ -215,14 +13,14 @@
 
 .form-intro h2 {
   font-size: 28px;
-  color: var(--form-title-color, #f1c40f);
+  color: var(--primary-color);
   margin-bottom: 12px;
   text-align: center;
 }
 
 .form-intro p {
-  font-size: 16px;
-  color: #ccc;
+  font-size: 18px;
+  color: var(--text-color-secondary);
   line-height: 1.6;
   text-align: center;
   max-width: 640px;
@@ -268,7 +66,7 @@
 }
 
 .form-error {
-  color: #e63946;
+  color: #FFA07A;
   font-size: 0.875rem;
 }
 
@@ -314,6 +112,12 @@
 .search-result-item:hover {
   background-color: var(--dropdown-hover-bg);
 }
+
+.suburb-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 
 .result-name {
   font-weight: 500;

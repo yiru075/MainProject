@@ -1,15 +1,18 @@
 :root {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --card-bg: #f9f9f9;
-  --border-color: #dddddd;
-  --primary-color: #FFC107;
-  --text-color-secondary: #555;
-  --nav-bg: #ffffff;
-  --nav-text-color: #000000;
-  --dropdown-bg: #f9f9f9;
-  --dropdown-hover-bg: #f0f0f0;
+  --bg-color: #FFFBD8; 
+  --text-color: #212121; 
+  --card-bg: #fef8ce; 
+  --border-color: #e0dcae; 
+  --primary-color: #FFC107; 
+  --text-color-secondary: #3A3A3A; 
+  --nav-bg: #fdf6ca; 
+  --nav-text-color: #333333; 
+  --dropdown-bg: #fffdf2; 
+  --dropdown-hover-bg: #f4ecd0; 
+  --button-bg: #FFC107;
+  --button-hover-bg: #e0a800;
 }
+
 
 body.dark {
   --bg-color: #121212;
@@ -22,6 +25,8 @@ body.dark {
   --nav-text-color: #ffffff;
   --dropdown-bg: #1a1a1a;
   --dropdown-hover-bg: #333333;
+  --button-bg: #FFC107;
+  --button-hover-bg: #e0a800;
 }
 
 html,

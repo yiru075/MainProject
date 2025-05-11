@@ -19,6 +19,8 @@ const Sustainability = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [noMatch, setNoMatch] = useState(false);
   const [skipNextSearch, setSkipNextSearch] = useState(false);
+  const [invalidChar, setInvalidChar] = useState(false);
+  const [invalidLength, setInvalidLength] = useState(false);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -59,6 +61,23 @@ const Sustainability = () => {
       setNoMatch(true);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSuburbChange = (e) => {
+    const value = e.target.value;
+    const regex = /^[a-zA-Z\s,]*$/;
+
+    if (regex.test(value)) {
+      if (value.length <= 80) {
+        setSuburb(value);
+        setInvalidChar(false);
+        setInvalidLength(value.length > 0 && value.length < 2);
+      } else {
+        setInvalidLength(true);
+      }
+    } else {
+      setInvalidChar(true);
     }
   };
 
@@ -149,7 +168,7 @@ const Sustainability = () => {
 
     const isIncomeValid = validateIncome();
     const isRentValid = validateRent();
-    const isSuburbValid = suburb.trim() !== '';
+    const isSuburbValid = suburb.trim() !== '' && !noMatch;;
 
     if (!isSuburbValid) {
       setErrors((prev) => ({ ...prev, suburb: 'Please select a suburb' }));
@@ -176,14 +195,6 @@ const Sustainability = () => {
 
     localStorage.setItem('sustainabilityData', JSON.stringify(userData));
 
-
-    // setSkipNextSearch(true);
-    // setSuburb('');
-    // setIncome('');
-    // setRent('');
-    // setSearchResults([]);
-    // setNoMatch(false);
-
   };
 
   const handleReset = () => {
@@ -193,6 +204,10 @@ const Sustainability = () => {
     setRentRatio(null);
     setErrors({ suburb: '', income: '', rent: '' });
     setSearchResults([]);
+    setInvalidChar(false);
+    setInvalidLength(false);
+    setSkipNextSearch(false); 
+    setNoMatch(false);
     localStorage.removeItem('sustainabilityData');
   };
 
@@ -222,7 +237,7 @@ const Sustainability = () => {
             <input
               type="text"
               value={suburb}
-              onChange={(e) => setSuburb(e.target.value)}
+              onChange={handleSuburbChange}
               className="form-input"
               placeholder="Enter suburb name"
             />
@@ -249,12 +264,16 @@ const Sustainability = () => {
               <p className="form-error">No matching suburbs found in Victoria.</p>
             )}
           </div>
+          {invalidChar && (
+            <p className="form-error">Only English letters, spaces and commas are allowed.</p>
+          )}
+
+          {invalidLength && (
+            <p className="form-error">Suburb name must be between 2 and 80 characters.</p>
+          )}
+
 
           {errors.suburb && <p className="form-error">{errors.suburb}</p>}
-
-          {noMatch && !isLoading && suburb.trim() !== '' && (
-            <p className="form-error">No matching suburbs found in Victoria.</p>
-          )}
         </div>
 
         <div className="form-section">
@@ -318,10 +337,10 @@ const Sustainability = () => {
                   );
                 } else {
                   return (
-                    <p style={{ color: 'red' }}>
+                    <p style={{ color: '#fd622e' }}>
                       <strong>Affordability Level: Level 3 (UNAFFORDABLE)</strong><br />
                       This is above the recommended 35% threshold.<br />
-                      WellbeingHub will help you discover nearby suburbs with better rent-to-income ratios.
+                      Safe and Settled will help you discover nearby suburbs with better rent-to-income ratios.
                     </p>
                   );
                 }
