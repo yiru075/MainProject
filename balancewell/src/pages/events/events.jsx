@@ -303,7 +303,7 @@ const Events = () => {
 
           {!isLoading && isFallback && (
             <p className="form-info" style={{ textAlign: 'center' }}>
-              No nearby events found. Showing you fallback events across Victoria.
+              No nearby events found. Showing you events across Victoria.
             </p>
           )}
 

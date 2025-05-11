@@ -6,6 +6,7 @@
   padding: 2rem;
   color: #fff;
   padding-bottom: 0;
+  flex-wrap: wrap; 
 }
 
 .introduction-content {
@@ -37,7 +38,8 @@
   margin-bottom: 2rem;
 }
 
-.test-button, .quiz-button {
+.test-button,
+.quiz-button {
   background-color: #FFC107;
   color: #000;
   border: none;
@@ -54,7 +56,8 @@
   text-align: center;
 }
 
-.test-button:hover, .quiz-button:hover {
+.test-button:hover,
+.quiz-button:hover {
   background-color: #e0aa05;
 }
 
@@ -88,12 +91,31 @@
   object-fit: cover;
 }
 
+@media (max-width: 1024px) {
+  .introduction-content {
+    max-width: 55%;
+    margin-left: 2rem;
+    padding-right: 1rem;
+  }
+
+  .introduction-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .introduction-content p {
+    font-size: 1.1rem;
+  }
+
+  .introduction-image {
+    max-width: 45%;
+  }
+}
+
 @media (max-width: 768px) {
   .introduction {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    height: auto; 
     padding: 2rem 1rem;
   }
 
@@ -101,6 +123,14 @@
     max-width: 100%;
     margin-left: 0;
     padding-right: 0;
+  }
+
+  .introduction-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .introduction-content p {
+    font-size: 1rem;
   }
 
   .button-group {
@@ -114,5 +144,25 @@
 
   .introduction-image img {
     width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .introduction-content h1 {
+    font-size: 1.4rem;
+  }
+
+  .introduction-content p {
+    font-size: 0.95rem;
+  }
+
+  .test-button,
+  .quiz-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .introduction-image img {
+    width: 90%;
   }
 }
