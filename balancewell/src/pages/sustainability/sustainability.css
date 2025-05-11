@@ -180,6 +180,12 @@
   font-weight: bold;
 }
 
+.map-navigation-section {
+  background-color: var(--bg-color); 
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
 .continue-btn {
   background-color: var(--primary-color);
   border: none;
@@ -201,3 +207,98 @@
 .discover-button-wrapper {
   margin-top: 16px;
 }
+
+@media (max-width: 1024px) {
+  .form-content {
+    padding: 0 16px;
+  }
+
+  .form-ratio-info table {
+    font-size: 13.5px;
+  }
+
+  .form-ratio-info th,
+  .form-ratio-info td {
+    padding: 6px 4px;
+  }
+
+  .form-intro p {
+    max-width: 90%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-intro h2 {
+    font-size: 24px;
+  }
+
+  .form-intro p {
+    font-size: 16px;
+  }
+
+  .form-label {
+    font-size: 17px;
+  }
+
+  .form-input {
+    font-size: 1rem;
+  }
+
+  .form-button-wrapper {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .form-submit-btn,
+  .form-reset-btn {
+    flex: 1 1 48%;
+  }
+
+  .form-ratio-info {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 16px;
+  }
+
+  .form-intro h2 {
+    font-size: 22px;
+  }
+
+  .form-intro p {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .form-label {
+    font-size: 16px;
+  }
+
+  .form-input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .form-button-wrapper {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-submit-btn,
+  .form-reset-btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 10px 16px;
+  }
+
+  .continue-btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 0;
+  }
+}
+
