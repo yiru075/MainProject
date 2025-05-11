@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, MenuOutlined } from "@ant-design/icons";
 import "./header.css";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(null);
+  const [hoveringMenu, setHoveringMenu] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [themeColor, setThemeColor] = useState(localStorage.getItem("themeColor") || "#FFC107");
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
+  useEffect(() => {
+    document.body.className = theme;
+    localStorage.setItem("theme", theme);
+    document.documentElement.style.setProperty('--theme-color', themeColor);
+    localStorage.setItem("themeColor", themeColor);
+  }, [theme, themeColor]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   const isAwarenessActive =
@@ -18,113 +29,98 @@ const Header = () => {
     location.pathname === "/eduMenu" ||
     location.pathname.startsWith("/level");
 
-  // Function to check level in localStorage and navigate accordingly
   const handleModulesClick = (e) => {
     e.preventDefault();
     const savedLevel = localStorage.getItem('userLevel');
+    navigate(savedLevel ? '/education' : '/eduMenu');
+    setDropdownVisible(null);
+    setMenuOpen(false);
+  };
 
-    if (savedLevel) {
-      // Navigate to education page if level is saved
-      navigate('/education');
+  const handleDropdownClick = (menuKey) => {
+    if (dropdownVisible === menuKey) {
+      if (!hoveringMenu) {
+        setDropdownVisible(null);
+      }
     } else {
-      // Navigate to eduMenu if no level is saved
-      navigate('/eduMenu');
+      setDropdownVisible(menuKey);
     }
-
-    setDropdownVisible(false);
   };
 
   return (
     <header className="bw-header">
       <div className="logo">
         <Link to="/home">
-          <img
-            src="/logo.png"
-            alt="Safe and Settled Logo"
-            className="logo-image"
-          />
+          <img src="/logo.png" alt="Safe and Settled Logo" className="logo-image" />
         </Link>
       </div>
-      <nav className="nav-menu">
+
+      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        <MenuOutlined />
+      </button>
+
+      <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
         <ul>
-          {/* <li>
-            <Link to="/" className={location.pathname === "/" ? "active" : ""}>
-              Home
-            </Link>
-          </li> */}
-
-          {/*For Login Page  */}
           <li>
-            <Link to="/home" className={location.pathname === "/home" ? "active" : ""}>
-              Home
-            </Link>
+            <Link to="/home" className={location.pathname === "/home" ? "active" : ""} onClick={() => setMenuOpen(false)}>Home</Link>
           </li>
 
-          <li>
-            <Link
-              to="/sustainability"
-              className={location.pathname === "/sustainability" ? "active" : ""}
+          <li className="dropdown-container">
+            <div
+              className={`dropdown-trigger ${["/sustainability", "/housing", "/calculation"].includes(location.pathname) ? "active" : ""}`}
+              onClick={() => handleDropdownClick("planning")}
             >
-              Sustainability
-            </Link>
+              Planning <DownOutlined className="dropdown-icon" />
+            </div>
+            {dropdownVisible === "planning" && (
+              <div
+                className="dropdown-menu"
+                onMouseEnter={() => setHoveringMenu(true)}
+                onMouseLeave={() => {
+                  setHoveringMenu(false);
+                  setDropdownVisible(null);
+                }}
+              >
+                <Link to="/sustainability" className={location.pathname === "/sustainability" ? "active" : ""} onClick={() => { setDropdownVisible(null); setMenuOpen(false); }}>Sustainability</Link>
+                <Link to="/housing" className={location.pathname === "/housing" ? "active" : ""} onClick={() => { setDropdownVisible(null); setMenuOpen(false); }}>Housing</Link>
+                <Link to="/calculation" className={location.pathname === "/calculation" ? "active" : ""} onClick={() => { setDropdownVisible(null); setMenuOpen(false); }}>Calculator</Link>
+              </div>
+            )}
+          </li>
+
+          <li>
+            <Link to="/events" className={location.pathname === "/events" ? "active" : ""} onClick={() => setMenuOpen(false)}>Events</Link>
           </li>
           <li>
-            <Link
-              to="/housing"
-              className={location.pathname === "/housing" ? "active" : ""}
-            >
-              Housing
-            </Link>
+            <Link to="/retirementSupport" className={location.pathname === "/retirementSupport" ? "active" : ""} onClick={() => setMenuOpen(false)}>Retirement Support</Link>
           </li>
-          <li>
-            <Link
-              to="/events"
-              className={location.pathname === "/events" ? "active" : ""}
-            >
-              Events
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/retirementSupport"
-              className={location.pathname === "/retirementSupport" ? "active" : ""}
-            >
-              Retirement Support
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/calculation"
-              className={location.pathname === "/calculation" ? "active" : ""}
-            >
-              Calculator
-            </Link>
-          </li>
+
           <li className="dropdown-container">
             <div
               className={`dropdown-trigger ${isAwarenessActive ? "active" : ""}`}
-              onClick={toggleDropdown}
+              onClick={() => handleDropdownClick("awareness")}
             >
               Awareness <DownOutlined className="dropdown-icon" />
             </div>
-            {dropdownVisible && (
-              <div className="dropdown-menu">
-                <a
-                  href="#"
-                  className={location.pathname === "/education" || location.pathname === "/eduMenu" || location.pathname.startsWith("/level") ? "active" : ""}
-                  onClick={handleModulesClick}
-                >
-                  Modules
-                </a>
-                <Link
-                  to="/news"
-                  className={location.pathname === "/news" ? "active" : ""}
-                  onClick={() => setDropdownVisible(false)}
-                >
-                  News
-                </Link>
+            {dropdownVisible === "awareness" && (
+              <div
+                className="dropdown-menu"
+                onMouseEnter={() => setHoveringMenu(true)}
+                onMouseLeave={() => {
+                  setHoveringMenu(false);
+                  setDropdownVisible(null);
+                }}
+              >
+                <a href="#" className={location.pathname === "/education" || location.pathname === "/eduMenu" || location.pathname.startsWith("/level") ? "active" : ""} onClick={handleModulesClick}>Modules</a>
+                <Link to="/news" className={location.pathname === "/news" ? "active" : ""} onClick={() => { setDropdownVisible(null); setMenuOpen(false); }}>News</Link>
               </div>
             )}
+          </li>
+
+          <li>
+            <button onClick={toggleTheme} className="theme-toggle-btn">
+              {theme === "light" ? "Dark" : "Light"}
+            </button>
           </li>
         </ul>
       </nav>

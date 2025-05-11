@@ -15,7 +15,6 @@ function Introduction() {
         </p>
         <div className="button-group">
           <Link to="/quiz" className="test-button">Start Your Guided Path</Link>
-          {/* <Link to="/quiz" className="quiz-button">Quiz</Link> */}
         </div>
       </div>
       <div className="introduction-image">
