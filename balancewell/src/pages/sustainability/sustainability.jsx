@@ -206,7 +206,7 @@ const Sustainability = () => {
     setSearchResults([]);
     setInvalidChar(false);
     setInvalidLength(false);
-    setSkipNextSearch(false); 
+    setSkipNextSearch(false);
     setNoMatch(false);
     localStorage.removeItem('sustainabilityData');
   };
@@ -375,10 +375,14 @@ const Sustainability = () => {
             </div>
 
             <div className="discover-button-wrapper">
-              <button className="continue-btn" type="button" onClick={() => navigate('/housing')}>
+              <button
+                className="continue-btn"
+                type="button"
+                onClick={() => {navigate('/housing');}}>
                 Discover Rent
               </button>
             </div>
+
           </>
         )}
       </form>

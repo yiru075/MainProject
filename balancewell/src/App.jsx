@@ -6,6 +6,7 @@ import {
   useLocation
 } from 'react-router-dom';
 import Header from './components/header/header.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx'; 
 import Home from './pages/home/home.jsx';
 import Housing from './pages/housing/housing.jsx';
 import Education from './pages/education/education.jsx';
@@ -55,6 +56,7 @@ import './App.css';
 function App() {
   return (
     <Router>
+      <ScrollToTop /> 
       <AppContent />
     </Router>
   );
