@@ -84,7 +84,7 @@ const Housing = () => {
 
         popupRef.current
           .setLngLat(e.lngLat)
-          .setHTML(`<strong>${suburb}</strong><br/>${type}: ${rentDisplay}`)
+          .setHTML(`<div style="color: black;"><strong>${suburb}</strong><br/>${type}: ${rentDisplay}</div>`)
           .addTo(map);
 
         map.getCanvas().style.cursor = 'pointer';
@@ -425,15 +425,18 @@ const Housing = () => {
 
 
       </div>
-      <div >
+      <div className="map-navigation">
         <p className="map-navigation-description">
           Want to review your rent situation or plan ahead?
         </p>
         <div className="map-navigation-buttons">
-          <button className="continue-btn" onClick={() => {navigate('/sustainability');}}>
+          <button className="continue-btn" onClick={() => { navigate('/sustainability'); }}>
             Re-check Rent Sustainability
           </button>
-          <button className="continue-btn" onClick={() => {navigate('/calculation');}}>
+          <button className="continue-btn" onClick={() => {
+            navigate('/calculation');
+            window.scrollTo(0, 0);
+          }}>
             Go to Retirement Rent Estimator
           </button>
         </div>

@@ -3,10 +3,11 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 40px;
-  background-color: #f7f7f7;
+  background-color: var(--card-bg);
   min-height: 100vh;
-  gap: 20px;
   flex-wrap: wrap;
+  margin-bottom: 0px;
+  min-height: auto;
 }
 
 .map-card {
@@ -15,8 +16,8 @@
   height: 75vh;
   border-radius: 12px;
   overflow: hidden;
-  background-color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  /* background-color: white; */
+  background-color: var(--card-bg);
   transition: width 0.3s ease;
 }
 
@@ -32,10 +33,12 @@
 
 .control-card {
   flex: 0.3;
-  background: white;
+  /* background: white; */
+  background: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  /* box-shadow: var(--card-bg); */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -44,7 +47,7 @@
 }
 
 .recommendation-box {
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
   width: 100%;
 }
@@ -63,7 +66,9 @@
 .recommendation-table td {
   text-align: left;
   padding: 5px;
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 .recommendation-table th {
@@ -102,6 +107,13 @@
   box-sizing: border-box;
 }
 
+.floating-dropdown label,
+.floating-dropdown select,
+.floating-dropdown option {
+  color: black;
+}
+
+
 .legend-box {
   position: absolute;
   top: 20px;
@@ -112,6 +124,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   width: 200px;
+  color: black;
 }
 
 .legend-title {
@@ -276,6 +289,11 @@
   background-color:var(--button-hover-bg);
 }
 
+.map-navigation{
+  background-color: var(--card-bg);
+  padding: 1rem 1rem;
+  text-align: center;
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
