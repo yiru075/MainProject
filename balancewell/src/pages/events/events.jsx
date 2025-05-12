@@ -15,6 +15,8 @@ const Events = () => {
   const [skipNextSearch, setSkipNextSearch] = useState(false);
   const [isFallback, setIsFallback] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [invalidChar, setInvalidChar] = useState(false);
+  const [invalidLength, setInvalidLength] = useState(false);
 
 
   useEffect(() => {
@@ -52,6 +54,32 @@ const Events = () => {
       setIsLoading(false);
     }
   };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    const regex = /^[a-zA-Z\s,]*$/;
+    if (regex.test(value)) {
+      if (value.length <= 80) {
+        setSuburb(value);
+        setInvalidChar(false);
+        setInvalidLength(value.length > 0 && value.length < 2);
+      } else {
+        setInvalidLength(true);
+      }
+    } else {
+      setInvalidChar(true);
+    }
+  };
+
+  const handleItemClick = (name) => {
+    setSuburb(name);
+    setSearchResults([]);
+    setNoMatch(false);
+    setSkipNextSearch?.(true);
+    setIsAutoLocated?.(false);
+    onSuburbSelect?.(name);
+  };
+
 
   const handleUseLocation = () => {
     if (navigator.geolocation) {
@@ -197,7 +225,7 @@ const Events = () => {
       <div className="event-header">
         <h2 className="event-title">Explore Local Health & Wellness Events</h2>
         <p className="event-subtitle">
-          Find free or low-cost health checkups, workshops, and wellness activities near you.
+          Find free health checkups, workshops, and wellness activities near you.
         </p>
       </div>
 
@@ -208,16 +236,36 @@ const Events = () => {
               type="text"
               value={suburb}
               onChange={(e) => {
-                setSuburb(e.target.value);
+                const value = e.target.value;
+                const regex = /^[a-zA-Z\s,]*$/;
+
+                if (regex.test(value)) {
+                  if (value.length <= 80) {
+                    setSuburb(value);
+                    setInvalidChar(false);
+                    setInvalidLength(value.length > 0 && value.length < 2);
+                  } else {
+                    setInvalidLength(true);
+                  }
+                } else {
+                  setInvalidChar(true);
+                }
                 setIsAutoLocated(false);
               }}
               className="form-input"
               placeholder="Enter suburb name"
             />
+
             <button className="event-location-btn" onClick={handleUseLocation}>
               Use my location
             </button>
           </div>
+          {invalidChar && (
+              <p className="form-error">Only English letters, spaces and commas are allowed.</p>
+            )}
+            {invalidLength && (
+              <p className="form-error">Suburb name must be between 2 and 80 characters.</p>
+            )}
 
           {isLoading && <p className="form-info">Loading...</p>}
 
@@ -240,7 +288,6 @@ const Events = () => {
             <p className="form-error">No matching suburbs found in Victoria.</p>
           )}
         </div>
-
         <button className="event-search-btn" onClick={() => handleSearchClick()}>
           Find events near me
         </button>
