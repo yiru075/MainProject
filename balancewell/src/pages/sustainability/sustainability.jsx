@@ -19,6 +19,8 @@ const Sustainability = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [noMatch, setNoMatch] = useState(false);
   const [skipNextSearch, setSkipNextSearch] = useState(false);
+  const [invalidChar, setInvalidChar] = useState(false);
+  const [invalidLength, setInvalidLength] = useState(false);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -62,10 +64,62 @@ const Sustainability = () => {
     }
   };
 
+  const handleSuburbChange = (e) => {
+    const value = e.target.value;
+    const regex = /^[a-zA-Z\s,]*$/;
+
+    if (regex.test(value)) {
+      if (value.length <= 80) {
+        setSuburb(value);
+        setInvalidChar(false);
+        setInvalidLength(value.length > 0 && value.length < 2);
+      } else {
+        setInvalidLength(true);
+      }
+    } else {
+      setInvalidChar(true);
+    }
+  };
+
+  const handleIncomeChange = (e) => {
+    const value = e.target.value;
+    const regex = /^\d{0,6}(\.\d{0,2})?$/;
+    if (regex.test(value) || value === '') {
+      setIncome(value);
+    }
+  };
+
+  const handleRentChange = (e) => {
+    const value = e.target.value;
+    const regex = /^\d{0,6}(\.\d{0,2})?$/;
+    if (regex.test(value) || value === '') {
+      setRent(value);
+    }
+  };
+
   const validateIncome = () => {
+    const trimmed = income.trim();
+
+    if (/^0\d+/.test(trimmed)) {
+      setErrors((prev) => ({
+        ...prev,
+        income: 'Leading zeros are not allowed.'
+      }));
+      return false;
+    }
+
+    const formatValid = /^(0|[1-9]\d{0,5})(\.\d{1,2})?$/.test(trimmed);
+    if (!formatValid) {
+      setErrors((prev) => ({
+        ...prev,
+        income: 'Max 6 digits before decimal and 2 after decimal.'
+      }));
+      return false;
+    }
+
     const value = parseFloat(income);
-    if (isNaN(value) || value < 0) {
-      setErrors((prev) => ({ ...prev, income: 'Income must be 0 or a positive number.' }));
+    if (isNaN(value) || value < 1) {
+      setErrors((prev) => ({ ...prev, income: 'Income must be a positive number(min 1 AUD).' }));
       return false;
     } else if (value > 250000) {
       setErrors((prev) => ({ ...prev, income: 'Income must not exceed 250,000 AUD.' }));
@@ -77,9 +131,28 @@ const Sustainability = () => {
   };
 
   const validateRent = () => {
+    const trimmed = rent.trim();
+
+    if (/^0\d+/.test(trimmed)) {
+      setErrors((prev) => ({
+        ...prev,
+        rent: 'Leading zeros are not allowed.'
+      }));
+      return false;
+    }
+
+    const formatValid = /^(0|[1-9]\d{0,5})(\.\d{1,2})?$/.test(trimmed);
+    if (!formatValid) {
+      setErrors((prev) => ({
+        ...prev,
+        rent: 'Max 6 digits before decimal and 2 after decimal.'
+      }));
+      return false;
+    }
+
     const value = parseFloat(rent);
-    if (isNaN(value) || value < 0) {
-      setErrors((prev) => ({ ...prev, rent: 'Rent must be 0 or a positive number.' }));
+    if (isNaN(value) || value < 1) {
+      setErrors((prev) => ({ ...prev, rent: 'Rent must be a positive number(min 1 AUD).' }));
       return false;
     } else if (value > 20000) {
       setErrors((prev) => ({ ...prev, rent: 'Rent must not exceed 20,000 AUD.' }));
@@ -95,7 +168,7 @@ const Sustainability = () => {
 
     const isIncomeValid = validateIncome();
     const isRentValid = validateRent();
-    const isSuburbValid = suburb.trim() !== '';
+    const isSuburbValid = suburb.trim() !== '' && !noMatch;;
 
     if (!isSuburbValid) {
       setErrors((prev) => ({ ...prev, suburb: 'Please select a suburb' }));
@@ -122,14 +195,6 @@ const Sustainability = () => {
 
     localStorage.setItem('sustainabilityData', JSON.stringify(userData));
 
-
-    // setSkipNextSearch(true);
-    // setSuburb('');
-    // setIncome('');
-    // setRent('');
-    // setSearchResults([]);
-    // setNoMatch(false);
-
   };
 
   const handleReset = () => {
@@ -139,6 +204,10 @@ const Sustainability = () => {
     setRentRatio(null);
     setErrors({ suburb: '', income: '', rent: '' });
     setSearchResults([]);
+    setInvalidChar(false);
+    setInvalidLength(false);
+    setSkipNextSearch(false);
+    setNoMatch(false);
     localStorage.removeItem('sustainabilityData');
   };
 
@@ -151,6 +220,14 @@ const Sustainability = () => {
 
   return (
     <div className="form-container">
+      <div className="form-intro">
+        <h2>Rent Sustainability Check</h2>
+        <p>
+          Use this tool to check whether your weekly rent is sustainable based on your income.
+          This helps you understand your housing affordability and discover more affordable suburbs if needed.
+        </p>
+      </div>
+
       <form onSubmit={handleSubmit} className="form-content">
         <div className="form-section">
           <label className="form-label">
@@ -160,7 +237,7 @@ const Sustainability = () => {
             <input
               type="text"
               value={suburb}
-              onChange={(e) => setSuburb(e.target.value)}
+              onChange={handleSuburbChange}
               className="form-input"
               placeholder="Enter suburb name"
             />
@@ -180,31 +257,34 @@ const Sustainability = () => {
                   </li>
                 ))}
               </ul>
+
             )}
 
             {noMatch && !isLoading && suburb.trim() !== '' && (
               <p className="form-error">No matching suburbs found in Victoria.</p>
             )}
           </div>
-
-
-          {noMatch && !isLoading && suburb.trim() !== '' && (
-            <p className="form-error">No matching suburbs found in Victoria.</p>
+          {invalidChar && (
+            <p className="form-error">Only English letters, spaces and commas are allowed.</p>
           )}
+
+          {invalidLength && (
+            <p className="form-error">Suburb name must be between 2 and 80 characters.</p>
+          )}
+
+
+          {errors.suburb && <p className="form-error">{errors.suburb}</p>}
         </div>
 
         <div className="form-section">
           <label className="form-label">2. What is your weekly income (AUD)?</label>
           <input
-            type="number"
-            step="0.01"
-            min="0"
-            max="250000"
+            type="text"
             value={income}
-            onChange={(e) => setIncome(e.target.value)}
+            onChange={handleIncomeChange}
             onBlur={validateIncome}
             className="form-input"
-            placeholder="e.g. 1250.50"
+            placeholder="Enter value between 1 and 250000 in AUD"
           />
           {errors.income && <p className="form-error">{errors.income}</p>}
         </div>
@@ -212,16 +292,14 @@ const Sustainability = () => {
         <div className="form-section">
           <label className="form-label">3. What is your weekly rent (AUD)?</label>
           <input
-            type="number"
-            step="0"
-            min="0"
-            max="20000"
+            type="text"
             value={rent}
-            onChange={(e) => setRent(e.target.value)}
+            onChange={handleRentChange}
             onBlur={validateRent}
             className="form-input"
-            placeholder="e.g. 450.00"
+            placeholder="Enter value between 1 and 20000 in AUD"
           />
+
           {errors.rent && <p className="form-error">{errors.rent}</p>}
         </div>
 
@@ -259,10 +337,10 @@ const Sustainability = () => {
                   );
                 } else {
                   return (
-                    <p style={{ color: 'red' }}>
+                    <p style={{ color: '#fd622e' }}>
                       <strong>Affordability Level: Level 3 (UNAFFORDABLE)</strong><br />
                       This is above the recommended 35% threshold.<br />
-                      WellbeingHub will help you discover nearby suburbs with better rent-to-income ratios.
+                      Safe and Settled will help you discover nearby suburbs with better rent-to-income ratios.
                     </p>
                   );
                 }
@@ -297,10 +375,14 @@ const Sustainability = () => {
             </div>
 
             <div className="discover-button-wrapper">
-              <button className="continue-btn" type="button" onClick={() => navigate('/housing')}>
+              <button
+                className="continue-btn"
+                type="button"
+                onClick={() => {navigate('/housing');}}>
                 Discover Rent
               </button>
             </div>
+
           </>
         )}
       </form>

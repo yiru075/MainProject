@@ -1,6 +1,17 @@
 export default async function handler(req, res) {
     // res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Origin', 'https://safeandsettled.vercel.app');
+    // res.setHeader('Access-Control-Allow-Origin', 'https://safeandsettled.vercel.app');
+    const allowedOrigins = [
+      'https://safeandsettled.vercel.app',
+      'https://iteration2-safeandsettled.vercel.app'
+    ];
+    const origin = req.headers.origin;
+  
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
+    
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   
