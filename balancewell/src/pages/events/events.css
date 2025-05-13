@@ -1,5 +1,6 @@
 .event-search-wrapper {
   padding: 20px;
+  background-color: var(--bg-color);
 }
 
 .event-header {
@@ -241,7 +242,7 @@
 }
 
 .event-detail {
-  max-width: 640px;
+  max-width: 700px;
   margin: 40px auto;
   background-color: var(--card-bg);
   border-radius: 16px;
@@ -250,6 +251,12 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+.event-time {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color-secondary);
 }
 
 .event-detail h2 {

@@ -261,11 +261,11 @@ const Events = () => {
             </button>
           </div>
           {invalidChar && (
-              <p className="form-error">Only English letters, spaces and commas are allowed.</p>
-            )}
-            {invalidLength && (
-              <p className="form-error">Suburb name must be between 2 and 80 characters.</p>
-            )}
+            <p className="form-error">Only English letters, spaces and commas are allowed.</p>
+          )}
+          {invalidLength && (
+            <p className="form-error">Suburb name must be between 2 and 80 characters.</p>
+          )}
 
           {isLoading && <p className="form-info">Loading...</p>}
 
@@ -312,9 +312,19 @@ const Events = () => {
         <div className="event-detail">
           <button className="back-btn" onClick={() => setSelectedEvent(null)}>← Back</button>
           <h2>{selectedEvent.name}</h2>
-          <p><strong>{new Date(selectedEvent.datetime_start).toLocaleString('en-AU', {
-            weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
-          })}</strong> – {new Date(selectedEvent.datetime_end).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' })}</p>
+          <p className="event-time">
+            {new Date(selectedEvent.datetime_start).toLocaleString('en-AU', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              hour: '2-digit',
+              minute: '2-digit'
+            })} – {new Date(selectedEvent.datetime_end).toLocaleTimeString('en-AU', {
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
+
 
           {selectedEvent.images?.images?.[0]?.transforms?.transforms?.find(t => t.transformation_id === 7) && (
             <img
