@@ -162,20 +162,8 @@ function Calculation() {
       {
         label: 'Years Affordable',
         data: getValidRecommendations().map(rec => rec.years) || [],
-        backgroundColor: [
-          'rgba(255, 184, 76, 0.8)',
-          'rgba(255, 154, 0, 0.8)',
-          'rgba(255, 133, 0, 0.8)',
-          'rgba(255, 112, 0, 0.8)',
-          'rgba(255, 91, 0, 0.8)',
-        ],
-        borderColor: [
-          'rgba(255, 184, 76, 1)',
-          'rgba(255, 154, 0, 1)',
-          'rgba(255, 133, 0, 1)',
-          'rgba(255, 112, 0, 1)',
-          'rgba(255, 91, 0, 1)',
-        ],
+        backgroundColor: 'rgba(255, 154, 0, 0.8)',
+        borderColor: 'rgba(255, 154, 0, 1)',
         borderWidth: 1,
         borderRadius: 6,
       },
@@ -186,6 +174,18 @@ function Calculation() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+      title: {
+        display: true,
+        text: 'Estimated Years of Rent Affordability in Recommended Suburbs',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
       legend: {
         display: false,
       },
@@ -235,7 +235,7 @@ function Calculation() {
         },
         ticks: {
           font: {
-            size: 12,
+            size: 20,
           },
           color: '#666',
         }
