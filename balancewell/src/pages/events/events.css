@@ -242,7 +242,7 @@
 }
 
 .event-detail {
-  max-width: 700px;
+  max-width: 640px;
   margin: 40px auto;
   background-color: var(--card-bg);
   border-radius: 16px;
@@ -324,4 +324,81 @@
 .event-detail h3:not(:first-of-type) {
   border-top: 1px solid var(--border-color);
   padding-top: 12px;
+}
+
+
+@media (max-width: 1024px) {
+  .event-detail {
+    padding: 20px;
+  }
+
+  .event-detail h2 {
+    font-size: 22px;
+  }
+
+  .event-detail h3 {
+    font-size: 17px;
+  }
+
+  .event-detail p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-detail {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .event-detail h2 {
+    font-size: 20px;
+  }
+
+  .event-detail h3 {
+    font-size: 16px;
+  }
+
+  .event-detail p {
+    font-size: 13.5px;
+  }
+
+  .event-detail-img {
+    max-height: 260px;
+  }
+
+  .register-btn {
+    font-size: 15px;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-detail {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .event-detail h2 {
+    font-size: 18px;
+  }
+
+  .event-detail h3 {
+    font-size: 15px;
+  }
+
+  .event-detail p {
+    font-size: 13px;
+  }
+
+  .event-detail-img {
+    max-height: 220px;
+    border-radius: 8px;
+  }
+
+  .back-btn,
+  .register-btn {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
 }
