@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './retirementSupport.css'; 
+import './retirementSupport.css';
 
 const RetirementSupport = () => {
   const [selectedCategory, setSelectedCategory] = useState('government');
@@ -56,22 +56,33 @@ const RetirementSupport = () => {
   };
 
   return (
-    <div className="support-container">
-      <h2>Retirement & Aging Support Services</h2>
-      <p>Find trusted community and government services that support your retirement journey.</p>
+    <div className="support-outer">
+      <div className="support-container">
+        <div className="support-container">
+          <h2>Retirement & Aging Support Services</h2>
+          <p>Find trusted community and government services that support your retirement journey.</p>
 
-      <label htmlFor="category-select" className="category-label">
-        Choose your option for support services:
-      </label>
-      <select id="category-select" value={selectedCategory} onChange={handleCategoryChange} className="category-select">
-        <option value="government">Government Services</option>
-        <option value="community">Community Services</option>
-      </select>
+          <label htmlFor="category-select" className="category-label">
+            Choose your option for support services:
+          </label>
+          <div className="select-wrapper">
+            <select
+              id="category-select"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              className="category-select"
+            >
+              <option value="government">Government Services</option>
+              <option value="community">Community Services</option>
+            </select>
+          </div>
 
-      <div className="support-group">
-        {servicesData[selectedCategory].map((service, index) => (
-          <SupportCard key={index} {...service} />
-        ))}
+          <div className="support-group">
+            {servicesData[selectedCategory].map((service, index) => (
+              <SupportCard key={index} {...service} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
