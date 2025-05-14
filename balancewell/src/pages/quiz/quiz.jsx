@@ -59,7 +59,7 @@ const Quiz = () => {
     if (savedLevel) {
       const level = parseInt(savedLevel);
       setRecommendedLevel(level);
-      
+
       // Estimate the score based on level
       let estimatedScore = 5; // Default for level 1
       if (level === 3) {
@@ -67,7 +67,7 @@ const Quiz = () => {
       } else if (level === 2) {
         estimatedScore = 8; // Midpoint for level 2
       }
-      
+
       setTotalScore(estimatedScore);
       setQuizCompleted(true);
     }
@@ -77,7 +77,7 @@ const Quiz = () => {
     // Save the current answer
     const newAnswers = { ...answers, [currentQuestion]: value };
     setAnswers(newAnswers);
-    
+
     // Move to next question or finish quiz
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -86,7 +86,7 @@ const Quiz = () => {
       // Calculate score (A=1, B=2, C=3)
       const scoreValues = Object.values(newAnswers).map(val => val + 1); // Add 1 because index starts at 0
       const score = scoreValues.reduce((acc, val) => acc + val, 0);
-      
+
       // Determine recommended level based on score
       let level = 1;
       if (score >= 10) {
@@ -96,10 +96,10 @@ const Quiz = () => {
       } else {
         level = 1; // Level 1 - Start Strong (Basic) for 4-6 points
       }
-      
+
       // Save user level to localStorage
       localStorage.setItem('userLevel', level.toString());
-      
+
       setTotalScore(score);
       setRecommendedLevel(level);
       setQuizCompleted(true);
@@ -120,7 +120,7 @@ const Quiz = () => {
   const restartQuiz = () => {
     // Clear the saved level from localStorage
     localStorage.removeItem('userLevel');
-    
+
     setCurrentQuestion(0);
     setAnswers({});
     setValue(null);
@@ -129,7 +129,7 @@ const Quiz = () => {
   };
 
   const getLevelTitle = (level) => {
-    switch(level) {
+    switch (level) {
       case 1: return "Level 1 – Start Strong (Basic)";
       case 2: return "Level 2 – Know More (Intermediate)";
       case 3: return "Level 3 – Live Well (Advanced)";
@@ -177,20 +177,26 @@ const Quiz = () => {
 
     const question = quizQuestions[currentQuestion];
     const optionLabels = ['A', 'B', 'C']; // For displaying A, B, C before options
-    
+
     return (
-      <>
-        <div className="quiz-progress">
-          <Text>Question {currentQuestion + 1} of {quizQuestions.length}</Text>
-          <Progress 
-            percent={((currentQuestion + 1) / quizQuestions.length) * 100} 
+      <div>
+        <div className="quiz-progress" >
+          <Text className="quiz-progress-text">
+            Question {currentQuestion + 1} of {quizQuestions.length}
+          </Text>
+
+          <Progress
+            percent={((currentQuestion + 1) / quizQuestions.length) * 100}
             showInfo={false}
-            strokeColor="#FFC107" 
+            strokeColor="#FFC107"
           />
         </div>
-        
-        <Title level={4}>{question.question}</Title>
-        
+
+        <Title level={4} className="quiz-question">
+          {question.question}
+        </Title>
+
+
         <Radio.Group onChange={handleChange} value={value} className="quiz-options">
           <Space direction="vertical">
             {question.options.map((option, index) => (
@@ -200,43 +206,45 @@ const Quiz = () => {
             ))}
           </Space>
         </Radio.Group>
-        
+
         <div className="quiz-actions">
-          <Button 
-            onClick={handlePrevious} 
+          <Button
+            onClick={handlePrevious}
             disabled={currentQuestion === 0}
           >
             Previous
           </Button>
-          <Button 
-            type="primary" 
-            onClick={handleNext} 
+          <Button
+            type="primary"
+            onClick={handleNext}
             disabled={value === null}
           >
             {currentQuestion === quizQuestions.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </div>
-      </>
+      </div>
     );
   };
 
   return (
-    <div className="quiz-container">
+    <div className="class-container" style={{ backgroundColor: 'var(--bg-color) '}}>
+      <div className="quiz-container">
+      <Title level={2} className="quiz-title">
+        Safe and Settled Module Assessment Quiz
+      </Title>
+      {!quizCompleted && (
+        <Paragraph className="quiz-description">
+          Let's find the best place for you to begin your journey.
+          <br />
+          Answer the following {quizQuestions.length} questions. Your responses will help us match you with the right level.
+        </Paragraph>
+      )}
       <Card className="quiz-card">
-        <Title level={2} className="quiz-title">
-          WellbeingHub Module Assessment Quiz
-        </Title>
-        {!quizCompleted && (
-          <Paragraph className="quiz-description">
-            Let's find the best place for you to begin your journey.
-            <br />
-            Answer the following {quizQuestions.length} questions. Your responses will help us match you with the right level.
-          </Paragraph>
-        )}
-        
         {renderQuizContent()}
       </Card>
     </div>
+    </div>
+    
   );
 };
 

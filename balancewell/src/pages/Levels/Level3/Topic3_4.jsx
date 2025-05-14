@@ -1,7 +1,7 @@
 import { Card, Typography, Divider, Table } from 'antd';
- 
+
 const { Title, Paragraph, Link } = Typography;
- 
+
 const Topic3_4 = () => {
   const foodStaplesColumns = [
     {
@@ -20,7 +20,7 @@ const Topic3_4 = () => {
       key: 'benefit',
     },
   ];
- 
+
   const foodStaplesData = [
     {
       key: '1',
@@ -71,7 +71,7 @@ const Topic3_4 = () => {
       benefit: 'Calcium and vitamin D',
     },
   ];
- 
+
   const mealPlanColumns = [
     {
       title: 'Meal Time',
@@ -84,7 +84,7 @@ const Topic3_4 = () => {
       key: 'samples',
     },
   ];
- 
+
   const mealPlanData = [
     {
       key: '1',
@@ -107,95 +107,95 @@ const Topic3_4 = () => {
       samples: 'Carrot sticks, seasonal fruit, hard-boiled egg',
     },
   ];
- 
+
   return (
-<div style={{ padding: '2rem', maxWidth: 1000, margin: '0 auto' }}>
-<Card>
-<Typography>
-<Title level={2}>Module 3 – Topic 4: Sample Weekly Meal Plan Under $50</Title>
- 
+    <div className="topic-page" >
+      <Card className="topic-cards">
+        <Typography className="topic-text">
+          <Title level={2}>Module 3 – Topic 4: Sample Weekly Meal Plan Under $50</Title>
+
           <Divider orientation="left">What You’ll Learn</Divider>
-<ul>
-<li>How everyday, low-cost foods can be combined into balanced meals</li>
-<li>That healthy eating doesn’t need to be expensive</li>
-<li>Where to find culturally inclusive and affordable meal planning ideas</li>
-</ul>
- 
+          <ul>
+            <li>How everyday, low-cost foods can be combined into balanced meals</li>
+            <li>That healthy eating doesn’t need to be expensive</li>
+            <li>Where to find culturally inclusive and affordable meal planning ideas</li>
+          </ul>
+
           <Divider orientation="left">Introduction</Divider>
-<Paragraph>
+          <Paragraph>
             Eating well doesn’t always mean spending more. With the right ingredients and a simple plan, it’s possible to:
-</Paragraph>
-<ul>
-<li>Stay full</li>
-<li>Get important nutrients (like protein, fiber, calcium)</li>
-<li>Stick to a realistic grocery budget — under $50 per week</li>
-</ul>
-<Paragraph>
+          </Paragraph>
+          <ul>
+            <li>Stay full</li>
+            <li>Get important nutrients (like protein, fiber, calcium)</li>
+            <li>Stick to a realistic grocery budget — under $50 per week</li>
+          </ul>
+          <Paragraph>
             This kind of meal planning supports:
-</Paragraph>
-<ul>
-<li>Energy during the day</li>
-<li>Better health as you age</li>
-<li>Less food waste and lower weekly costs</li>
-</ul>
- 
+          </Paragraph>
+          <ul>
+            <li>Energy during the day</li>
+            <li>Better health as you age</li>
+            <li>Less food waste and lower weekly costs</li>
+          </ul>
+
           <Divider orientation="left">Budget-Friendly Staples (Approx. Price in AUD)</Divider>
-<Table columns={foodStaplesColumns} dataSource={foodStaplesData} pagination={false} bordered />
- 
+          <Table columns={foodStaplesColumns} dataSource={foodStaplesData} pagination={false} bordered />
+
           <Divider orientation="left">Example 5-Day Meal Plan (Budget: ~$45)</Divider>
-<Table columns={mealPlanColumns} dataSource={mealPlanData} pagination={false} bordered />
-<Paragraph>
+          <Table columns={mealPlanColumns} dataSource={mealPlanData} pagination={false} bordered />
+          <Paragraph>
             These meals can be spiced or adapted to suit Vietnamese, Arabic, Indian, Chinese, Sudanese, or Sri Lankan cooking traditions.
-</Paragraph>
- 
+          </Paragraph>
+
           <Divider orientation="left">Helpful Resources</Divider>
-<ul>
-<li>
-<Link href="https://nutritionaustralia.org/fact-sheets/healthy-eating-on-a-budget/" target="_blank">
+          <ul>
+            <li>
+              <Link href="https://nutritionaustralia.org/fact-sheets/healthy-eating-on-a-budget/" target="_blank">
                 Nutrition Australia – Healthy Eating on a Budget
-</Link>
-<ul>
-<li>Build balanced meals from low-cost items</li>
-<li>Sample plans and seasonal tips</li>
-<li>Smart shopping advice</li>
-</ul>
-</li>
-<li>
-<Link href="https://www.eatforhealth.gov.au/resources/sample-meal-plan" target="_blank">
+              </Link>
+              <ul>
+                <li>Build balanced meals from low-cost items</li>
+                <li>Sample plans and seasonal tips</li>
+                <li>Smart shopping advice</li>
+              </ul>
+            </li>
+            <li>
+              <Link href="https://www.eatforhealth.gov.au/resources/sample-meal-plan" target="_blank">
                 Eat for Health – Meal Plans
-</Link>
-<ul>
-<li>How to use food groups for energy and strength</li>
-<li>Ideas for adults over 50</li>
-<li>Printable meal plan templates</li>
-</ul>
-</li>
-<li>
-<Link href="https://www.healthdirect.gov.au/nutrition-and-healthy-eating" target="_blank">
+              </Link>
+              <ul>
+                <li>How to use food groups for energy and strength</li>
+                <li>Ideas for adults over 50</li>
+                <li>Printable meal plan templates</li>
+              </ul>
+            </li>
+            <li>
+              <Link href="https://www.healthdirect.gov.au/nutrition-and-healthy-eating" target="_blank">
                 HealthDirect – Nutrition and Meal Planning
-</Link>
-<ul>
-<li>General healthy eating tips</li>
-<li>Portion size guidance</li>
-<li>Managing food choices on a budget</li>
-</ul>
-</li>
-</ul>
- 
+              </Link>
+              <ul>
+                <li>General healthy eating tips</li>
+                <li>Portion size guidance</li>
+                <li>Managing food choices on a budget</li>
+              </ul>
+            </li>
+          </ul>
+
           <Divider orientation="left">Reflective Prompt</Divider>
-<Paragraph>
+          <Paragraph>
             What are some staple ingredients you already cook with?
             Could you swap one takeaway meal this week with a home-prepared meal?
-</Paragraph>
- 
+          </Paragraph>
+
           <Divider orientation="left">Key Takeaway</Divider>
-<Paragraph>
+          <Paragraph>
             Nutritious eating doesn't need to be fancy or expensive. With a few smart ingredients, you can prepare meals that support your health — and your wallet.
-</Paragraph>
-</Typography>
-</Card>
-</div>
+          </Paragraph>
+        </Typography>
+      </Card>
+    </div>
   );
 };
- 
+
 export default Topic3_4;

@@ -1,66 +1,37 @@
-:root {
-  --yellow-100: #fffef6;
-  --yellow-400: #ffc107;
-  --yellow-500: #ffb300;
-  --yellow-600: #d48d00;
-  --border-color: #f0ecdc;
-  --text-dark: #333;
-  --text-light: #666;
-}
-
-/* ========================
-   Container & Global Styles
-======================== */
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: var(--yellow-100);
-}
-
 .news-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  padding-bottom: 30px;
 }
-
-/* ========================
-   Header Styles
-======================== */
 
 .news-header {
-  background-color: var(--yellow-400);
-  color: white;
+  margin-bottom: 20px;
+  align-items: center; 
+}
+
+.news-header h2 {
+  font-size: 28px;
+  color: var(--primary-color);
+  margin-bottom: 12px;
   text-align: center;
-  padding: 50px 20px 90px;
-  margin-bottom: 30px;
-  position: relative;
-  clip-path: ellipse(100% 55% at 50% 40%);
 }
 
-.news-header h1 {
-  font-size: 32px;
-  margin: 0 0 10px;
+.news-subtitle-text {
+  font-size: 18px;
+  color: var(--text-color-secondary);
+  line-height: 1.6;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
 }
-
-.news-header p {
-  font-size: 16px;
-  margin: 0;
-  opacity: 0.9;
-}
-
-/* ========================
-   Search Bar
-======================== */
 
 .search-container {
   display: flex;
   justify-content: center;
-  margin: -40px auto 30px;
-  position: relative;
-  z-index: 10;
+  margin: 0 auto 30px;
 }
+
 
 .search-bar {
   width: 90%;
@@ -70,16 +41,14 @@ body {
   border-radius: 25px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   font-size: 15px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
 }
 
 .search-bar:focus {
   outline: none;
-  border-color: var(--yellow-400);
+  border-color: var(--primary-color);
 }
-
-/* ========================
-   News Cards Grid
-======================== */
 
 .news-cards-grid {
   display: grid;
@@ -89,7 +58,7 @@ body {
 }
 
 .news-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -114,9 +83,8 @@ body {
   flex-shrink: 0;
 }
 
-/* 为ABC News标志添加蓝色背景 */
 .news-card.topic-card .news-image-container {
-  background-color: #065af3; /* ABC News blue */
+  background-color: #065af3;
 }
 
 .news-image {
@@ -125,7 +93,6 @@ body {
   object-fit: cover;
 }
 
-/* 主题卡片的图片使用contain以保持ABC News标志完整 */
 .topic-card .news-image {
   object-fit: contain;
   max-width: 80%;
@@ -137,17 +104,25 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  color: var(--text-color);
 }
 
 .news-content h3 {
   margin: 0 0 10px;
   font-size: 16px;
   line-height: 1.4;
-  color: #333;
+  color: var(--text-color);
+}
+
+.news-content p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-color-secondary);
 }
 
 .news-content a {
-  color: #996c00;
+  color: var(---text-color-secondary);
   text-decoration: none;
 }
 
@@ -156,12 +131,12 @@ body {
 }
 
 .topic-title {
-  color: #b77800 !important;
+  color: var(--text-color) !important;
 }
 
 .news-description {
   font-size: 14px;
-  color: var(--text-light);
+  color: var(--text-color-secondary);
   margin: 8px 0;
   line-height: 1.5;
   flex-grow: 1;
@@ -169,21 +144,17 @@ body {
 
 .news-date {
   font-size: 12px;
-  color: #999;
+  color: var(--text-color-secondary);
   margin: 12px 0 0;
   text-align: left;
 }
-
-/* ========================
-   Status Messages
-======================== */
 
 .loading-message,
 .error-message,
 .no-articles {
   text-align: center;
   padding: 30px;
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   margin: 20px auto;
@@ -191,56 +162,78 @@ body {
 }
 
 .loading-message {
-  color: #666;
+  color: var(--text-color-secondary);
 }
 
 .error-message {
-  color: #e53935;
+  color: #e53935; 
 }
 
 .no-articles {
-  color: #666;
+  color: var(--text-color-secondary);
   font-style: italic;
 }
 
-/* ========================
-   Responsive Design
-======================== */
-
-@media (max-width: 1100px) {
+@media (max-width: 1024px) {
   .news-cards-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
+  .news-header h2 {
+    font-size: 24px;
+  }
+
+  .news-subtitle-text {
+    font-size: 16px;
+  }
+
   .news-cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
 
-@media (max-width: 580px) {
-  .news-cards-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .news-header {
-    padding: 40px 20px 70px;
-  }
-  
-  .news-header h1 {
-    font-size: 28px;
+  .search-bar {
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
-  .news-header {
-    padding: 30px 15px 60px;
+  .news-container {
+    padding: 0 12px;
   }
-  
-  .news-header h1 {
-    font-size: 24px;
+
+  .news-header h2 {
+    font-size: 22px;
   }
-} 
+
+  .news-subtitle-text {
+    font-size: 15px;
+  }
+
+  .news-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-bar {
+    padding: 10px 12px;
+    font-size: 14px;
+    max-width: 100%;
+  }
+
+  .news-card {
+    border-radius: 6px;
+  }
+
+  .news-content h3 {
+    font-size: 15px;
+  }
+
+  .news-description {
+    font-size: 13px;
+  }
+
+  .news-date {
+    font-size: 12px;
+  }
+}
