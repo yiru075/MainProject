@@ -1,7 +1,7 @@
 import { Card, Typography, Divider, Table } from 'antd';
- 
+
 const { Title, Paragraph, Link } = Typography;
- 
+
 const Topic2_5 = () => {
   const columns = [
     {
@@ -20,7 +20,7 @@ const Topic2_5 = () => {
       key: 'uses',
     },
   ];
- 
+
   const data = [
     {
       key: '1',
@@ -65,79 +65,79 @@ const Topic2_5 = () => {
       uses: 'Curries, salads, baked dishes',
     },
   ];
- 
+
   return (
-<div style={{ padding: '2rem', maxWidth: 1000, margin: '0 auto' }}>
-<Card>
-<Typography>
-<Title level={2}>Module 2 – Topic 5: Affordable Staples That Support Energy and Health</Title>
- 
+    <div className="topic-page" >
+      <Card className="topic-cards">
+        <Typography className="topic-text">
+          <Title level={2}>Module 2 – Topic 5: Affordable Staples That Support Energy and Health</Title>
+
           <Divider orientation="left">What You’ll Understand After This Topic</Divider>
-<ul>
-<li>What kinds of affordable, everyday foods support health after 40</li>
-<li>How simple ingredients can support energy and aging</li>
-<li>Where to find more information on budget-friendly healthy eating in Australia</li>
-</ul>
- 
+          <ul>
+            <li>What kinds of affordable, everyday foods support health after 40</li>
+            <li>How simple ingredients can support energy and aging</li>
+            <li>Where to find more information on budget-friendly healthy eating in Australia</li>
+          </ul>
+
           <Divider orientation="left">Why This Matters</Divider>
-<Paragraph>
+          <Paragraph>
             As you get older, your body needs foods that support your bones, muscles, heart, and energy levels — even if you’re on a low income.
             You don’t need expensive “superfoods.” Many affordable items found in Aussie supermarkets (or even your own cultural pantry) are just as good.
-</Paragraph>
-<Paragraph>
+          </Paragraph>
+          <Paragraph>
             Knowing your staples helps you:
-</Paragraph>
-<ul>
-<li>Spend less at the shops</li>
-<li>Eat better without stress</li>
-<li>Stay stronger and feel less tired</li>
-</ul>
- 
+          </Paragraph>
+          <ul>
+            <li>Spend less at the shops</li>
+            <li>Eat better without stress</li>
+            <li>Stay stronger and feel less tired</li>
+          </ul>
+
           <Divider orientation="left">Examples of Low-Cost Nutritious Staples</Divider>
-<Table columns={columns} dataSource={data} pagination={false} bordered />
- 
+          <Table columns={columns} dataSource={data} pagination={false} bordered />
+
           <Divider orientation="left">Helpful Learning Resources</Divider>
-<ul>
-<li>
-<Link href="https://www.eatforhealth.gov.au" target="_blank">
+          <ul>
+            <li>
+              <Link href="https://www.eatforhealth.gov.au" target="_blank">
                 Eat for Health – Food Essentials
-</Link>
-<ul>
-<li>Recommended foods by age</li>
-<li>How to eat well with simple ingredients</li>
-<li>Example meal plans</li>
-</ul>
-</li>
-<li>
-<Link href="https://www.healthdirect.gov.au/nutrition-and-diet" target="_blank">
+              </Link>
+              <ul>
+                <li>Recommended foods by age</li>
+                <li>How to eat well with simple ingredients</li>
+                <li>Example meal plans</li>
+              </ul>
+            </li>
+            <li>
+              <Link href="https://www.healthdirect.gov.au/nutrition-and-diet" target="_blank">
                 HealthDirect – Nutrition and Diet
-</Link>
-<ul>
-<li>Balanced meals and portion sizes</li>
-<li>Nutrition after 40</li>
-<li>Managing diet on a budget</li>
-</ul>
-</li>
-<li>
-<Link href="https://nutritionaustralia.org/" target="_blank">
+              </Link>
+              <ul>
+                <li>Balanced meals and portion sizes</li>
+                <li>Nutrition after 40</li>
+                <li>Managing diet on a budget</li>
+              </ul>
+            </li>
+            <li>
+              <Link href="https://nutritionaustralia.org/" target="_blank">
                 Nutrition Australia – Culturally Inclusive Nutrition
-</Link>
-<ul>
-<li>Traditional foods with modern health twists</li>
-<li>Free recipes</li>
-<li>Guides for low-cost meal planning</li>
-</ul>
-</li>
-</ul>
- 
+              </Link>
+              <ul>
+                <li>Traditional foods with modern health twists</li>
+                <li>Free recipes</li>
+                <li>Guides for low-cost meal planning</li>
+              </ul>
+            </li>
+          </ul>
+
           <Divider orientation="left">Reflective Prompt</Divider>
-<Paragraph>
+          <Paragraph>
             Which of these foods do you already eat? Are there healthy ingredients from your culture that are also affordable?
-</Paragraph>
-</Typography>
-</Card>
-</div>
+          </Paragraph>
+        </Typography>
+      </Card>
+    </div>
   );
 };
- 
+
 export default Topic2_5;

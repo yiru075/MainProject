@@ -1,21 +1,28 @@
 .education-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
-  color: #333;
+  color: var(--text-color);
+  margin-top: 20px;
+  padding-bottom: 30px;
 }
 
 .education-header {
-  text-align: center;
-  margin-bottom: 50px;
-  padding: 0 20px;
+  margin-bottom: 20px;
 }
 
 .education-header h2 {
-  font-size: 2.2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #000;
+  font-size: 28px;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.level-badge p {
+  font-size: 18px;
+  color: var(--text-color-secondary);
+  line-height: 1.6;
+  text-align: center;
+  max-width: 640px;
 }
 
 .education-intro {
@@ -25,7 +32,6 @@
   line-height: 1.6;
 }
 
-/* Level cards styling */
 .level-cards-container {
   display: flex;
   flex-direction: column;
@@ -36,6 +42,8 @@
 
 .level-card {
   border-radius: 8px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   padding: 0;
@@ -60,16 +68,16 @@
   margin: 0;
   font-size: 1.6rem;
   font-weight: bold;
-  color: #000;
+  color: var(--text-color);
 }
 
 .recommended-level {
-  border: 2px solid #FFC107 !important;
+  border: 2px solid var(--primary-color) !important;
 }
 
 .recommended-badge {
-  background-color: #FFC107;
-  color: #000;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   font-weight: bold;
   padding: 6px 15px;
   border-radius: 20px;
@@ -80,22 +88,22 @@
 .level-description {
   font-size: 1.1rem;
   margin-bottom: 25px;
-  color: #555;
+  color: var(--text-color-secondary);
   line-height: 1.6;
 }
 
 .level-topics {
-  background-color: #f8f8f8;
+  background-color: var(--card-bg);
   padding: 25px;
   border-radius: 8px;
   margin-bottom: 25px;
-  border-left: 3px solid #FFC107;
+  border-left: 3px solid var(--primary-color);
 }
 
 .level-topics h4 {
   margin-top: 0;
   margin-bottom: 16px;
-  color: #000;
+  color: var(--text-color);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -107,7 +115,7 @@
 
 .level-topics li {
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-color);
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -118,26 +126,25 @@
   margin-top: 10px;
   font-size: 1.1rem;
   font-weight: 500;
-  background-color: #FFC107 !important;
-  border-color: #FFC107 !important;
-  color: #000 !important;
+  background-color: var(--button-bg) !important;
+  border-color: var(--button-bg) !important;
+  color: var(--text-color) !important;
   transition: all 0.3s ease;
   letter-spacing: 0.5px;
 }
 
 .start-level-btn:hover {
-  background-color: #e0aa05 !important;
-  border-color: #e0aa05 !important;
-  color: #000 !important;
+  background-color: var(--button-hover-bg) !important;
+  border-color: var(--button-hover-bg) !important;
+  color: var(--text-color) !important;
   transform: translateY(-2px);
 }
 
-/* Responsive styling */
 @media (max-width: 768px) {
   .education-container {
     padding: 30px 15px;
   }
-  
+
   .education-header h2 {
     font-size: 1.8rem;
   }
@@ -145,11 +152,11 @@
   .education-intro {
     font-size: 1rem;
   }
-  
+
   .level-card {
     margin-bottom: 20px;
   }
-  
+
   .level-topics {
     padding: 20px;
   }
@@ -159,7 +166,6 @@
   }
 }
 
-/* Animation for recommended level */
 .recommended-level {
   position: relative;
   animation: pulse 2s infinite;
@@ -179,35 +185,36 @@
 
 .assessment-tip {
   margin-top: 15px;
-  background-color: #f8f8f8;
+  background-color: var(--card-bg);
   padding: 10px 15px;
   border-radius: 6px;
   display: inline-flex;
-  border-left: 3px solid #FFC107;
+  border-left: 3px solid var(--primary-color);
 }
 
 .assessment-tip .anticon {
-  color: #FFC107;
+  color: var(--primary-color);
   font-size: 18px;
   margin-right: 5px;
 }
 
 .assessment-tip button {
-  background-color: #FFC107;
-  border-color: #FFC107;
-  color: #000;
+  background-color: var(--button-bg);
+  border-color: var(--button-bg);
+  color: var(--text-color);
   margin-left: 10px;
 }
 
 .assessment-tip button:hover {
-  background-color: #e0aa05;
-  border-color: #e0aa05;
-  color: #000;
+  background-color: var(--button-hover-bg);
+  border-color: var(--button-hover-bg);
+  color: var(--text-color);
 }
 
 .progress-container {
   margin-bottom: 30px;
-  background-color: #fff;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -221,24 +228,24 @@
 }
 
 .reset-button {
-  background-color: #FFC107 !important;
-  border-color: #FFC107 !important;
-  color: #000 !important;
+  background-color: var(--button-bg) !important;
+  border-color: var(--button-bg) !important;
+  color: var(--text-color) !important;
   font-weight: 500;
 }
 
 .quiz-reminder {
   margin: 0 auto 30px;
   padding: 15px 20px;
-  background-color: rgba(255, 193, 7, 0.1);
+  background-color: var(--card-bg);
   border-radius: 8px;
-  border-left: 3px solid #FFC107;
+  border-left: 3px solid var(--primary-color);
   max-width: 900px;
   text-align: center;
 }
 
 .quiz-reminder .anticon {
-  color: #FFC107;
+  color: var(--primary-color);
   font-size: 20px;
   margin-right: 8px;
 }
@@ -251,17 +258,17 @@
 }
 
 .quiz-reminder button {
-  background-color: #FFC107;
-  border-color: #FFC107;
-  color: #000;
+  background-color: var(--button-bg);
+  border-color: var(--button-bg);
+  color: var(--text-color);
   margin-left: 10px;
   font-weight: 500;
 }
 
 .quiz-reminder button:hover {
-  background-color: #e0aa05;
-  border-color: #e0aa05;
-  color: #000;
+  background-color: var(--button-hover-bg);
+  border-color: var(--button-hover-bg);
+  color: var(--text-color);
 }
 
 @media (max-width: 768px) {
@@ -269,29 +276,30 @@
     padding: 12px 15px;
     margin-bottom: 20px;
   }
-  
+
   .quiz-reminder .ant-space {
     flex-direction: column;
   }
-  
+
   .quiz-reminder button {
     margin-left: 0;
     margin-top: 10px;
   }
 }
 
-/* Topic卡片样式 */
 .topic-card {
   height: 100%;
   transition: all 0.3s ease;
   border: none;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative; /* 添加相对定位，以支持extra的绝对定位 */
-  overflow: hidden; /* 确保角落的extra不溢出 */
+  position: relative;
+  overflow: hidden;
 }
 
 .topic-card .ant-card-body {
-  padding-top: 30px; /* 为absolute positioned的extra留出空间 */
+  padding-top: 30px;
 }
 
 .topic-card:hover {
@@ -302,20 +310,18 @@
 .topic-card h4 {
   margin-bottom: 10px;
   font-weight: bold;
-  color: #000;
+  color: var(--text-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* 已完成topic卡片样式 */
 .completed-topic {
-  border-left: 3px solid #FFC107;
+  border-left: 3px solid var(--primary-color);
 }
 
-/* 已完成topic卡片的标签栏 */
 .topic-card .ant-card-extra {
-  background-color: #FFC107;
+  background-color: var(--primary-color);
   padding: 5px 10px;
   border-radius: 0 8px 0 8px;
   position: absolute;
@@ -326,7 +332,7 @@
 
 .completed-tag {
   background-color: transparent !important;
-  color: #000;
+  color: var(--text-color);
   border: none;
   display: flex;
   align-items: center;
@@ -339,7 +345,93 @@
 }
 
 .completed-icon {
-  color: #FFC107;
+  color: var(--primary-color);
   font-size: 18px;
   margin-left: 8px;
+}
+
+@media (max-width: 1024px) {
+  .education-container {
+    padding: 40px 20px;
+  }
+
+  .progress-container {
+    padding: 15px;
+  }
+
+  .quiz-reminder {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .topic-card h4 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .education-container {
+    padding: 30px 15px;
+  }
+
+  .education-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .education-intro {
+    font-size: 1rem;
+  }
+
+  .quiz-reminder .ant-space {
+    flex-direction: column;
+  }
+
+  .quiz-reminder button {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .topic-card h4 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .education-container {
+    padding: 20px 10px;
+  }
+
+  .education-header h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .level-badge p,
+  .education-intro {
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .progress-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .quiz-reminder .ant-space {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-reminder button {
+    width: 100%;
+  }
+
+  .topic-card h4 {
+    font-size: 1rem;
+  }
+
+  .topic-card .ant-card-body {
+    padding-top: 20px;
+  }
 }

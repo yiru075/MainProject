@@ -47,7 +47,7 @@ const Education = () => {
   const [progressPercent, setProgressPercent] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAssessedLevel, setIsAssessedLevel] = useState(false);
-  
+
   // Load completed topics from local storage
   useEffect(() => {
     const storedCompletedTopics = localStorage.getItem('completedTopics');
@@ -55,7 +55,7 @@ const Education = () => {
       setCompletedTopics(JSON.parse(storedCompletedTopics));
     }
   }, []);
-  
+
   // Calculate completion progress
   useEffect(() => {
     const totalTopics = levelTopics[userLevel].length;
@@ -68,7 +68,7 @@ const Education = () => {
   useEffect(() => {
     const savedLevel = localStorage.getItem('userLevel');
     const tryLevel = localStorage.getItem('trylevel');
-    
+
     if (savedLevel) {
       setUserLevel(parseInt(savedLevel));
       setIsAssessedLevel(true);
@@ -87,11 +87,11 @@ const Education = () => {
     if (!completedTopics.includes(topicId)) {
       const updatedCompletedTopics = [...completedTopics, topicId];
       setCompletedTopics(updatedCompletedTopics);
-      
+
       // Save to localStorage
       localStorage.setItem('completedTopics', JSON.stringify(updatedCompletedTopics));
     }
-    
+
     // Navigate to the corresponding topic page
     navigate(`/level${level}/${topicId}`);
   };
@@ -111,95 +111,115 @@ const Education = () => {
     const filteredTopics = completedTopics.filter(
       topic => !topic.startsWith(`Topic${userLevel}_`)
     );
-    
+
     setCompletedTopics(filteredTopics);
     localStorage.setItem('completedTopics', JSON.stringify(filteredTopics));
     setIsModalVisible(false);
   };
 
   return (
-    <div className="education-container">
-      <div className="education-header">
-        <Title level={2}>Education Resources</Title>
-        <Text>Your current level: <Badge count={userLevel} style={{ backgroundColor: '#FFC107', color: '#000' }} /></Text>
-      </div>
-      
-      {!isAssessedLevel && (
-        <div className="quiz-reminder">
-          <Space align="center">
-            <QuestionCircleOutlined />
-            <Text>
-              You're currently exploring Level {userLevel}. For a personalized recommendation based on your knowledge, 
-              take our quick assessment quiz.
+    <div style={{ backgroundColor: 'var(--bg-color)', minHeight: '100vh' }}>
+      <div className="education-container">
+        <div className="education-header">
+          <Title level={2}>Education Resources</Title>
+          <div style={{ textAlign: 'center' }}>
+            <Text style={{ color: 'var(--text-color-secondary)', fontSize: '18px' }}>
+              Your current level:
+              <Badge
+                count={userLevel}
+                style={{
+                  backgroundColor: 'var(--primary-color)',
+                  color: '#ffffff',
+                  marginLeft: '8px'
+                }}
+              />
             </Text>
-            <Link to="/quiz">
-              <Button type="primary" size="small">Take Quiz</Button>
-            </Link>
-          </Space>
+          </div>
         </div>
-      )}
-      
-      <div className="progress-container">
-        <div className="progress-header">
-          {progressPercent === 100 && (
-            <Button 
-              type="primary" 
-              icon={<ReloadOutlined />} 
-              onClick={handleResetProgress}
-              className="reset-button"
-            >
-              Reset Progress
-            </Button>
-          )}
-          <Text>Your progress: {progressPercent}% completed</Text>
-        </div>
-        <Progress percent={progressPercent} strokeColor="#FFC107" />
-        {progressPercent === 100 && (
-          <div className="completion-message">
-            <TrophyOutlined className="trophy-icon" />
-            <Text strong>Congratulations! You've completed all topics for this level.</Text>
+
+        {!isAssessedLevel && (
+          <div className="quiz-reminder">
+            <Space align="center">
+              <QuestionCircleOutlined />
+              <Text style={{ color: 'var(--text-color-secondary)' }}>
+                You're currently exploring <strong>Level {userLevel}</strong>. To receive a personalized recommendation based on your knowledge, take our short quiz.
+              </Text>
+              <Link to="/quiz">
+                <Button type="primary" size="small">Take Quiz</Button>
+              </Link>
+            </Space>
           </div>
         )}
-      </div>
-      
-      <div className="topics-container">
-        <Title level={3}>Topics For Your Level</Title>
-        <Row gutter={[16, 16]}>
-          {levelTopics[userLevel]?.map((topic) => (
-            <Col xs={24} sm={12} md={8} key={topic.id}>
-              <Card 
-                hoverable
-                className={`topic-card ${isTopicCompleted(topic.id) ? 'completed-topic' : ''}`}
-                onClick={() => handleTopicClick(userLevel, topic.id)}
-                extra={isTopicCompleted(topic.id) && (
-                  <Tag className="completed-tag">
-                    <CheckCircleFilled /> Done
-                  </Tag>
-                )}
-              >
-                <Title level={4}>
-                  {topic.title}
-                  {isTopicCompleted(topic.id) && <CheckCircleFilled className="completed-icon" />}
-                </Title>
-                <Text type="secondary">{topic.description}</Text>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </div>
 
-      <Modal 
-        title="Reset Progress" 
-        open={isModalVisible} 
-        onOk={confirmReset} 
-        onCancel={() => setIsModalVisible(false)}
-        okText="Yes, reset my progress"
-        cancelText="Cancel"
-      >
-        <p>Are you sure you want to reset your progress for Level {userLevel}?</p>
-        <p>This action cannot be undone.</p>
-      </Modal>
+        <div className="progress-container">
+          <div className="progress-header">
+            {progressPercent === 100 && (
+              <Button
+                type="primary"
+                icon={<ReloadOutlined />}
+                onClick={handleResetProgress}
+                className="reset-button"
+              >
+                Reset Progress
+              </Button>
+            )}
+            <Text style={{ color: 'var(--text-color)', fontSize: '16px' }}>
+              Your progress: {progressPercent}% completed
+            </Text>
+
+          </div>
+          <Progress percent={progressPercent} strokeColor="#FFC107" />
+          {progressPercent === 100 && (
+            <div className="completion-message">
+              <TrophyOutlined className="trophy-icon" />
+              <Text strong>Congratulations! You've completed all topics for this level.</Text>
+            </div>
+          )}
+        </div>
+
+        <div className="topics-container">
+          <Title level={3}>Topics For Your Level</Title>
+          <Row gutter={[16, 16]}>
+            {levelTopics[userLevel]?.map((topic) => (
+              <Col xs={24} sm={12} md={8} key={topic.id}>
+                <Card
+                  hoverable
+                  className={`topic-card ${isTopicCompleted(topic.id) ? 'completed-topic' : ''}`}
+                  onClick={() => handleTopicClick(userLevel, topic.id)}
+                  extra={isTopicCompleted(topic.id) && (
+                    <Tag className="completed-tag">
+                      <CheckCircleFilled /> Done
+                    </Tag>
+                  )}
+                >
+                  <Title level={4}>
+                    {topic.title}
+                    {isTopicCompleted(topic.id) && <CheckCircleFilled className="completed-icon" />}
+                  </Title>
+                  <Text style={{ color: 'var(--text-color-secondary)' }}>
+                    {topic.description}
+                  </Text>
+
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+
+        <Modal
+          title="Reset Progress"
+          open={isModalVisible}
+          onOk={confirmReset}
+          onCancel={() => setIsModalVisible(false)}
+          okText="Yes, reset my progress"
+          cancelText="Cancel"
+        >
+          <p>Are you sure you want to reset your progress for Level {userLevel}?</p>
+          <p>This action cannot be undone.</p>
+        </Modal>
+      </div>
     </div>
+
   );
 };
 

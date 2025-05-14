@@ -19,10 +19,10 @@ const TopicNavigation = ({ currentLevel, currentTopic, topicsInLevel }) => {
       // Format topic ID to match the education page format: "Topic1_1"
       const levelNumber = currentLevel.slice(-1);
       const topicId = `Topic${levelNumber}_${currentTopic}`;
-      
+
       // Get existing completed topics from localStorage or initialize empty array
       const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
-      
+
       // Add current topic if not already in the list
       if (!completedTopics.includes(topicId)) {
         completedTopics.push(topicId);
@@ -53,22 +53,28 @@ const TopicNavigation = ({ currentLevel, currentTopic, topicsInLevel }) => {
 
   return (
     <Space style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', width: '100%' }}>
-      <Button 
-        type="primary" 
-        icon={<LeftOutlined />} 
-        onClick={goToPreviousTopic}
-        disabled={currentTopic === 1}
-      >
-        Previous Topic
-      </Button>
-      <Button 
-        type="primary" 
-        icon={<RightOutlined />} 
-        onClick={goToNextTopic} 
-        disabled={currentTopic === topicsInLevel}
-      >
-        Next Topic
-      </Button>
+      <div className="topic-nav-wrapper">
+        <Button
+          type="primary"
+          icon={<LeftOutlined />}
+          onClick={goToPreviousTopic}
+          disabled={currentTopic === 1}
+          className="topic-nav-button"
+        >
+          Previous Topic
+        </Button>
+
+        <Button
+          type="primary"
+          icon={<RightOutlined />}
+          onClick={goToNextTopic}
+          disabled={currentTopic === topicsInLevel}
+          className="topic-nav-button"
+        >
+          Next Topic
+        </Button>
+      </div>
+
     </Space>
   );
 };

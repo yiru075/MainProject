@@ -1,7 +1,6 @@
 .edumenu-container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
+  background-color: var(--bg-color);
+  justify-content: center;
 }
 
 .edumenu-header {
@@ -10,22 +9,21 @@
 }
 
 .edumenu-header h2 {
-  font-size: 2.2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #000;
+  font-size: 28px;
+  color: var(--primary-color)!important;
+  margin-bottom: 12px;
+  text-align: center;
 }
 
 .edumenu-intro {
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-  max-width: 800px;
+  font-size: 18px;
+  color: var(--text-color-secondary);
   line-height: 1.6;
-  color: #555;
+  text-align: center;
+  max-width: 640px;
   margin: 0 auto;
 }
 
-/* Level cards styling */
 .level-cards-container {
   display: flex;
   flex-direction: column;
@@ -41,11 +39,6 @@
   border: none;
 }
 
-.level-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
 .level-card-header {
   display: flex;
   justify-content: space-between;
@@ -58,28 +51,28 @@
   margin: 0;
   font-size: 1.6rem;
   font-weight: bold;
-  color: #000;
+  color: var(--text-color);
 }
 
 .level-description {
   font-size: 1.1rem;
   margin-bottom: 25px;
-  color: #555;
+  color: var(--text-color-secondary);
   line-height: 1.6;
 }
 
 .level-topics {
-  background-color: #f8f8f8;
+  background-color: var(--card-bg);
   padding: 25px;
   border-radius: 8px;
   margin-bottom: 25px;
-  border-left: 3px solid #FFC107;
+  border-left: 3px solid var(--primary-color);
 }
 
 .level-topics h4 {
   margin-top: 0;
   margin-bottom: 16px;
-  color: #000;
+  color: var(--text-color);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -91,7 +84,7 @@
 
 .level-topics li {
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-color-secondary);
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -102,44 +95,89 @@
   margin-top: 10px;
   font-size: 1.1rem;
   font-weight: 500;
-  background-color: #FFC107 !important;
-  border-color: #FFC107 !important;
-  color: #000 !important;
+  background-color: var(--button-bg) !important;
+  border-color: var(--button-bg) !important;
+  color: var(--nav-text-color) !important;
   transition: all 0.3s ease;
   letter-spacing: 0.5px;
 }
 
 .start-level-btn:hover {
-  background-color: #e0aa05 !important;
-  border-color: #e0aa05 !important;
-  color: #000 !important;
+  background-color: var(--button-hover-bg) !important;
+  border-color: var(--button-hover-bg) !important;
+  color: var(--nav-text-color) !important;
   transform: translateY(-2px);
 }
 
-/* Responsive styling */
-@media (max-width: 768px) {
-  .edumenu-container {
-    padding: 30px 15px;
-    margin: 20px auto;
-  }
-  
+@media (max-width: 1024px) {
   .edumenu-header h2 {
-    font-size: 1.8rem;
-  }
-
-  .edumenu-intro {
-    font-size: 1rem;
-  }
-  
-  .level-card {
-    margin-bottom: 20px;
-  }
-  
-  .level-topics {
-    padding: 20px;
+    font-size: 24px;
   }
 
   .level-card-header h3 {
     font-size: 1.4rem;
+  }
+
+  .level-description {
+    font-size: 1rem;
+  }
+
+  .level-topics h4 {
+    font-size: 1.1rem;
+  }
+
+  .start-level-btn {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .level-cards-container {
+    gap: 24px;
+  }
+
+  .level-topics {
+    padding: 20px;
+  }
+
+  .start-level-btn {
+    height: 45px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .edumenu-header h2 {
+    font-size: 20px;
+  }
+
+  .edumenu-intro {
+    font-size: 16px;
+    padding: 0 10px;
+  }
+
+  .level-card-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .level-description {
+    font-size: 0.95rem;
+  }
+
+  .level-topics h4 {
+    font-size: 1rem;
+  }
+
+  .level-topics ul {
+    padding-left: 16px;
+  }
+
+  .level-topics li {
+    font-size: 0.95rem;
+  }
+
+  .start-level-btn {
+    height: 42px;
+    font-size: 0.9rem;
   }
 }
