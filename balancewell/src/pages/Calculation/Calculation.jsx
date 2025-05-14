@@ -276,20 +276,8 @@ function Calculation() {
       {
         label: 'Years Affordable',
         data: getValidRecommendations().map(rec => rec.years) || [],
-        backgroundColor: [
-          'rgba(255, 184, 76, 0.8)',
-          'rgba(255, 154, 0, 0.8)',
-          'rgba(255, 133, 0, 0.8)',
-          'rgba(255, 112, 0, 0.8)',
-          'rgba(255, 91, 0, 0.8)',
-        ],
-        borderColor: [
-          'rgba(255, 184, 76, 1)',
-          'rgba(255, 154, 0, 1)',
-          'rgba(255, 133, 0, 1)',
-          'rgba(255, 112, 0, 1)',
-          'rgba(255, 91, 0, 1)',
-        ],
+        backgroundColor: 'rgba(255, 154, 0, 0.8)',
+        borderColor: 'rgba(255, 154, 0, 1)',
         borderWidth: 1,
         borderRadius: 6,
       },
@@ -300,6 +288,18 @@ function Calculation() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+      title: {
+        display: true,
+        text: 'Estimated Years of Rent Affordability in Recommended Suburbs',
+        font: {
+          size: 20,
+          weight: 'bold'
+        },
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
       legend: {
         display: false,
       },
@@ -329,7 +329,7 @@ function Calculation() {
         },
         ticks: {
           font: {
-            size: 12,
+            size: 15,
           },
           color: '#666',
         },
@@ -338,7 +338,7 @@ function Calculation() {
           text: 'Years',
           color: '#333',
           font: {
-            size: 14,
+            size: 16,
             weight: 'bold',
           },
         }
@@ -349,7 +349,7 @@ function Calculation() {
         },
         ticks: {
           font: {
-            size: 12,
+            size: 20,
           },
           color: '#666',
         }
@@ -373,14 +373,14 @@ function Calculation() {
 
   // Get all suburbs for crime data (target and valid recommendations)
   const getAllSuburbs = () => {
-    const suburbs = new Set(); // 使用Set来避免重复
+    const suburbs = new Set(); // Use Set to avoid duplicates
     
-    // Add target suburb (用户选择的suburb，来自API结果)
+    // Add target suburb (user selected suburb from API results)
     if (results?.target_suburb) {
       suburbs.add(results.target_suburb);
     }
     
-    // Add valid recommendations (最多5个推荐)
+    // Add valid recommendations (max 5 recommendations)
     if (results?.recommendations) {
       const validRecs = results.recommendations.filter(rec => rec.years > 0);
       for (let i = 0; i < Math.min(validRecs.length, 5); i++) {
@@ -390,7 +390,7 @@ function Calculation() {
       }
     }
     
-    // 如果Set中没有至少6个suburb，并且用户输入的suburb不在其中，添加它
+    // If Set doesn't have at least 6 suburbs and user input suburb is not in it, add it
     if (suburbs.size < 6 && suburb && !suburbs.has(suburb) && !isCaseInsensitiveMatch(suburb, [...suburbs])) {
       suburbs.add(suburb);
     }
@@ -465,7 +465,7 @@ function Calculation() {
     return null;
   };
 
-  // 生成详细的折线图数据
+  // Generate detailed line chart data
   const generateCrimeTrendChartData = (suburbName, suburbCrimeData) => {
     if (!suburbCrimeData || !suburbCrimeData.crime_trend_2020_2024) return null;
     
@@ -473,19 +473,19 @@ function Calculation() {
     const years = ['2020', '2021', '2022', '2023', '2024'];
     const values = [];
     
-    // 假设2020为基准值
-    let baseValue = 10000; // 假设的初始犯罪率
+    // Assume 2020 is the baseline value
+    let baseValue = 10000; // Assumed initial crime rate
     values.push(baseValue);
     
-    // 计算其他年份的值(基于百分比变化)
+    // Calculate values for other years (based on percentage changes)
     for (let i = 1; i < years.length; i++) {
       const year = years[i];
       const percentChange = trend[year] !== null ? trend[year] : 0;
       if (i === 1) {
-        // 2021年的变化直接基于2020年
+        // 2021 change is directly based on 2020
         values.push(baseValue * (1 + percentChange/100));
       } else {
-        // 其他年份基于上一年
+        // Other years based on previous year
         values.push(values[i-1] * (1 + percentChange/100));
       }
     }
@@ -508,7 +508,7 @@ function Calculation() {
     };
   };
   
-  // 折线图的配置选项
+  // Line chart configuration options
   const trendChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -571,12 +571,12 @@ function Calculation() {
     }
   };
 
-  // 处理卡片点击
+  // Handle card click
   const handleCrimeCardClick = (suburbName) => {
     if (selectedSuburb === suburbName) {
-      setSelectedSuburb(null); // 再次点击同一卡片，关闭详情
+      setSelectedSuburb(null); // Clicking the same card again, close details
     } else {
-      setSelectedSuburb(suburbName); // 点击新卡片，显示详情
+      setSelectedSuburb(suburbName); // Click new card, show details
     }
   };
 
@@ -790,7 +790,7 @@ function Calculation() {
                           })}
                         </div>
                         
-                        {/* 详细的折线图(使用modal方式显示) */}
+                        {/* Detailed line chart (displayed as modal) */}
                         {selectedSuburb && (
                           <div className="trend-modal-overlay" onClick={() => setSelectedSuburb(null)}>
                             <div className="trend-modal" onClick={e => e.stopPropagation()}>

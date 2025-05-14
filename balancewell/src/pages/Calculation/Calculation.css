@@ -732,7 +732,7 @@
   margin-top: 10px;
 }
 
-/* 查看趋势提示 */
+/* View trend hint */
 .view-trend-hint {
   display: flex;
   align-items: center;
@@ -751,7 +751,7 @@
   color: #ff9a00;
 }
 
-/* 详细折线图容器 */
+/* Detailed line chart container */
 .detailed-trend-chart {
   margin-top: 2rem;
   background-color: #fff;
@@ -786,7 +786,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .detailed-trend-chart {
     padding: 1rem;
@@ -797,14 +797,14 @@
   }
 }
 
-/* 删除不再需要的样式 */
+/* Remove unused styles */
 .crime-trend-chart,
 .trend-years,
 .crime-trend-title {
   display: none;
 }
 
-/* 模态窗口样式 */
+/* Modal window styles */
 .trend-modal-overlay {
   position: fixed;
   top: 0;
