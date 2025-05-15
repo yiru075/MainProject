@@ -1,0 +1,75 @@
+.booth-wrapper {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+
+.booth-container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  transition: all 0.3s ease-in-out;
+}
+
+.booth-tab {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 12px 10px;
+  font-weight: bold;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booth-panel {
+  background-color: var(--card-bg);
+  border: 2px solid var(--primary-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  margin-right: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+}
+
+.booth-container.open .booth-panel {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(0);
+}
+
+.booth-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.booth-button {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.booth-button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.booth-message {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+}

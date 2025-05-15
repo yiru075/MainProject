@@ -1,7 +1,16 @@
 .tools-section {
     padding: 60px 20px;
     background-color: var(--bg-color);
+     position: relative;
   }
+
+  .booth-anchor {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
   
   .tools-title {
     text-align: center;
