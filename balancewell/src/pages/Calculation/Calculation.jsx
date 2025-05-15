@@ -6,13 +6,13 @@ import './Calculation.css';
 
 // Register Chart.js components
 ChartJS.register(
-  CategoryScale, 
-  LinearScale, 
-  BarElement, 
-  Title, 
-  Tooltip, 
-  Legend, 
-  LineElement, 
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
   PointElement
 );
 
@@ -41,7 +41,7 @@ function Calculation() {
         setShowSuggestions(false);
       }
     }
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -55,7 +55,7 @@ function Calculation() {
         try {
           // Using URL parameters as shown in the provided Supabase function
           const response = await fetch(
-            `https://xdlxegeejnkumdzxsqzs.supabase.co/functions/v1/suburb_suggestions?q=${encodeURIComponent(suburb)}`, 
+            `https://xdlxegeejnkumdzxsqzs.supabase.co/functions/v1/suburb_suggestions?q=${encodeURIComponent(suburb)}`,
             {
               method: 'GET',
               headers: {
@@ -64,9 +64,9 @@ function Calculation() {
               }
             }
           );
-          
+
           if (!response.ok) throw new Error('Failed to fetch suggestions');
-          
+
           const data = await response.json();
           setSuggestions(data.suggestions || []);
           setShowSuggestions(true);
@@ -97,9 +97,9 @@ function Calculation() {
   // Fetch crime data for suburbs
   const fetchCrimeData = async (suburbs) => {
     if (!suburbs || suburbs.length === 0) return;
-    
+
     setLoadingCrimeData(true);
-    
+
     try {
       // Try to fetch data from the API
       const response = await fetch(
@@ -113,9 +113,9 @@ function Calculation() {
           body: JSON.stringify({ suburbs })
         }
       );
-      
+
       if (!response.ok) throw new Error('Failed to fetch crime data');
-      
+
       const data = await response.json();
       if (data.success) {
         setCrimeData(data.data);
@@ -124,18 +124,18 @@ function Calculation() {
       }
     } catch (error) {
       console.error('Error fetching crime data:', error);
-      
+
       // Provide mock data when the API call fails (e.g., due to CORS issues in development)
       // This is a temporary workaround for development purposes
       if (import.meta.env.DEV) {
         console.log('Using mock crime data due to API error');
         const mockCrimeData = {};
-        
+
         // Create mock data for each suburb
         suburbs.forEach(suburbName => {
           // Generate random values between ranges for demonstration
           const crimeIndex = Math.floor(Math.random() * 10000) + 5000;
-          
+
           // Determine crime intensity based on index value
           let crimeIntensity;
           if (crimeIndex < 7000) {
@@ -145,7 +145,7 @@ function Calculation() {
           } else {
             crimeIntensity = 'High';
           }
-          
+
           mockCrimeData[suburbName] = {
             crime_index: crimeIndex,
             crime_intensity: crimeIntensity,
@@ -159,7 +159,7 @@ function Calculation() {
             }
           };
         });
-        
+
         setCrimeData(mockCrimeData);
       }
     } finally {
@@ -183,11 +183,11 @@ function Calculation() {
     setLoading(true);
     setCrimeData(null);
     setShowCrimeInsights(false);
-    
+
     try {
       // Using POST method as shown in the provided Supabase function
       const response = await fetch(
-        'https://xdlxegeejnkumdzxsqzs.supabase.co/functions/v1/Year-calculation', 
+        'https://xdlxegeejnkumdzxsqzs.supabase.co/functions/v1/Year-calculation',
         {
           method: 'POST',
           headers: {
@@ -201,20 +201,20 @@ function Calculation() {
           })
         }
       );
-      
+
       if (!response.ok) throw new Error('Failed to calculate years');
-      
+
       const data = await response.json();
       setResults(data);
-      
+
       // Prepare suburbs for crime data fetch - Limit to 6 suburbs total
       const allSuburbs = new Set();
-      
+
       // 1. Add target suburb
       if (data.target_suburb) {
         allSuburbs.add(data.target_suburb);
       }
-      
+
       // 2. Add top 5 recommendations that have years > 0
       if (data.recommendations && data.recommendations.length > 0) {
         const validRecs = data.recommendations.filter(rec => rec.years > 0);
@@ -224,20 +224,20 @@ function Calculation() {
           }
         }
       }
-      
+
       // Convert Set back to array and fetch crime data
       const suburbsArray = [...allSuburbs];
       console.log("Fetching crime data for suburbs:", suburbsArray);
-      
+
       if (suburbsArray.length > 0) {
         fetchCrimeData(suburbsArray);
       }
-      
+
       // Scroll to results
       setTimeout(() => {
         document.querySelector('.results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
-      
+
     } catch (error) {
       console.error('Error calculating years:', error);
       alert('Error calculating sustainability. Please try again.');
@@ -298,7 +298,8 @@ function Calculation() {
         padding: {
           top: 10,
           bottom: 20
-        }
+        },
+        color: '#FFC107',
       },
       legend: {
         display: false,
@@ -331,12 +332,12 @@ function Calculation() {
           font: {
             size: 12,
           },
-          color: '#666',
+          color: '#FFC107',
         },
         title: {
           display: true,
           text: 'Years',
-          color: '#333',
+          color: '#FFC107',
           font: {
             size: 14,
             weight: 'bold',
@@ -351,7 +352,7 @@ function Calculation() {
           font: {
             size: 20,
           },
-          color: '#666',
+          color: '#FFC107',
         }
       }
     }
@@ -373,14 +374,13 @@ function Calculation() {
 
   // Get all suburbs for crime data (target and valid recommendations)
   const getAllSuburbs = () => {
-    const suburbs = new Set(); // 使用Set来避免重复
-    
-    // Add target suburb (用户选择的suburb，来自API结果)
+    const suburbs = new Set(); 
+
+    // Add target suburb
     if (results?.target_suburb) {
       suburbs.add(results.target_suburb);
     }
-    
-    // Add valid recommendations (最多5个推荐)
+
     if (results?.recommendations) {
       const validRecs = results.recommendations.filter(rec => rec.years > 0);
       for (let i = 0; i < Math.min(validRecs.length, 5); i++) {
@@ -389,19 +389,18 @@ function Calculation() {
         }
       }
     }
-    
-    // 如果Set中没有至少6个suburb，并且用户输入的suburb不在其中，添加它
+
     if (suburbs.size < 6 && suburb && !suburbs.has(suburb) && !isCaseInsensitiveMatch(suburb, [...suburbs])) {
       suburbs.add(suburb);
     }
-    
+
     // Debug log to check what suburbs we're using
     const suburbList = [...suburbs];
     console.log("All suburbs for crime data:", suburbList);
-    
+
     return suburbList;
   };
-  
+
   // Helper function to check case-insensitive match
   const isCaseInsensitiveMatch = (suburb, suburbList) => {
     const lowerSuburb = suburb.toLowerCase();
@@ -411,85 +410,80 @@ function Calculation() {
   // Generate SVG path for crime trend line
   const generateTrendPath = (trendData) => {
     if (!trendData || !trendData.crime_trend_2020_2024) return '';
-    
+
     const trend = trendData.crime_trend_2020_2024;
-    
+
     // Only display years 2021-2024 since 2020 is the base year
     const years = ['2021', '2022', '2023', '2024'];
-    
+
     // Filter out null values and get the percentage changes
     const values = years.map(year => trend[year] !== null ? trend[year] : 0);
-    
+
     // If all values are null/0, return empty path
     if (values.every(v => v === 0 || v === null)) return '';
-    
+
     // Normalize values for visual representation
     const maxValue = Math.max(...values.map(v => Math.abs(v)), 5); // At least 5% for scale
-    
+
     // Map values to y-positions (0.5 = middle, 0 = top, 1 = bottom)
     // Positive values go up (smaller y), negative values go down (larger y)
     const normalizedValues = values.map(v => 0.5 - (v / maxValue) * 0.4); // Use 40% of height for variation
-    
+
     // Create SVG path - M=moveto, L=lineto
     const width = 100;
     const height = 50;
     const step = width / (years.length - 1);
-    
+
     // Create path points
-    const pathPoints = normalizedValues.map((v, i) => 
+    const pathPoints = normalizedValues.map((v, i) =>
       `${i * step},${v * height}`
     );
-    
+
     return `M${pathPoints.join(' L')}`;
   };
 
   // Get suburb crime data with case-insensitive matching
   const getSuburbCrimeData = (suburbName, crimeDataObj) => {
     if (!suburbName || !crimeDataObj) return null;
-    
+
     // Direct match
     if (crimeDataObj[suburbName]) {
       return crimeDataObj[suburbName];
     }
-    
+
     // Case-insensitive match
     const suburbLower = suburbName.toLowerCase();
     const keys = Object.keys(crimeDataObj);
-    
+
     for (const key of keys) {
       if (key.toLowerCase() === suburbLower) {
         return crimeDataObj[key];
       }
     }
-    
+
     return null;
   };
 
-  // 生成详细的折线图数据
   const generateCrimeTrendChartData = (suburbName, suburbCrimeData) => {
     if (!suburbCrimeData || !suburbCrimeData.crime_trend_2020_2024) return null;
-    
+
     const trend = suburbCrimeData.crime_trend_2020_2024;
     const years = ['2020', '2021', '2022', '2023', '2024'];
     const values = [];
-    
-    // 假设2020为基准值
-    let baseValue = 10000; // 假设的初始犯罪率
+
+    let baseValue = 10000; 
     values.push(baseValue);
-    
-    // 计算其他年份的值(基于百分比变化)
+
     for (let i = 1; i < years.length; i++) {
       const year = years[i];
       const percentChange = trend[year] !== null ? trend[year] : 0;
       if (i === 1) {
-        // 2021年的变化直接基于2020年
-        values.push(baseValue * (1 + percentChange/100));
+        values.push(baseValue * (1 + percentChange / 100));
       } else {
-        // 其他年份基于上一年
-        values.push(values[i-1] * (1 + percentChange/100));
+        values.push(values[i - 1] * (1 + percentChange / 100));
       }
     }
-    
+
     return {
       labels: years,
       datasets: [
@@ -507,8 +501,7 @@ function Calculation() {
       ]
     };
   };
-  
-  // 折线图的配置选项
+
   const trendChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -523,21 +516,22 @@ function Calculation() {
         padding: {
           top: 10,
           bottom: 20
-        }
+        },
+        color: '#FFC107',
       },
       tooltip: {
         callbacks: {
           label: (context) => {
             const index = context.dataIndex;
             const value = context.raw;
-            
+
             if (index > 0) {
               const prevValue = context.dataset.data[index - 1];
               const percentChange = ((value - prevValue) / prevValue * 100).toFixed(2);
               const sign = percentChange > 0 ? '+' : '';
               return [`Crime Rate: ${Math.round(value)}`, `Change: ${sign}${percentChange}%`];
             }
-            
+
             return `Crime Rate: ${Math.round(value)}`;
           }
         }
@@ -550,11 +544,16 @@ function Calculation() {
           text: 'Crime Rate per 100,000 Population',
           font: {
             weight: 'bold'
-          }
+          },
+          color: '#FFC107',
+        },
+        ticks: {
+          color: '#FFC107'
         },
         grid: {
           color: 'rgba(0, 0, 0, 0.05)'
-        }
+        },
+
       },
       x: {
         title: {
@@ -562,7 +561,11 @@ function Calculation() {
           text: 'Year',
           font: {
             weight: 'bold'
-          }
+          },
+          color: '#FFC107',
+        },
+        ticks: {
+          color: '#FFC107'
         },
         grid: {
           display: false
@@ -571,19 +574,18 @@ function Calculation() {
     }
   };
 
-  // 处理卡片点击
   const handleCrimeCardClick = (suburbName) => {
     if (selectedSuburb === suburbName) {
-      setSelectedSuburb(null); // 再次点击同一卡片，关闭详情
+      setSelectedSuburb(null); 
     } else {
-      setSelectedSuburb(suburbName); // 点击新卡片，显示详情
+      setSelectedSuburb(suburbName); 
     }
   };
 
   return (
     <div className="calculation-container">
       <div className="hero-section">
-        <h1>Project Your Rent Sustainability Over Time</h1>
+        <h2>Project Your Rent Sustainability Over Time</h2>
         <p>
           This calculator is designed to help you understand how long your savings might cover rental expenses in a specific suburb.
         </p>
@@ -613,8 +615,8 @@ function Calculation() {
             {showSuggestions && suggestions.length > 0 && (
               <ul className="suggestions-dropdown">
                 {suggestions.map((suggestion, index) => (
-                  <li 
-                    key={index} 
+                  <li
+                    key={index}
                     onClick={() => handleSelectSuburb(suggestion)}
                   >
                     {suggestion}
@@ -643,8 +645,8 @@ function Calculation() {
         <div className="input-group">
           <label>What is your property type?</label>
           <div className="dropdown-container">
-            <select 
-              value={propertyType} 
+            <select
+              value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
               className="property-dropdown"
             >
@@ -658,8 +660,8 @@ function Calculation() {
           </div>
         </div>
 
-        <button 
-          className="calculate-button" 
+        <button
+          className="calculate-button"
           onClick={calculateYears}
           disabled={loading}
         >
@@ -690,7 +692,7 @@ function Calculation() {
 
           <div className="recommendations">
             <h2>Recommended Similar Suburbs</h2>
-            
+
             {hasNoValidRecommendations() ? (
               <div className="no-recommendations-message">
                 <p>Your budget is insufficient to recommend alternative suburbs. Consider increasing your budget or exploring more affordable property types.</p>
@@ -700,33 +702,33 @@ function Calculation() {
                 <div className="chart-container">
                   <Bar data={chartData} options={chartOptions} height={350} />
                 </div>
-                
+
                 <div className="recommendations-list">
                   {getValidRecommendations().map((rec, index) => (
                     <div className="recommendation-item" key={index}>
                       <div className="recommendation-info">
                         <h3>{rec.suburb}</h3>
                         <p>
-                          <span>Weekly rent:</span> 
+                          <span>Weekly rent:</span>
                           <strong>{formatCurrency(rec.median)}</strong>
                         </p>
                         <p>
-                          <span>Inflation rate:</span> 
+                          <span>Inflation rate:</span>
                           <strong>{(rec.rental_inflation * 100).toFixed(1)}%</strong>
                         </p>
                         <p>
-                          <span>Affordable for:</span> 
+                          <span>Affordable for:</span>
                           <strong>{rec.years} years</strong>
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Safety insights toggle */}
                 <div className="safety-insights-toggle">
-                  <div 
-                    className="safety-banner" 
+                  <div
+                    className="safety-banner"
                     onClick={() => setShowCrimeInsights(!showCrimeInsights)}
                   >
                     <div className="safety-banner-icon">⚠️</div>
@@ -760,10 +762,10 @@ function Calculation() {
                           {getAllSuburbs().map((suburbName, index) => {
                             // Use the case-insensitive matching function
                             const suburbCrimeData = getSuburbCrimeData(suburbName, crimeData);
-                            
+
                             return (
-                              <div 
-                                className={`crime-data-card ${selectedSuburb === suburbName ? 'selected' : ''}`} 
+                              <div
+                                className={`crime-data-card ${selectedSuburb === suburbName ? 'selected' : ''}`}
                                 key={index}
                                 onClick={() => handleCrimeCardClick(suburbName)}
                               >
@@ -781,7 +783,7 @@ function Calculation() {
                                       </span>
                                     </p>
                                     <div className="view-trend-hint">
-                                      <span className="info-icon">ⓘ</span> 
+                                      <span className="info-icon">ⓘ</span>
                                       <span>Click to {selectedSuburb === suburbName ? 'hide' : 'view'} crime trend</span>
                                     </div>
                                   </div>
@@ -794,8 +796,7 @@ function Calculation() {
                             );
                           })}
                         </div>
-                        
-                        {/* 详细的折线图(使用modal方式显示) */}
+
                         {selectedSuburb && (
                           <div className="trend-modal-overlay" onClick={() => setSelectedSuburb(null)}>
                             <div className="trend-modal" onClick={e => e.stopPropagation()}>
@@ -806,11 +807,11 @@ function Calculation() {
                               {getSuburbCrimeData(selectedSuburb, crimeData) && (
                                 <div className="crime-trend-detailed">
                                   <div className="line-chart-container">
-                                    <Line 
+                                    <Line
                                       data={generateCrimeTrendChartData(
-                                        selectedSuburb, 
+                                        selectedSuburb,
                                         getSuburbCrimeData(selectedSuburb, crimeData)
-                                      )} 
+                                      )}
                                       options={trendChartOptions}
                                       height={300}
                                     />
