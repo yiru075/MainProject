@@ -94,6 +94,9 @@ const Header = () => {
           <li>
             <Link to="/retirementSupport" className={location.pathname === "/retirementSupport" ? "active" : ""} onClick={() => setMenuOpen(false)}>Retirement Support</Link>
           </li>
+          <li>
+            <Link to="/advisors" className={location.pathname === "/advisors" ? "active" : ""} onClick={() => setMenuOpen(false)}>Advisors</Link>
+          </li>
 
           <li className="dropdown-container">
             <div

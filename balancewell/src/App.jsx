@@ -20,6 +20,7 @@ import ProtectedRoute from './components/projectedRoute.jsx';
 import Events from './pages/events/events.jsx';
 import Calculation from './pages/Calculation/Calculation';
 import RetirementSupport from './pages/retirementSupport/retirementSupport.jsx';
+import Advisors from './pages/advisor/advisors.jsx';
 
 // Level 1 Topics
 import Topic1_1 from './pages/Levels/Level1/Topic1_1.jsx';
@@ -84,6 +85,7 @@ function AppContent() {
         <Route path="/housing" element={<ProtectedRoute><Housing /></ProtectedRoute>} />
         <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
         <Route path="/retirementSupport" element={<ProtectedRoute><RetirementSupport /></ProtectedRoute>} />
+        <Route path="/advisors" element={<ProtectedRoute><Advisors /></ProtectedRoute>} />
         <Route path="/education" element={<ProtectedRoute><Education /></ProtectedRoute>} />
         <Route path="/eduMenu" element={<ProtectedRoute><EduMenu /></ProtectedRoute>} />
         <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
