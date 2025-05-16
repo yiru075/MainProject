@@ -33,6 +33,8 @@ function Calculation() {
   const [loadingCrimeData, setLoadingCrimeData] = useState(false);
   const [selectedSuburb, setSelectedSuburb] = useState(null);
   const dropdownRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [noMatch, setNoMatch] = useState(false);
 
   // Handle outside click for suburb suggestions dropdown
   useEffect(() => {
@@ -53,6 +55,7 @@ function Calculation() {
     const fetchSuggestions = async () => {
       if (suburb.length > 0) {
         try {
+          setIsLoading(true);
           // Using URL parameters as shown in the provided Supabase function
           const response = await fetch(
             `https://xdlxegeejnkumdzxsqzs.supabase.co/functions/v1/suburb_suggestions?q=${encodeURIComponent(suburb)}`,
@@ -70,13 +73,18 @@ function Calculation() {
           const data = await response.json();
           setSuggestions(data.suggestions || []);
           setShowSuggestions(true);
+          setNoMatch(data.suggestions && data.suggestions.length === 0);
         } catch (error) {
           console.error('Error fetching suggestions:', error);
           setSuggestions([]);
+          setNoMatch(true);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         setSuggestions([]);
         setShowSuggestions(false);
+        setNoMatch(false);
       }
     };
 
@@ -502,13 +510,22 @@ function Calculation() {
     };
   };
 
+  // Helper function to capitalize the first letter of each word in a suburb name
+  const capitalizeSuburbName = (name) => {
+    if (!name) return '';
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   const trendChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        text: selectedSuburb ? `${selectedSuburb} - Crime Rate Trend (2020-2024)` : 'Crime Rate Trend (2020-2024)',
+        text: selectedSuburb ? `${capitalizeSuburbName(selectedSuburb)} - Crime Rate Trend (2020-2024)` : 'Crime Rate Trend (2020-2024)',
         font: {
           size: 16,
           weight: 'bold'
@@ -604,7 +621,7 @@ function Calculation() {
       <div className="calculator-section">
         <div className="input-group">
           <label>Which suburb are you looking forward to stay?</label>
-          <div className="suburb-input-container" ref={dropdownRef}>
+          <div className="suburb-input-wrapper" ref={dropdownRef}>
             <input
               type="text"
               placeholder="Search your suburb name within Victoria only"
@@ -612,17 +629,26 @@ function Calculation() {
               onChange={(e) => setSuburb(e.target.value)}
               className="suburb-input"
             />
+            
+            {isLoading && <p className="form-info">Loading...</p>}
+            
             {showSuggestions && suggestions.length > 0 && (
-              <ul className="suggestions-dropdown">
+              <ul className="search-results" role="listbox">
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}
+                    className="search-result-item"
                     onClick={() => handleSelectSuburb(suggestion)}
+                    role="option"
                   >
                     {suggestion}
                   </li>
                 ))}
               </ul>
+            )}
+            
+            {noMatch && !isLoading && suburb.trim() !== '' && (
+              <p className="form-error">No matching suburbs found in Victoria.</p>
             )}
           </div>
         </div>
@@ -687,7 +713,7 @@ function Calculation() {
           </div>
 
           <p className="results-explanation">
-            Based on median weekly rent and 5 year average rental inflation rate of {(results.rental_inflation * 100).toFixed(1)}%, you can afford to live in <strong>{results.target_suburb}</strong>, in a <strong>{propertyType}</strong> for approximately <strong>{results.can_live_years} years</strong>.
+            Based on median weekly rent and 5 year average rental inflation rate of {(results.rental_inflation * 100).toFixed(1)}%, you can afford to live in <strong>{capitalizeSuburbName(results.target_suburb)}</strong>, in a <strong>{propertyType}</strong> for approximately <strong>{results.can_live_years} years</strong>.
           </p>
 
           <div className="recommendations">
@@ -707,7 +733,7 @@ function Calculation() {
                   {getValidRecommendations().map((rec, index) => (
                     <div className="recommendation-item" key={index}>
                       <div className="recommendation-info">
-                        <h3>{rec.suburb}</h3>
+                        <h3>{capitalizeSuburbName(rec.suburb)}</h3>
                         <p>
                           <span>Weekly rent:</span>
                           <strong>{formatCurrency(rec.median)}</strong>
@@ -769,24 +795,32 @@ function Calculation() {
                                 key={index}
                                 onClick={() => handleCrimeCardClick(suburbName)}
                               >
-                                <h3>{suburbName}</h3>
+                                <h3>{capitalizeSuburbName(suburbName)}</h3>
                                 {suburbCrimeData ? (
-                                  <div className="crime-data-info">
-                                    <p className="crime-index">
-                                      Crime Index:
-                                      <span className="crime-index-value">{suburbCrimeData.crime_index}</span>
+                                  <>
+                                    <p className="lga-info">
+                                      {capitalizeSuburbName(suburbName)} falls under the {suburbCrimeData.lga} Local Government Area.
                                     </p>
-                                    <p className="crime-level">
-                                      Crime Level:
-                                      <span className={`crime-level-tag ${getCrimeLevelClass(suburbCrimeData.crime_intensity)}`}>
-                                        {suburbCrimeData.crime_intensity}
-                                      </span>
+                                    <p className="crime-rate-info">
+                                      Per year, an average of {suburbCrimeData.crime_index.toLocaleString()} crime incidents per 100,000 people is recorded in this LGA. [10 Year Average: 2015 to 2024]
                                     </p>
-                                    <div className="view-trend-hint">
-                                      <span className="info-icon">ⓘ</span>
-                                      <span>Click to {selectedSuburb === suburbName ? 'hide' : 'view'} crime trend</span>
+                                    <div className="crime-data-info">
+                                      <p className="crime-index">
+                                        Crime Index:
+                                        <span className="crime-index-value">{suburbCrimeData.crime_index} incidents / 100,000 population</span>
+                                      </p>
+                                      <p className="crime-level">
+                                        Crime Level:
+                                        <span className={`crime-level-tag ${getCrimeLevelClass(suburbCrimeData.crime_intensity)}`}>
+                                          {suburbCrimeData.crime_intensity}
+                                        </span>
+                                      </p>
+                                      <div className="view-trend-hint">
+                                        <span className="info-icon">ⓘ</span>
+                                        <span>Click to {selectedSuburb === suburbName ? 'hide' : 'view'} crime trend</span>
+                                      </div>
                                     </div>
-                                  </div>
+                                  </>
                                 ) : (
                                   <div className="no-crime-data">
                                     <p>No crime data available for this suburb</p>
@@ -801,11 +835,19 @@ function Calculation() {
                           <div className="trend-modal-overlay" onClick={() => setSelectedSuburb(null)}>
                             <div className="trend-modal" onClick={e => e.stopPropagation()}>
                               <div className="modal-header">
-                                <h3>{selectedSuburb} - Crime Rate Trend</h3>
+                                <h3>{capitalizeSuburbName(selectedSuburb)}</h3>
                                 <button className="close-modal-btn" onClick={() => setSelectedSuburb(null)}>×</button>
                               </div>
                               {getSuburbCrimeData(selectedSuburb, crimeData) && (
                                 <div className="crime-trend-detailed">
+                                  <div className="modal-suburb-info">
+                                    <p className="lga-info">
+                                      {capitalizeSuburbName(selectedSuburb)} falls under the {getSuburbCrimeData(selectedSuburb, crimeData).lga} Local Government Area.
+                                    </p>
+                                    <p className="crime-rate-info">
+                                      Per year an average of {getSuburbCrimeData(selectedSuburb, crimeData).crime_index.toLocaleString()} crime incidents per 100,000 people is recorded in this LGA. [10 Year Average: 2015 to 2024]
+                                    </p>
+                                  </div>
                                   <div className="line-chart-container">
                                     <Line
                                       data={generateCrimeTrendChartData(
@@ -817,7 +859,7 @@ function Calculation() {
                                     />
                                   </div>
                                   <div className="trend-explanation">
-                                    <p>This chart shows the crime rate trend for {selectedSuburb} from 2020 to 2024, with percentage changes based on the previous year.</p>
+                                    <p>This chart shows the crime rate trend for {capitalizeSuburbName(selectedSuburb)} from 2020 to 2024, with percentage changes based on the previous year.</p>
                                     <p>Values are calculated based on reported crimes per 100,000 population.</p>
                                   </div>
                                 </div>
