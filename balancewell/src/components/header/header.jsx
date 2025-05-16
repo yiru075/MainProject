@@ -13,15 +13,18 @@ const Header = () => {
   const [themeColor, setThemeColor] = useState(localStorage.getItem("themeColor") || "#FFC107");
 
   useEffect(() => {
-    document.body.className = theme;
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(theme);
+
     localStorage.setItem("theme", theme);
     document.documentElement.style.setProperty('--theme-color', themeColor);
     localStorage.setItem("themeColor", themeColor);
   }, [theme, themeColor]);
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    setTheme(prev => prev === "light" ? "dark" : "light");
   };
+
 
   const isAwarenessActive =
     location.pathname === "/education" ||
