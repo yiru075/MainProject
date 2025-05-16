@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HeartOutlined, HeartFilled, SearchOutlined, CheckCircleOutlined, CloseOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartFilled, SearchOutlined } from "@ant-design/icons";
 import "./advisors.css";
 
 // Supabase token for authentication
@@ -20,8 +20,6 @@ const Advisors = () => {
     pageSize: 9,  // Changed to 9 items per page
     resultsReturned: 0
   });
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [selectedAdvisor, setSelectedAdvisor] = useState(null);
 
   // Load saved favorites from localStorage
   useEffect(() => {
@@ -185,24 +183,6 @@ const Advisors = () => {
     return favoriteAdvisors.includes(advisorKey);
   };
 
-  // Handle booking click
-  const handleBooking = (advisor) => {
-    setSelectedAdvisor(advisor);
-    setBookingSuccess(true);
-    
-    // Automatically close the modal after 5 seconds
-    setTimeout(() => {
-      setBookingSuccess(false);
-      setSelectedAdvisor(null);
-    }, 5000);
-  };
-
-  // Close booking success modal
-  const closeBookingModal = () => {
-    setBookingSuccess(false);
-    setSelectedAdvisor(null);
-  };
-
   // Alphabetical sorting option
   const sortByAlphabetical = () => {
     const sortedAdvisors = [...advisors].sort((a, b) => 
@@ -216,25 +196,19 @@ const Advisors = () => {
     return value ? value : "No information";
   };
 
+  // Helper function to render superannuation advice value with correct class
+  const renderSuperannuationValue = (value) => {
+    if (!value) return <span className="detail-value">No information</span>;
+    
+    if (value === "Yes") {
+      return <span className="detail-value yes-value">Yes</span>;
+    }
+    
+    return <span className="detail-value">{value}</span>;
+  };
+
   return (
     <div className="advisors-container">
-      {bookingSuccess && selectedAdvisor && (
-        <div className="booking-modal-overlay">
-          <div className="booking-modal">
-            <button className="close-modal-btn" onClick={closeBookingModal}>
-              <CloseOutlined />
-            </button>
-            <div className="booking-success-content">
-              <CheckCircleOutlined className="success-icon" />
-              <h3>Booking Confirmed!</h3>
-              <p>Your appointment with {selectedAdvisor.advisor_name} has been scheduled successfully.</p>
-              <p>You will receive a confirmation email shortly with all the details.</p>
-              <button className="ok-button" onClick={closeBookingModal}>OK</button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="advisors-hero">
         <h2>Need Guidance with Your Finances?</h2>
         <p className="advisors-intro">
@@ -351,17 +325,8 @@ const Advisors = () => {
 
                     <div className="detail-group">
                       <span className="detail-label">Can Advise on Superannuation:</span>
-                      <span className="detail-value">{displayValue(advisor.can_advise_on_superannuation)}</span>
+                      {renderSuperannuationValue(advisor.can_advise_super)}
                     </div>
-                  </div>
-                  
-                  <div className="advisor-action">
-                    <button 
-                      className="book-now-button"
-                      onClick={() => handleBooking(advisor)}
-                    >
-                      Book now
-                    </button>
                   </div>
                 </div>
               ))}
