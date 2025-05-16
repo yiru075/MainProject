@@ -37,8 +37,8 @@ const PositivityBooth = () => {
 
   const getStretchReminder = () => {
     const reminders = [
-      "Time to move! Take a short walk. 🏃",
-      "Stretch your body and reset your mind. 🧘‍♀️",
+      "Time to move! Take a short walk.",
+      "Stretch your body and reset your mind. ",
       "Stand up, roll your shoulders, breathe in deeply!",
     ];
     return reminders[Math.floor(Math.random() * reminders.length)];
