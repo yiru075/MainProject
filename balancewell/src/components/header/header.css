@@ -221,7 +221,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #000;
+    background-color: var(--nav-bg);
     z-index: 1000;
     padding: 3rem 1rem 1.5rem;
     overflow-y: auto;
