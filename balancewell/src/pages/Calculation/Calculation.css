@@ -73,7 +73,7 @@
   opacity: 0;
 }
 
-.suburb-input-container, 
+
 .dropdown-container {
   position: relative;
   height: 48px;
@@ -81,7 +81,11 @@
   align-items: center;
 }
 
-.suburb-input, 
+.suburb-input-container{
+  position: relative;
+  width: 100%;
+}
+
 .savings-input, 
 .property-dropdown {
   width: 100%;
@@ -95,13 +99,6 @@
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-color);
-}
-
-/* Override for input fields inside input-group */
-.input-group .suburb-input,
-.input-group .savings-input {
-  padding: 8px;
-  width: 100%;
 }
 
 .suburb-input::placeholder, 
@@ -124,40 +121,6 @@
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 35px;
-}
-
-.suggestions-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: white;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  border: 1px solid #ddd;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  max-height: 250px;
-  overflow-y: auto;
-  z-index: 10;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.suggestions-dropdown li {
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.suggestions-dropdown li:last-child {
-  border-bottom: none;
-}
-
-.suggestions-dropdown li:hover {
-  background-color: #fff8ec;
-  color: #ff9a00;
 }
 
 .dropdown-container::after {
@@ -550,7 +513,7 @@
 
 .crime-index-value {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   color: var(--primary-color);
 }
 
@@ -561,7 +524,8 @@
   display: inline-block;
   text-align: end;
   min-width: 80px;
-  color: var(--primary-color);
+  /* color: var(--primary-color); */
+  color: #d19261;
 }
 
 .crime-level-low {
@@ -571,11 +535,11 @@
 
 .crime-level-moderate {
   background-color: #fef9e7;
-  color: #f39c12;
+  color: #d9a400;
 }
 
 .crime-level-high {
-  background-color: #fadbd8;
+  background-color: var(--card-bg);
   color: #e74c3c;
 }
 
@@ -997,4 +961,109 @@
     width: 28px;
     height: 28px;
   }
+}
+
+.lga-info {
+  font-size: 0.95rem;
+  color: var(--text-color-secondary);
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.crime-rate-info {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #eee;
+}
+
+.modal-suburb-info {
+  padding: 0 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-suburb-info .lga-info,
+.modal-suburb-info .crime-rate-info {
+  margin: 0.8rem 0;
+  font-size: 1rem;
+}
+
+.suburb-input-wrapper {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--card-bg);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+}
+
+.search-result-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background-color: var(--dropdown-hover-bg);
+  color: var(--primary-color);
+}
+
+.form-info {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  font-style: italic;
+}
+
+.form-error {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #e74c3c;
+}
+
+.suburb-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+/* Override for input fields inside input-group */
+.input-group .suburb-input,
+.input-group .savings-input {
+  padding: 0 16px;
+  width: 100%;
 }
