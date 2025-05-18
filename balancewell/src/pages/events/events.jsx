@@ -39,25 +39,6 @@ const Events = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [suburb]);
 
-  // const handleSearch = async (query) => {
-  //   setIsLoading(true);
-  //   try {
-  //     const baseUrl = import.meta.env.VITE_WEBSITE_URL;
-  //     const response = await fetch(`${baseUrl}/api/suburb_search?q=${encodeURIComponent(query)}`);
-  //     if (!response.ok) throw new Error('Search failed');
-  //     const data = await response.json();
-  //     const results = data.results || [];
-  //     setSearchResults(results);
-  //     setNoMatch(results.length === 0);
-  //   } catch (err) {
-  //     console.error('Search error:', err);
-  //     setSearchResults([]);
-  //     setNoMatch(true);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleAutocomplete = async (query) => {
     setIsLoading(true);
     try {
@@ -122,8 +103,8 @@ const Events = () => {
           );
           if (isVictoria) {
             selectedRef.current = { suburb: name, coords };
-            // setSuburb(name);
-            // setIsAutoLocated(true);
+            setSuburb(name);
+            setIsAutoLocated(true);
             await handleSearchClick(category);
           } else {
             alert('Your location is outside Victoria.');
@@ -233,7 +214,6 @@ const Events = () => {
         );
         if (isVictoria) {
           selectedRef.current = { suburb: resultName, coords };
-          // await handleSearchClick(category);
         } else {
           alert('This suburb is not in Victoria.');
         }
@@ -244,8 +224,6 @@ const Events = () => {
       console.error('Failed to fetch coordinates:', error);
       alert('Failed to retrieve location data.');
     }
-    setHasSearched(true);
-
   };
 
   return (
@@ -263,23 +241,6 @@ const Events = () => {
             <input
               type="text"
               value={suburb}
-              // onChange={(e) => {
-              //   const value = e.target.value;
-              //   const regex = /^[a-zA-Z\s,]*$/;
-
-              //   if (regex.test(value)) {
-              //     if (value.length <= 80) {
-              //       setSuburb(value);
-              //       setInvalidChar(false);
-              //       setInvalidLength(value.length > 0 && value.length < 2);
-              //     } else {
-              //       setInvalidLength(true);
-              //     }
-              //   } else {
-              //     setInvalidChar(true);
-              //   }
-              //   setIsAutoLocated(false);
-              // }}
               onChange={handleInputChange}
               className="form-input"
               placeholder="Enter suburb name"
