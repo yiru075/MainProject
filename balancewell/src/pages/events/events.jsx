@@ -130,13 +130,14 @@ const Events = () => {
   const handleCategoryChange = async (newCategory) => {
     setCategory(newCategory);
     setIsFallback(false);
-    // setEvents([]);
     setSelectedEvent(null);
+    setHasSearched(false);
     setIsLoadingEvents(true);
     if (selectedRef.current?.coords || suburb.trim() !== '') {
       await handleSearchClick(newCategory);
     } else {
       setIsLoading(false);
+      setHasSearched(true);
     }
   };
 
@@ -145,6 +146,7 @@ const Events = () => {
     setIsFallback(false);
     setEvents([]);
     setIsLoadingEvents(true);
+    setHasSearched(false);
 
     if (!selectedRef.current?.coords && suburb.trim() !== '') {
       try {
@@ -196,6 +198,7 @@ const Events = () => {
       setEvents([]); 
     } finally {
       setIsLoadingEvents(false);
+      setHasSearched(true);
     }
   };
 
@@ -353,21 +356,21 @@ const Events = () => {
             </p>
           )}
 
-          {!isLoadingEvents && isFallback && (
+          {!isLoadingEvents  && isFallback && (
             <p className="form-info" style={{ textAlign: 'center' }}>
               No nearby events found. Showing you events across Victoria.
             </p>
           )}
 
 
-          {!isLoadingEvents && hasSearched && events.length === 0 && !isFallback && (
+          {!isLoadingEvents  && hasSearched && events.length === 0 && !isFallback && (
             <p className="form-error" style={{ textAlign: 'center' }}>
               No events found for this area and category.
             </p>
           )}
 
 
-          {!isLoadingEvents && events.map((event) => (
+          {!isLoadingEvents  && events.map((event) => (
             <div key={event.id} className="event-card" onClick={() => setSelectedEvent(event)}>
               <div className="event-date">
                 <div className="event-day">
