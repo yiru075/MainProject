@@ -41,6 +41,8 @@ const Events = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [suburb]);
 
+  
+
   const handleAutocomplete = async (query) => {
     setIsAutocompleteLoading(true);
     try {
@@ -130,7 +132,7 @@ const Events = () => {
     setIsFallback(false);
     setEvents([]);
     setSelectedEvent(null);
-    setIsLoading(true);
+    setIsLoadingEvents(true);
     if (selectedRef.current?.coords || suburb.trim() !== '') {
       await handleSearchClick(newCategory);
     } else {
@@ -187,14 +189,13 @@ const Events = () => {
       const data = await res.json();
       setEvents(data.events || []);
       setIsFallback(data.isFallback || false);
+      setHasSearched(true);
     } catch (err) {
       console.error('Event fetching failed:', err);
       alert('Failed to fetch events.');
     } finally {
       setIsLoadingEvents(false);
     }
-    setHasSearched(true);
-
   };
 
   const handleSuburbSelect = async (resultName) => {
