@@ -122,8 +122,8 @@ const Events = () => {
           );
           if (isVictoria) {
             selectedRef.current = { suburb: name, coords };
-            setSuburb(name);
-            setIsAutoLocated(true);
+            // setSuburb(name);
+            // setIsAutoLocated(true);
             await handleSearchClick(category);
           } else {
             alert('Your location is outside Victoria.');
@@ -233,7 +233,7 @@ const Events = () => {
         );
         if (isVictoria) {
           selectedRef.current = { suburb: resultName, coords };
-          await handleSearchClick(category);
+          // await handleSearchClick(category);
         } else {
           alert('This suburb is not in Victoria.');
         }
@@ -393,11 +393,6 @@ const Events = () => {
             </p>
           )}
 
-          {/* {!isLoading && events.length === 0 && !isFallback && (
-            <p className="form-error" style={{ textAlign: 'center' }}>
-              No events found for this area and category.
-            </p>
-          )} */}
 
           {!isLoading && hasSearched && events.length === 0 && !isFallback && (
             <p className="form-error" style={{ textAlign: 'center' }}>
