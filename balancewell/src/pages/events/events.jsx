@@ -18,6 +18,8 @@ const Events = () => {
   const [invalidChar, setInvalidChar] = useState(false);
   const [invalidLength, setInvalidLength] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isAutocompleteLoading, setIsAutocompleteLoading] = useState(false);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
 
 
@@ -40,7 +42,7 @@ const Events = () => {
   }, [suburb]);
 
   const handleAutocomplete = async (query) => {
-    setIsLoading(true);
+    setIsAutocompleteLoading(true);
     try {
       const baseUrl = import.meta.env.VITE_WEBSITE_URL;
       const response = await fetch(`${baseUrl}/api/suburb_search?q=${encodeURIComponent(query)}`);
@@ -54,7 +56,7 @@ const Events = () => {
       setSearchResults([]);
       setNoMatch(true);
     } finally {
-      setIsLoading(false);
+      setIsAutocompleteLoading(false);
     }
   };
 
@@ -140,7 +142,7 @@ const Events = () => {
     let lat, lng;
     setIsFallback(false);
     setEvents([]);
-    setIsLoading(true);
+    setIsLoadingEvents(true);
 
     if (!selectedRef.current?.coords && suburb.trim() !== '') {
       try {
@@ -155,27 +157,27 @@ const Events = () => {
           );
           if (!isVictoria) {
             alert('This suburb is not in Victoria.');
-            setIsLoading(false);
+            setIsLoadingEvents(false);
             return;
           }
           selectedRef.current = { suburb, coords };
           [lng, lat] = coords;
         } else {
           alert('Could not resolve location from suburb name.');
-          setIsLoading(false);
+          setIsLoadingEvents(false);
           return;
         }
       } catch (err) {
         console.error('Geocode fetch error:', err);
         alert('Failed to resolve location.');
-        setIsLoading(false);
+        setIsLoadingEvents(false);
         return;
       }
     } else if (selectedRef.current?.coords) {
       [lng, lat] = selectedRef.current.coords;
     } else {
       alert('Please use location or choose a suburb.');
-      setIsLoading(false);
+      setIsLoadingEvents(false);
       return;
     }
 
@@ -189,7 +191,7 @@ const Events = () => {
       console.error('Event fetching failed:', err);
       alert('Failed to fetch events.');
     } finally {
-      setIsLoading(false);
+      setIsLoadingEvents(false);
     }
     setHasSearched(true);
 
@@ -258,7 +260,7 @@ const Events = () => {
             <p className="form-error">Suburb name must be between 2 and 80 characters.</p>
           )}
 
-          {isLoading && <p className="form-info">Loading...</p>}
+          {isAutocompleteLoading  && <p className="form-info">Loading...</p>}
 
           {searchResults.length > 0 && suburb.trim() !== '' && (
             <ul className="search-results" role="listbox">
@@ -343,7 +345,7 @@ const Events = () => {
         </div>
       ) : (
         <div className="event-list">
-          {isLoading && (
+          {isLoadingEvents  && (
             <p className="form-info" style={{ textAlign: 'center' }}>
               Loading events...
             </p>
