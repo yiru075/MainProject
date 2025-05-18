@@ -11,15 +11,15 @@ const SupportOptions = () => {
     <div className="support-options-container">
       <div className="option-card">
         <img src={personImg} alt="Financial Advisor Icon" className="option-icon" />
-        <h3 className="option-title">Financial Advisor In<br />Your Location</h3>
-        <button className="option-button" onClick={() => navigate('/advisors')}>Get Advice</button>
+        <h3 className="option-title">Check Advisors instead of<br />Get Advice</h3>
+        <button className="option-button" onClick={() => navigate('/advisors')}>Check Advisor</button>
       </div>
 
-      <div className="option-card">
+      {/* <div className="option-card">
         <img src={handImg} alt="Safety Icon" className="option-icon" />
         <h3 className="option-title">Safety Level Of Your<br />Desired Suburb</h3>
         <button className="option-button" onClick={() => navigate('/calculation')}>Check now</button>
-      </div>
+      </div> */}
     </div>
   );
 };
