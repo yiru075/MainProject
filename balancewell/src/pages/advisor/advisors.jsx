@@ -34,7 +34,7 @@ const Advisors = () => {
     setLoading(true);
     try {
       console.log("Request parameters:", params); // Debug request parameters
-      
+
       const response = await fetch(
         'https://xdlxegeejnkumdzxsqzs.supabase.co/functions/v1/advisors',
         {
@@ -60,7 +60,7 @@ const Advisors = () => {
 
       const data = await response.json();
       console.log("API Response Data:", data); // Debug response data
-      
+
       if (data.success) {
         setAdvisors(data.data);
         setPagination(data.pagination);
@@ -100,7 +100,7 @@ const Advisors = () => {
         {
           advisor_name: "Michael Denis Williams",
           role: "Financial Adviser",
-          role_status: "Current", 
+          role_status: "Current",
           first_advisory_year: "2000",
           registration_status: "Registered",
           license_holder_name: "SENTRY ADVICE PTY LTD",
@@ -165,7 +165,7 @@ const Advisors = () => {
   // Toggle favorite status for an advisor
   const toggleFavorite = (advisor) => {
     const advisorKey = `${advisor.advisor_name}-${advisor.license_number}`;
-    
+
     if (favoriteAdvisors.includes(advisorKey)) {
       const newFavorites = favoriteAdvisors.filter(key => key !== advisorKey);
       setFavoriteAdvisors(newFavorites);
@@ -185,12 +185,12 @@ const Advisors = () => {
 
   // Alphabetical sorting option
   const sortByAlphabetical = () => {
-    const sortedAdvisors = [...advisors].sort((a, b) => 
+    const sortedAdvisors = [...advisors].sort((a, b) =>
       a.advisor_name.localeCompare(b.advisor_name)
     );
     setAdvisors(sortedAdvisors);
   };
-  
+
   // Helper function to display field value or "No information" if empty
   const displayValue = (value) => {
     return value ? value : "No information";
@@ -199,11 +199,11 @@ const Advisors = () => {
   // Helper function to render superannuation advice value with correct class
   const renderSuperannuationValue = (value) => {
     if (!value) return <span className="detail-value">No information</span>;
-    
+
     if (value === "Yes") {
       return <span className="detail-value yes-value">Yes</span>;
     }
-    
+
     return <span className="detail-value">{value}</span>;
   };
 
@@ -220,20 +220,34 @@ const Advisors = () => {
         <div className="input-group">
           <label>Which postcode are you looking for advisors in?</label>
           <div className="input-container">
-            <input 
-              type="text" 
-              placeholder="Enter postcode" 
+
+            <input
+              type="text"
+              placeholder="Enter 4-digit postcode(e.g., 3000)"
               value={searchParams.postcode}
-              onChange={handleLocationChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d{0,4}$/.test(value)) {
+                  setSearchParams({
+                    ...searchParams,
+                    postcode: value,
+                    page: 1,
+                  });
+                }
+              }}
               className="search-input"
+              maxLength={4}
+              inputMode="numeric"
+              pattern="\d{4}"
             />
+
           </div>
         </div>
-        
+
         <div className="input-group">
           <label>What is the advisor role status?</label>
           <div className="input-container">
-            <select 
+            <select
               value={searchParams.roleStatus}
               onChange={handleRoleStatusChange}
               className="role-status-select"
@@ -244,7 +258,7 @@ const Advisors = () => {
             </select>
           </div>
         </div>
-        
+
         <div className="input-group">
           <label>Sort options</label>
           <button onClick={sortByAlphabetical} className="sort-button">
@@ -273,7 +287,7 @@ const Advisors = () => {
                 <div className="advisor-card" key={index}>
                   <div className="advisor-header">
                     <h3 className="advisor-name">{displayValue(advisor.advisor_name)}</h3>
-                    <button 
+                    <button
                       className="favorite-button"
                       onClick={() => toggleFavorite(advisor)}
                       aria-label={isFavorite(advisor) ? "Remove from favorites" : "Add to favorites"}
@@ -281,7 +295,7 @@ const Advisors = () => {
                       {isFavorite(advisor) ? <HeartFilled className="favorite-icon active" /> : <HeartOutlined className="favorite-icon" />}
                     </button>
                   </div>
-                  
+
                   <div className="advisor-details">
                     <div className="detail-group">
                       <span className="detail-label">Role:</span>
@@ -292,27 +306,27 @@ const Advisors = () => {
                       <span className="detail-label">Role Status:</span>
                       <span className="detail-value">{displayValue(advisor.role_status)}</span>
                     </div>
-                    
+
                     <div className="detail-group">
                       <span className="detail-label">First Advice Year:</span>
                       <span className="detail-value">{displayValue(advisor.first_advisory_year)}</span>
                     </div>
-                    
+
                     <div className="detail-group">
                       <span className="detail-label">Registration Status:</span>
                       <span className="detail-value">{displayValue(advisor.registration_status)}</span>
                     </div>
-                    
+
                     <div className="detail-group">
                       <span className="detail-label">License Holder Name:</span>
                       <span className="detail-value">{displayValue(advisor.license_holder_name)}</span>
                     </div>
-                    
+
                     <div className="detail-group">
                       <span className="detail-label">License Number:</span>
                       <span className="detail-value">{displayValue(advisor.license_number)}</span>
                     </div>
-                    
+
                     <div className="detail-group">
                       <span className="detail-label">Address - Locality:</span>
                       <span className="detail-value">{displayValue(advisor.address_area)}</span>
@@ -334,7 +348,7 @@ const Advisors = () => {
 
             {pagination.resultsReturned > 0 && (
               <div className="pagination-controls">
-                <button 
+                <button
                   className="pagination-button"
                   disabled={pagination.currentPage === 1}
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
@@ -344,7 +358,7 @@ const Advisors = () => {
                 <span className="page-indicator">
                   Page {pagination.currentPage}
                 </span>
-                <button 
+                <button
                   className="pagination-button"
                   disabled={pagination.resultsReturned < pagination.pageSize}
                   onClick={() => handlePageChange(pagination.currentPage + 1)}

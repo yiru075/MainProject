@@ -382,7 +382,7 @@ function Calculation() {
 
   // Get all suburbs for crime data (target and valid recommendations)
   const getAllSuburbs = () => {
-    const suburbs = new Set(); 
+    const suburbs = new Set();
 
     // Add target suburb
     if (results?.target_suburb) {
@@ -479,7 +479,7 @@ function Calculation() {
     const years = ['2020', '2021', '2022', '2023', '2024'];
     const values = [];
 
-    let baseValue = 10000; 
+    let baseValue = 10000;
     values.push(baseValue);
 
     for (let i = 1; i < years.length; i++) {
@@ -593,9 +593,9 @@ function Calculation() {
 
   const handleCrimeCardClick = (suburbName) => {
     if (selectedSuburb === suburbName) {
-      setSelectedSuburb(null); 
+      setSelectedSuburb(null);
     } else {
-      setSelectedSuburb(suburbName); 
+      setSelectedSuburb(suburbName);
     }
   };
 
@@ -626,12 +626,18 @@ function Calculation() {
               type="text"
               placeholder="Search your suburb name within Victoria only"
               value={suburb}
-              onChange={(e) => setSuburb(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  setSuburb(value);
+                }
+              }}
               className="suburb-input"
             />
-            
-            {isLoading && <p className="form-info">Loading...</p>}
-            
+            <div className="form-info-placeholder">
+              {isLoading && <span className="form-info">Loading...</span>}
+            </div>
+
             {showSuggestions && suggestions.length > 0 && (
               <ul className="search-results" role="listbox">
                 {suggestions.map((suggestion, index) => (
@@ -646,11 +652,10 @@ function Calculation() {
                 ))}
               </ul>
             )}
-            
-            {noMatch && !isLoading && suburb.trim() !== '' && (
-              <p className="form-error">No matching suburbs found in Victoria.</p>
-            )}
           </div>
+          {noMatch && !isLoading && suburb.trim() !== '' && (
+            <p className="form-error">No matching suburbs found in Victoria.</p>
+          )}
         </div>
 
         <div className="input-group">

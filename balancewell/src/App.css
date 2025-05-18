@@ -128,6 +128,10 @@ body,
 .topic-text li {
   color: var(--text-color)!important;
 }
+.topic-text a {
+  text-decoration: underline;
+  color: var(--text-color);
+}
 
 .ant-divider-inner-text {
   color: var(--text-color) !important;

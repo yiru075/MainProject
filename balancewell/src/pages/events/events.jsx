@@ -17,6 +17,8 @@ const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [invalidChar, setInvalidChar] = useState(false);
   const [invalidLength, setInvalidLength] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+
 
 
   useEffect(() => {
@@ -31,12 +33,32 @@ const Events = () => {
         setNoMatch(false);
         return;
       }
-      handleSearch(trimmed);
+      // handleSearch(trimmed);
+      handleAutocomplete(trimmed);
     }, 300);
     return () => clearTimeout(delayDebounceFn);
   }, [suburb]);
 
-  const handleSearch = async (query) => {
+  // const handleSearch = async (query) => {
+  //   setIsLoading(true);
+  //   try {
+  //     const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+  //     const response = await fetch(`${baseUrl}/api/suburb_search?q=${encodeURIComponent(query)}`);
+  //     if (!response.ok) throw new Error('Search failed');
+  //     const data = await response.json();
+  //     const results = data.results || [];
+  //     setSearchResults(results);
+  //     setNoMatch(results.length === 0);
+  //   } catch (err) {
+  //     console.error('Search error:', err);
+  //     setSearchResults([]);
+  //     setNoMatch(true);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleAutocomplete = async (query) => {
     setIsLoading(true);
     try {
       const baseUrl = import.meta.env.VITE_WEBSITE_URL;
@@ -55,6 +77,7 @@ const Events = () => {
     }
   };
 
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     const regex = /^[a-zA-Z\s,]*$/;
@@ -69,6 +92,7 @@ const Events = () => {
     } else {
       setInvalidChar(true);
     }
+    setIsAutoLocated(false);
   };
 
   const handleItemClick = (name) => {
@@ -185,6 +209,8 @@ const Events = () => {
     } finally {
       setIsLoading(false);
     }
+    setHasSearched(true);
+
   };
 
   const handleSuburbSelect = async (resultName) => {
@@ -218,6 +244,8 @@ const Events = () => {
       console.error('Failed to fetch coordinates:', error);
       alert('Failed to retrieve location data.');
     }
+    setHasSearched(true);
+
   };
 
   return (
@@ -235,23 +263,24 @@ const Events = () => {
             <input
               type="text"
               value={suburb}
-              onChange={(e) => {
-                const value = e.target.value;
-                const regex = /^[a-zA-Z\s,]*$/;
+              // onChange={(e) => {
+              //   const value = e.target.value;
+              //   const regex = /^[a-zA-Z\s,]*$/;
 
-                if (regex.test(value)) {
-                  if (value.length <= 80) {
-                    setSuburb(value);
-                    setInvalidChar(false);
-                    setInvalidLength(value.length > 0 && value.length < 2);
-                  } else {
-                    setInvalidLength(true);
-                  }
-                } else {
-                  setInvalidChar(true);
-                }
-                setIsAutoLocated(false);
-              }}
+              //   if (regex.test(value)) {
+              //     if (value.length <= 80) {
+              //       setSuburb(value);
+              //       setInvalidChar(false);
+              //       setInvalidLength(value.length > 0 && value.length < 2);
+              //     } else {
+              //       setInvalidLength(true);
+              //     }
+              //   } else {
+              //     setInvalidChar(true);
+              //   }
+              //   setIsAutoLocated(false);
+              // }}
+              onChange={handleInputChange}
               className="form-input"
               placeholder="Enter suburb name"
             />
@@ -364,11 +393,18 @@ const Events = () => {
             </p>
           )}
 
-          {!isLoading && events.length === 0 && !isFallback && (
+          {/* {!isLoading && events.length === 0 && !isFallback && (
+            <p className="form-error" style={{ textAlign: 'center' }}>
+              No events found for this area and category.
+            </p>
+          )} */}
+
+          {!isLoading && hasSearched && events.length === 0 && !isFallback && (
             <p className="form-error" style={{ textAlign: 'center' }}>
               No events found for this area and category.
             </p>
           )}
+
 
           {!isLoading && events.map((event) => (
             <div key={event.id} className="event-card" onClick={() => setSelectedEvent(event)}>
