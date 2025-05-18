@@ -130,7 +130,7 @@ const Events = () => {
   const handleCategoryChange = async (newCategory) => {
     setCategory(newCategory);
     setIsFallback(false);
-    setEvents([]);
+    // setEvents([]);
     setSelectedEvent(null);
     setIsLoadingEvents(true);
     if (selectedRef.current?.coords || suburb.trim() !== '') {
@@ -193,6 +193,7 @@ const Events = () => {
     } catch (err) {
       console.error('Event fetching failed:', err);
       alert('Failed to fetch events.');
+      setEvents([]); 
     } finally {
       setIsLoadingEvents(false);
     }
@@ -352,21 +353,21 @@ const Events = () => {
             </p>
           )}
 
-          {!isLoading && isFallback && (
+          {!isLoadingEvents && isFallback && (
             <p className="form-info" style={{ textAlign: 'center' }}>
               No nearby events found. Showing you events across Victoria.
             </p>
           )}
 
 
-          {!isLoading && hasSearched && events.length === 0 && !isFallback && (
+          {!isLoadingEvents && hasSearched && events.length === 0 && !isFallback && (
             <p className="form-error" style={{ textAlign: 'center' }}>
               No events found for this area and category.
             </p>
           )}
 
 
-          {!isLoading && events.map((event) => (
+          {!isLoadingEvents && events.map((event) => (
             <div key={event.id} className="event-card" onClick={() => setSelectedEvent(event)}>
               <div className="event-date">
                 <div className="event-day">
