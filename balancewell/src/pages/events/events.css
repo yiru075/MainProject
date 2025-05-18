@@ -106,7 +106,7 @@
 }
 
 .form-error {
-  color: #FFA07A;
+  color: red;
   font-size: 0.875rem;
   margin-top: 4px;
   margin-left: 2px;
