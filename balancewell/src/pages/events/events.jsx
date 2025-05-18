@@ -103,6 +103,7 @@ const Events = () => {
           );
           if (isVictoria) {
             selectedRef.current = { suburb: name, coords };
+            setSkipNextSearch(true);
             setSuburb(name);
             setIsAutoLocated(true);
             await handleSearchClick(category);
