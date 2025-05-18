@@ -131,7 +131,7 @@ const Events = () => {
     setEvents([]);
     setSelectedEvent(null);
     setIsLoading(true);
-    if (selectedRef.current?.coords) {
+    if (selectedRef.current?.coords || suburb.trim() !== '') {
       await handleSearchClick(newCategory);
     } else {
       setIsLoading(false);
