@@ -11,7 +11,7 @@ const SupportOptions = () => {
     <div className="support-options-container">
       <div className="option-card">
         <img src={personImg} alt="Financial Advisor Icon" className="option-icon" />
-        <h3 className="option-title">Check Advisors instead of<br />Get Advice</h3>
+        <h3 className="option-title">Financial Advisors In <br />Your Location</h3>
         <button className="option-button" onClick={() => navigate('/advisors')}>Check Advisor</button>
       </div>
 
