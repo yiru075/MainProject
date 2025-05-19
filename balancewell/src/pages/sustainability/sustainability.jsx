@@ -151,8 +151,8 @@ const Sustainability = () => {
     }
 
     const value = parseFloat(rent);
-    if (isNaN(value) || value < 1) {
-      setErrors((prev) => ({ ...prev, rent: 'Rent must be a positive number(min 1 AUD).' }));
+    if (isNaN(value) || value < 50) {
+      setErrors((prev) => ({ ...prev, rent: 'Rent must be a positive number(min 50 AUD).' }));
       return false;
     } else if (value > 20000) {
       setErrors((prev) => ({ ...prev, rent: 'Rent must not exceed 20,000 AUD.' }));
@@ -297,7 +297,7 @@ const Sustainability = () => {
             onChange={handleRentChange}
             onBlur={validateRent}
             className="form-input"
-            placeholder="Enter value between 1 and 20000 in AUD"
+            placeholder="Enter value between 50 and 20000 in AUD"
           />
 
           {errors.rent && <p className="form-error">{errors.rent}</p>}
