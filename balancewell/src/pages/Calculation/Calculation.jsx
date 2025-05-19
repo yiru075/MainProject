@@ -35,6 +35,7 @@ function Calculation() {
   const dropdownRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [noMatch, setNoMatch] = useState(false);
+  const [maxDistance, setMaxDistance] = useState(0); // 0 means no distance limit
 
   // Handle outside click for suburb suggestions dropdown
   useEffect(() => {
@@ -175,6 +176,11 @@ function Calculation() {
     }
   };
 
+  // Handle distance change
+  const handleDistanceChange = (e) => {
+    setMaxDistance(Number(e.target.value));
+  };
+
   // Calculate sustainability years
   const calculateYears = async () => {
     if (!suburb || !savings || !propertyType) {
@@ -205,7 +211,8 @@ function Calculation() {
           body: JSON.stringify({
             suburb: suburb.toLowerCase(),
             property_type: propertyType,
-            budget: savingsValue
+            budget: savingsValue,
+            maxDistance: maxDistance // Use maxDistance parameter
           })
         }
       );
@@ -691,6 +698,39 @@ function Calculation() {
           </div>
         </div>
 
+        {/* Distance slider replacing dropdown */}
+        <div className="input-group">
+          <label>Distance for recommendations:</label>
+          <div className="slider-container">
+            <input
+              type="range"
+              min="0"
+              max="50"
+              step="5"
+              value={maxDistance}
+              onChange={handleDistanceChange}
+              className="distance-slider"
+            />
+            <div className="slider-value-container">
+              <span className="slider-value">{maxDistance > 0 ? `${maxDistance}km` : 'No limit'}</span>
+            </div>
+            <div className="slider-labels">
+              <span>No limit</span>
+              <span>10km</span>
+              <span>20km</span>
+              <span>30km</span>
+              <span>40km</span>
+              <span>50km</span>
+            </div>
+          </div>
+          <div className="slider-description">
+            {maxDistance > 0 
+              ? `Recommendations will only include suburbs within ${maxDistance}km of your selected suburb.`
+              : "Recommendations will include suburbs from all distances in Victoria."
+            }
+          </div>
+        </div>
+
         <button
           className="calculate-button"
           onClick={calculateYears}
@@ -720,6 +760,15 @@ function Calculation() {
           <p className="results-explanation">
             Based on median weekly rent and 5 year average rental inflation rate of {(results.rental_inflation * 100).toFixed(1)}%, you can afford to live in <strong>{capitalizeSuburbName(results.target_suburb)}</strong>, in a <strong>{propertyType}</strong> for approximately <strong>{results.can_live_years} years</strong>.
           </p>
+          
+          {results.region && (
+            <p className="region-info">
+              Region: <strong>{results.region}</strong> 
+              {results.maxDistance > 0 
+                ? ` (Recommendations below are within ${results.maxDistance}km)`
+                : " (Recommendations below include suburbs from all distances)"}
+            </p>
+          )}
 
           <div className="recommendations">
             <h2>Recommended Similar Suburbs</h2>
@@ -751,6 +800,13 @@ function Calculation() {
                           <span>Affordable for:</span>
                           <strong>{rec.years} years</strong>
                         </p>
+                        {/* Add distance information display */}
+                        {rec.distance !== undefined && (
+                          <p>
+                            <span>Distance:</span>
+                            <strong>{rec.distance.toFixed(1)} km</strong>
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}

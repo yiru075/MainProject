@@ -57,6 +57,121 @@
   color: var(--text-color);
 }
 
+/* Dropdown description style */
+.dropdown-description {
+  font-size: 14px;
+  color: var(--text-color-secondary);
+  margin-top: 8px;
+  padding-left: 0.6rem;
+  line-height: 1.4;
+}
+
+/* Slider styles */
+.slider-container {
+  padding: 1rem 0;
+  position: relative;
+  width: 100%;
+}
+
+.distance-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #ffb84c 0%, #ff9a00 100%);
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.distance-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 2px solid white;
+  transition: all 0.2s ease;
+}
+
+.distance-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 2px solid white;
+  transition: all 0.2s ease;
+}
+
+.distance-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.distance-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.slider-value-container {
+  margin: 10px 0 20px;
+  text-align: center;
+}
+
+.slider-value {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--text-color-secondary);
+  font-size: 12px;
+}
+
+.slider-description {
+  font-size: 14px;
+  color: var(--text-color-secondary);
+  margin-top: 12px;
+  padding-left: 0.6rem;
+  line-height: 1.4;
+}
+
+/* Distance tag style for recommendations */
+.recommendation-info p .distance-tag {
+  background-color: var(--bg-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+  font-size: 0.85em;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.region-info {
+  font-size: 16px;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: var(--card-bg);
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+}
+
 .input-group input {
   padding: 8px;
   width: -webkit-fill-available;
@@ -960,6 +1075,23 @@
     font-size: 1.2rem;
     width: 28px;
     height: 28px;
+  }
+
+  .slider-container {
+    padding: 0.5rem 0;
+  }
+
+  .slider-labels {
+    font-size: 10px;
+  }
+
+  .slider-value {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+
+  .slider-description {
+    font-size: 13px;
   }
 }
 
