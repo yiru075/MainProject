@@ -281,7 +281,7 @@ const Housing = () => {
       sustainabilityDataRef.current?.income &&
       sustainabilityDataRef.current?.suburb &&
       showControlPanel &&
-      rentRatio > 35
+      sustainabilityDataRef.current.rentRatio > 35
     ) {
       generateRecommendations(
         geojsonRef.current,
