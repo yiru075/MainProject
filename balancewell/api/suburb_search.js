@@ -3,7 +3,8 @@ export default async function handler(req, res) {
   // res.setHeader('Access-Control-Allow-Origin', 'https://safeandsettled.vercel.app');
   const allowedOrigins = [
     'https://safeandsettled.vercel.app',
-    'https://iteration2-safeandsettled.vercel.app'
+    'https://iteration2-safeandsettled.vercel.app',
+    'https://iteration3-safeandsettled.vercel.app'
   ];
   const origin = req.headers.origin;
 
