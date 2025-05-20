@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; 
 import './tool.css';
-import PositivityBooth from '../positivityBooth/positivityBooth'; 
 
 const tools = [
   {
@@ -51,10 +50,6 @@ const Tool = () => {
             </div>
           </Link>
         ))}
-      </div>
-
-      <div className="booth-anchor">
-        <PositivityBooth />
       </div>
     </section>
   );

@@ -39,6 +39,7 @@
   background-color: var(--card-bg);
   color: var(--text-color);
   transition: transform 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
   
@@ -53,7 +54,22 @@
     line-height: 1.6;
     color: var(--text-color-secondary);
   }
-  
+
+  .tool-card-link {
+  text-decoration: none;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.tool-card-link:hover {
+  transform: translateY(-5px); 
+  cursor: pointer;
+}
+
+.tool-card-link:hover .tool-card {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); 
+}
+
 
   @media (max-width: 1024px) {
   .tools-section {
