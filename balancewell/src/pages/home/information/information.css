@@ -21,11 +21,6 @@
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: bold;
-    text-shadow:
-    -1px -1px 0 #938451,
-     1px -1px 0 #938451,
-    -1px  1px 0 #938451,
-     1px  1px 0 #938451;
     color: var(--primary-color); 
   }
   

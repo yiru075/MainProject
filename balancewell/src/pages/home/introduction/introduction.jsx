@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./introduction.css";
-import woman from "../../../assets/woman.png";
+import woman from "../../../assets/download.png";
 
 function Introduction() {
   return (
