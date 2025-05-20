@@ -299,6 +299,12 @@ function Calculation() {
     ],
   };
 
+  // Add a helper function for year/years text
+  const getYearText = (years) => {
+    return years === 1 ? 'year' : 'years';
+  };
+
+  // Update the chart tooltip callback
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -332,7 +338,7 @@ function Calculation() {
           size: 14,
         },
         callbacks: {
-          label: (context) => `Years affordable: ${context.raw} years`,
+          label: (context) => `Years affordable: ${context.raw} ${getYearText(context.raw)}`,
         }
       },
     },
@@ -753,12 +759,12 @@ function Calculation() {
             </div>
             <div className="result-card">
               <h3>Estimated years affordable</h3>
-              <p className="result-value highlight">{results.can_live_years} years</p>
+              <p className="result-value highlight">{results.can_live_years} {getYearText(results.can_live_years)}</p>
             </div>
           </div>
 
           <p className="results-explanation">
-            Based on median weekly rent and 5 year average rental inflation rate of {(results.rental_inflation * 100).toFixed(1)}%, you can afford to live in <strong>{capitalizeSuburbName(results.target_suburb)}</strong>, in a <strong>{propertyType}</strong> for approximately <strong>{results.can_live_years} years</strong>.
+            Based on median weekly rent and 5 year average rental inflation rate of {(results.rental_inflation * 100).toFixed(1)}%, you can afford to live in <strong>{capitalizeSuburbName(results.target_suburb)}</strong>, in a <strong>{propertyType}</strong> for approximately <strong>{results.can_live_years} {getYearText(results.can_live_years)}</strong>.
           </p>
           
           {results.region && (
@@ -798,7 +804,7 @@ function Calculation() {
                         </p>
                         <p>
                           <span>Affordable for:</span>
-                          <strong>{rec.years} years</strong>
+                          <strong>{rec.years} {getYearText(rec.years)}</strong>
                         </p>
                         {/* Add distance information display */}
                         {rec.distance !== undefined && (

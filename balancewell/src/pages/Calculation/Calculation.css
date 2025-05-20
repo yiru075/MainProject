@@ -82,8 +82,10 @@
   outline: none;
   border-radius: 3px;
   cursor: pointer;
+  margin: 15px 0; /* Add margin for Firefox positioning */
 }
 
+/* Webkit browsers (Chrome, Safari) */
 .distance-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -97,15 +99,28 @@
   transition: all 0.2s ease;
 }
 
+/* Firefox */
 .distance-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 16px; /* Slightly smaller in Firefox to match visual size */
+  height: 16px;
   border-radius: 50%;
   background: var(--primary-color);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border: 2px solid white;
   transition: all 0.2s ease;
+}
+
+/* Firefox track styles */
+.distance-slider::-moz-range-track {
+  height: 6px;
+  background: linear-gradient(90deg, #ffb84c 0%, #ff9a00 100%);
+  border-radius: 3px;
+}
+
+/* Firefox focus styles */
+.distance-slider:focus::-moz-range-thumb {
+  outline: none;
 }
 
 .distance-slider::-webkit-slider-thumb:hover {
@@ -121,6 +136,7 @@
 .slider-value-container {
   margin: 10px 0 20px;
   text-align: center;
+  position: relative; /* Ensure proper positioning in Firefox */
 }
 
 .slider-value {
@@ -213,7 +229,7 @@
   box-sizing: border-box;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
-  color: var(--text-color);
+  color: var(--text-color-secondary);
 }
 
 .suburb-input::placeholder, 
@@ -1196,7 +1212,7 @@
   box-sizing: border-box;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
-  color: var(--text-color);
+  color: var(--text-color-secondary);
 }
 
 /* Override for input fields inside input-group */
@@ -1204,4 +1220,16 @@
 .input-group .savings-input {
   padding: 0 16px;
   width: 100%;
+}
+
+/* Add lighter grey placeholder for suburb search */
+.suburb-input::placeholder {
+  color: #a0a0a0; /* Light grey color for placeholder */
+  opacity: 0.7;
+}
+
+/* Add lighter grey for savings input placeholder */
+.savings-input::placeholder {
+  color: #a0a0a0; /* Light grey color for placeholder */
+  opacity: 0.7;
 }
