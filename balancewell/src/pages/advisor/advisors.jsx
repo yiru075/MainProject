@@ -11,7 +11,7 @@ const Advisors = () => {
   const [favoriteAdvisors, setFavoriteAdvisors] = useState([]);
   const [searchParams, setSearchParams] = useState({
     postcode: "3000", // Set default value to "3000"
-    roleStatus: "Current",
+    roleStatus: "All", // Changed from "Current" to "All" to show all by default
     page: 1,
     pageSize: 9  // Changed to 9 items per page to fit 3 column layout
   });
@@ -137,11 +137,19 @@ const Advisors = () => {
 
   // Handle role status change
   const handleRoleStatusChange = (e) => {
-    setSearchParams({
+    const newStatus = e.target.value;
+    
+    // Update the state
+    const updatedParams = {
       ...searchParams,
-      roleStatus: e.target.value,
-      page: 1 // Reset to first page on new filter
-    });
+      roleStatus: newStatus,
+      page: 1 // Reset to first page on filter change
+    };
+    
+    setSearchParams(updatedParams);
+    
+    // Immediately fetch advisors with new filter
+    fetchAdvisors(updatedParams);
   };
 
   // Handle search button click
@@ -245,21 +253,6 @@ const Advisors = () => {
         </div>
 
         <div className="input-group">
-          <label>What is the advisor role status?</label>
-          <div className="input-container">
-            <select
-              value={searchParams.roleStatus}
-              onChange={handleRoleStatusChange}
-              className="role-status-select"
-            >
-              <option value="Current">Current</option>
-              <option value="Ceased">Ceased</option>
-              <option value="All">All</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="input-group">
           <label>Sort options</label>
           <button onClick={sortByAlphabetical} className="sort-button">
             Sort by Alphabetical
@@ -282,6 +275,24 @@ const Advisors = () => {
           </div>
         ) : (
           <>
+            <div className="results-header">
+              <div className="filter-container">
+                <label className="filter-label">Filter by status:</label>
+                <select
+                  value={searchParams.roleStatus}
+                  onChange={handleRoleStatusChange}
+                  className="filter-select"
+                >
+                  <option value="All">All</option>
+                  <option value="Current">Current</option>
+                  <option value="Ceased">Ceased</option>
+                </select>
+              </div>
+              <div className="results-count">
+                Showing {advisors.length} advisor{advisors.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+            
             <div className="advisors-list">
               {advisors.map((advisor, index) => (
                 <div className="advisor-card" key={index}>
