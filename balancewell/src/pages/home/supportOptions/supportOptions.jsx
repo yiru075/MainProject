@@ -1,25 +1,26 @@
 import React from 'react';
 import './supportOptions.css';
 import personImg from '../../../assets/person.png';
-import handImg from '../../../assets/hand.png';
 import { useNavigate } from 'react-router-dom';
 
 const SupportOptions = () => {
   const navigate = useNavigate();
-  
-  return (
-    <div className="support-options-container">
-      <div className="option-card">
-        <img src={personImg} alt="Financial Advisor Icon" className="option-icon" />
-        <h3 className="option-title">Financial Advisors In <br />Your Location</h3>
-        <button className="option-button" onClick={() => navigate('/advisors')}>Check Advisor</button>
-      </div>
 
-      {/* <div className="option-card">
-        <img src={handImg} alt="Safety Icon" className="option-icon" />
-        <h3 className="option-title">Safety Level Of Your<br />Desired Suburb</h3>
-        <button className="option-button" onClick={() => navigate('/calculation')}>Check now</button>
-      </div> */}
+  return (
+    <div className="advisor-banner-container">
+      <div className="advisor-banner">
+        <div className="advisor-banner-left">
+          <img src={personImg} alt="Financial Advisor Icon" className="advisor-icon" />
+          <div className="advisor-texts">
+            <h2 className="advisor-main-title">More on aging well ...</h2>
+            <div className="advisor-title-desc">
+              <h3 className="advisor-title">Financial Advisor In Your Location</h3>
+              <p className="advisor-desc">Connect with a financial advisor in your area who specializes in retirement planning.</p>
+            </div>
+          </div>
+        </div>
+        <button className="advisor-btn" onClick={() => navigate('/advisors')}>Check Advisor</button>
+      </div>
     </div>
   );
 };
