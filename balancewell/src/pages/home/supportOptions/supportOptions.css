@@ -82,7 +82,7 @@ body.dark .advisor-icon {
   font-size: 18px;
   font-weight: 700;
   border: none;
-  border-radius: 16px;
+  border-radius: 8px;
   padding: 10px 32px;
   cursor: pointer;
   transition: background 0.2s;
