@@ -14,14 +14,14 @@ const tools = [
     path: "/housing",
   },
   {
-    title: "Your personalized learning hub",
-    description: "Take a quiz to find your retirement planning level, then access tailored lessons on saving, superannuation, health budgeting, and more — all designed for your stage in life.",
-    path: "/quiz",
-  },
-  {
     title: "Rental Sustainability Estimator",
     description: "Estimate how long you can afford to rent in your desired suburb. We factor in rent trends to help you plan ahead.",
     path: "/calculation",
+  },
+  {
+    title: "Your personalized learning hub",
+    description: "Take a quiz to find your retirement planning level, then access tailored lessons on saving, superannuation, health budgeting, and more — all designed for your stage in life.",
+    path: "/quiz",
   },
   {
     title: "Health & Wellbeing Events Suggestions",
