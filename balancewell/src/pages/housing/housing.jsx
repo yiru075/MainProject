@@ -206,7 +206,9 @@ const Housing = () => {
 
       map.on('load', async () => {
         try {
-          const response = await fetch('/enhanced_rental_by_sa2.geojson');
+          const baseUrl = import.meta.env.VITE_WEBSITE_URL;
+          const response = await fetch(`${baseUrl}/api/enhanced_rental`);
+          // const response = await fetch('/enhanced_rental_by_sa2.geojson');
           if (!response.ok) {
             throw new Error('Failed to load geojson data');
           }
