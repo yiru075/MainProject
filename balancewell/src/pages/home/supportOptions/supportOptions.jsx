@@ -15,7 +15,7 @@ const SupportOptions = () => {
             <h2 className="advisor-main-title">More on aging well ...</h2>
             <div className="advisor-title-desc">
               <h3 className="advisor-title">Financial Advisor In Your Location</h3>
-              <p className="advisor-desc">Connect with a financial advisor in your area who specializes in retirement planning.</p>
+              <p className="advisor-desc">Check if a financial advisor in your area is currently registered and active before making decisions</p>
             </div>
           </div>
         </div>
