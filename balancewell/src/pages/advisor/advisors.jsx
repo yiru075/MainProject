@@ -220,7 +220,7 @@ const Advisors = () => {
       <div className="advisors-hero">
         <h2>Need Guidance with Your Finances?</h2>
         <p className="advisors-intro">
-          Connect with a financial advisor in your area who specializes in retirement planning.
+        Check if a financial advisor in your area is currently registered and active before making decisions
         </p>
       </div>
 
